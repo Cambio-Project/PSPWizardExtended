@@ -50,72 +50,65 @@ import psp.mappings.PatternMapper;
 import psp.mappings.PrismMapper;
 import psp.mappings.QuantitativePrismMapper;
 import psp.mappings.SELMapper;
+import psp.mappings.TBVMapper;
 import psp.sel.Event;
 import psp.sel.patterns.Pattern;
 import psp.sel.scopes.Scope;
 import psp.ui.dialogs.EditEventDialog;
 import psp.ui.dialogs.NewEventDialog;
 
-public class PSPWizard extends javax.swing.JFrame implements PSPController
-{
+public class PSPWizard extends javax.swing.JFrame implements PSPController {
     private EventStorage fEvents;
-    
-    private void initMappings()
-    {
-        fMappings.addItem( new SELMapper() );
-        fMappings.addItem( new LTLMapper() );
-        fMappings.addItem( new MTLMapper() );
-        fMappings.addItem( new PrismMapper() );
-        fMappings.addItem( new QuantitativePrismMapper() );
+
+    private void initMappings() {
+        fMappings.addItem(new SELMapper());
+        fMappings.addItem(new LTLMapper());
+        fMappings.addItem(new MTLMapper());
+        fMappings.addItem(new PrismMapper());
+        fMappings.addItem(new QuantitativePrismMapper());
+        fMappings.addItem(new TBVMapper());
     }
-    
-    public PSPWizard()
-    {
+
+    public PSPWizard() {
         initComponents();
-        
+
         reset();
-        
+
         initMappings();
-        
+
         // connect scopes with controller
-        fScopes.setController( this );
+        fScopes.setController(this);
         fSelectedScope = fScopes.getSelectedScope();
 
         // connect patterns with controller
-        fPatterns.setController( this );
+        fPatterns.setController(this);
         fSelectedPattern = fPatterns.getSelectedPattern();
 
         // update initial SEL and mapping
         updateSELandMapping();
     }
 
-       // Entry point
-    
-    public static void main(String args[]) 
-    {
-       /* Create and display the form */
-        java.awt.EventQueue.invokeLater( new Runnable() 
-        {
-            public void run() 
-            {
+    // Entry point
+
+    public static void main(String args[]) {
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
                 (new PSPWizard()).showEditor();
             }
         });
     }
 
-    public void showEditor()
-    {
-        setLocationRelativeTo( null );  // center?
-        setVisible( true );
+    public void showEditor() {
+        setLocationRelativeTo(null); // center?
+        setVisible(true);
     }
 
-    public JFrame getHostFrame() 
-    {
+    public JFrame getHostFrame() {
         return this;
     }
 
-    public void reset()
-    {
+    public void reset() {
         Event.reset();
         fEvents = new EventStorage();
 
@@ -126,49 +119,44 @@ public class PSPWizard extends javax.swing.JFrame implements PSPController
         fPatterns.updateEvents();
         fScopes.clearSelection();
         fPatterns.clearSelection();
-        fSEs.setEnabled( true );
-        fESpec.setSelected( false );
-        fEName.setSelected( true );
+        fSEs.setEnabled(true);
+        fESpec.setSelected(false);
+        fEName.setSelected(true);
         Event.EventStringMethod = Event.E_Name;
-}
+    }
 
     // event controller facet
-    
-    public Event newEvent( String aName )
-    {
-        Event Result = fEvents.newEvent( aName );
-                        
+
+    public Event newEvent(String aName) {
+        Event Result = fEvents.newEvent(aName);
+
         return Result;
     }
 
-    public Event newEvent( String aName, String aSpecification )
-    {
-        Event Result = fEvents.newEvent( aName, aSpecification );
-                        
+    public Event newEvent(String aName, String aSpecification) {
+        Event Result = fEvents.newEvent(aName, aSpecification);
+
         return Result;
     }
- 
-    public Iterator<Event> iterator()
-    {
+
+    public Iterator<Event> iterator() {
         return fEvents.iterator();
     }
 
     // event selection validation facet
 
     // Scope events
-    
+
     private Scope fSelectedScope;
 
-    public boolean isScopeEventSelectionPossible( Event aEvent ) 
-    {
-        return EventSelectionValidator.isScopeEventSelectionPossible( this, aEvent );
+    public boolean isScopeEventSelectionPossible(Event aEvent) {
+        return EventSelectionValidator.isScopeEventSelectionPossible(this, aEvent);
     }
 
-    public void updateScope() 
-    {
+    public void updateScope() {
         fSelectedScope = fScopes.getSelectedScope();
 
-        EventSelectionValidator.updateScopeEvents( fSelectedScope );
+        EventSelectionValidator.updateScopeEvents(fSelectedScope);
 
         // update SEL and mapping
         updateSELandMapping();
@@ -176,68 +164,59 @@ public class PSPWizard extends javax.swing.JFrame implements PSPController
 
     // Pattern events
     private Pattern fSelectedPattern;
-    public boolean isPatternEventSelectionPossible( Event aEvent ) 
-    {
-        return EventSelectionValidator.isPatternEventSelectionPossible( this, aEvent );
+
+    public boolean isPatternEventSelectionPossible(Event aEvent) {
+        return EventSelectionValidator.isPatternEventSelectionPossible(this, aEvent);
     }
 
-    public boolean isPatternEventSelectionPossible( Event aEvent, Event aAltEvent )
-    {
-        return EventSelectionValidator.isPatternEventSelectionPossible( this, aEvent, aAltEvent );
+    public boolean isPatternEventSelectionPossible(Event aEvent, Event aAltEvent) {
+        return EventSelectionValidator.isPatternEventSelectionPossible(this, aEvent, aAltEvent);
     }
 
-    public void updatePattern() 
-    {
+    public void updatePattern() {
         fSelectedPattern = fPatterns.getSelectedPattern();
-    
-        EventSelectionValidator.updatePatternEvents( fSelectedPattern );
-        
+
+        EventSelectionValidator.updatePatternEvents(fSelectedPattern);
+
         // update SEL and mapping
         updateSELandMapping();
     }
 
     // SEL expansion
-    
-    private void updateSELandMapping()
-    {
+
+    private void updateSELandMapping() {
         StringBuilder sb = new StringBuilder();
-        
-        if ( fSelectedScope != null && fSelectedPattern != null )
-        {
-            sb.append( fSelectedScope.getSpecificationAsSEL() );
-            sb.append( ", " );
-            sb.append( fSelectedPattern.getSpecificationAsSEL() );
-            sb.append( '.' );
-        
-            fSELP.setText( sb.toString() );
 
-            PatternMapper lMapper = (PatternMapper)fMappings.getSelectedItem();
+        if (fSelectedScope != null && fSelectedPattern != null) {
+            sb.append(fSelectedScope.getSpecificationAsSEL());
+            sb.append(", ");
+            sb.append(fSelectedPattern.getSpecificationAsSEL());
+            sb.append('.');
 
-            if ( lMapper != null )
-            {
-                String lMapping = lMapper.getMapping( fSelectedScope, fSelectedPattern );
+            fSELP.setText(sb.toString());
 
-                if ( !lMapping.isEmpty() )
-                {
-                    if ( lMapper.hasMappingErrorOccurred() )
-                        fMapping.setForeground( Color.red );
+            PatternMapper lMapper = (PatternMapper) fMappings.getSelectedItem();
+
+            if (lMapper != null) {
+                String lMapping = lMapper.getMapping(fSelectedScope, fSelectedPattern);
+
+                if (!lMapping.isEmpty()) {
+                    if (lMapper.hasMappingErrorOccurred())
+                        fMapping.setForeground(Color.red);
                     else
-                        fMapping.setForeground( Color.black );
-                    fMapping.setText( lMapping );
-                }
-                else
-                {
-                    fMapping.setForeground( Color.red );
-                    fMapping.setText( lMapper.getNotSupportedMessage() );
+                        fMapping.setForeground(Color.black);
+                    fMapping.setText(lMapping);
+                } else {
+                    fMapping.setForeground(Color.red);
+                    fMapping.setText(lMapper.getNotSupportedMessage());
                 }
             }
         }
     }
-    
+
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
+     * content of this method is always regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -274,33 +253,29 @@ public class PSPWizard extends javax.swing.JFrame implements PSPController
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(fScopes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(fScopes,
+                    javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)));
+        jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(fScopes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(fScopes,
+                    javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Pattern"));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(fPatterns, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(fPatterns, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(fPatterns,
+                    javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)));
+        jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(fPatterns, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                javax.swing.GroupLayout.PREFERRED_SIZE));
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Options"));
 
@@ -328,32 +303,19 @@ public class PSPWizard extends javax.swing.JFrame implements PSPController
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(fESpec))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(fClear))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(fEName)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(fEName)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fESpec)
-                .addGap(18, 18, 18)
-                .addComponent(fClear)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                    .addGroup(jPanel3Layout.createSequentialGroup().addContainerGap().addComponent(fESpec))
+                    .addGroup(jPanel3Layout.createSequentialGroup().addGap(34, 34, 34).addComponent(fClear))
+                    .addGroup(jPanel3Layout.createSequentialGroup().addContainerGap().addComponent(fEName)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+        jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                jPanel3Layout.createSequentialGroup().addContainerGap().addComponent(fEName)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(fESpec)
+                    .addGap(18, 18, 18).addComponent(fClear)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Structured English Grammar"));
 
@@ -367,20 +329,14 @@ public class PSPWizard extends javax.swing.JFrame implements PSPController
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
-        );
+        jPanel5Layout.setHorizontalGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup().addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+        jPanel5Layout
+            .setVerticalGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+                jPanel5Layout.createSequentialGroup().addContainerGap().addComponent(jScrollPane1).addContainerGap()));
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Mapping"));
 
@@ -406,37 +362,29 @@ public class PSPWizard extends javax.swing.JFrame implements PSPController
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
+        jPanel6Layout.setHorizontalGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup().addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup().addComponent(jLabel2).addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(fMappings, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel6Layout.createSequentialGroup().addComponent(jLabel1).addGap(18, 18, 18)
+                                .addComponent(fMappings, javax.swing.GroupLayout.PREFERRED_SIZE, 180,
+                                    javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jScrollPane2))
-                        .addContainerGap())))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
+                        .addContainerGap()))));
+        jPanel6Layout.setVerticalGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup().addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(fMappings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+                    .addComponent(jLabel1).addComponent(fMappings, javax.swing.GroupLayout.PREFERRED_SIZE,
+                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18).addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                    javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 170,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()));
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Events"));
 
@@ -463,180 +411,171 @@ public class PSPWizard extends javax.swing.JFrame implements PSPController
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fSEs)
-                    .addComponent(fNE)
-                    .addComponent(fEE))
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
+        jPanel7Layout
+            .setHorizontalGroup(
+                jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup().addContainerGap()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(fSEs).addComponent(fNE).addComponent(fEE))
+                        .addContainerGap(12, Short.MAX_VALUE)));
 
-        jPanel7Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {fEE, fNE, fSEs});
+        jPanel7Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] { fEE, fNE, fSEs });
 
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(fNE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fEE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fSEs)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jPanel7Layout.setVerticalGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup().addContainerGap().addComponent(fNE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(fEE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(fSEs)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+        layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
+            .createSequentialGroup().addContainerGap()
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false).addGroup(layout
+                .createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                        Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                        Short.MAX_VALUE)))
+                .addGroup(
+                    layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                            javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addContainerGap(12, Short.MAX_VALUE)));
+        layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
+            .createSequentialGroup().addGap(8, 8, 8)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING,
+                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING,
+                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGap(15, 15, 15)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                    layout.createSequentialGroup()
+                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18).addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void fNEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fNEActionPerformed
+    private void fNEActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_fNEActionPerformed
         // add new event
 
-        if ( (new NewEventDialog( this )).showDialog() != null )
-        {
+        if ((new NewEventDialog(this)).showDialog() != null) {
             EventSelectionValidator.startEditUpdate();
             fScopes.updateEvents();
             fPatterns.updateEvents();
             EventSelectionValidator.stopEditUpdate();
         }
-        
+
         this.requestFocus();
-    }//GEN-LAST:event_fNEActionPerformed
+    }// GEN-LAST:event_fNEActionPerformed
 
-    private void fMappingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fMappingsActionPerformed
+    private void fMappingsActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_fMappingsActionPerformed
         // TODO add your handling code here:
         updateSELandMapping();
-    }//GEN-LAST:event_fMappingsActionPerformed
+    }// GEN-LAST:event_fMappingsActionPerformed
 
-    private void fENameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fENameActionPerformed
+    private void fENameActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_fENameActionPerformed
         // TODO add your handling code here:
 
-        if ( !fEName.isSelected() )
-        {
-            fESpec.setSelected( true );
+        if (!fEName.isSelected()) {
+            fESpec.setSelected(true);
             Event.EventStringMethod = Event.E_Spec;
-        }
-        else
-        {
-            if ( fESpec.isSelected() )
+        } else {
+            if (fESpec.isSelected())
                 Event.EventStringMethod = Event.E_NameAndSpec;
             else
-                Event.EventStringMethod = Event.E_Name;                
+                Event.EventStringMethod = Event.E_Name;
         }
         updateSELandMapping();
         repaint();
-    }//GEN-LAST:event_fENameActionPerformed
+    }// GEN-LAST:event_fENameActionPerformed
 
-    private void fESpecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fESpecActionPerformed
+    private void fESpecActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_fESpecActionPerformed
         // TODO add your handling code here:
 
-        if ( !fESpec.isSelected() )
-        {
-            fEName.setSelected( true );
+        if (!fESpec.isSelected()) {
+            fEName.setSelected(true);
             Event.EventStringMethod = Event.E_Name;
-        }
-        else
-        {
-            if ( fEName.isSelected() )
+        } else {
+            if (fEName.isSelected())
                 Event.EventStringMethod = Event.E_NameAndSpec;
             else
-                Event.EventStringMethod = Event.E_Spec;                
+                Event.EventStringMethod = Event.E_Spec;
         }
         updateSELandMapping();
         repaint();
-    }//GEN-LAST:event_fESpecActionPerformed
+    }// GEN-LAST:event_fESpecActionPerformed
 
-    private void fSEsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSEsActionPerformed
+    private void fSEsActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_fSEsActionPerformed
         // add sample events
-        
-        newEvent( "P" );
-        newEvent( "S" );
-        newEvent( "T" );
-        newEvent( "T1" );
-        newEvent( "T2" );
-        newEvent( "T3" );
-        newEvent( "Q" );
-        newEvent( "R" );
-        newEvent( "Z" );
-        newEvent( "ZS" );
-        newEvent( "Z1" );
-        newEvent( "Z2" );
-        newEvent( "Z3" );
+
+        newEvent("P");
+        newEvent("S");
+        newEvent("T");
+        newEvent("T1");
+        newEvent("T2");
+        newEvent("T3");
+        newEvent("Q");
+        newEvent("R");
+        newEvent("Z");
+        newEvent("ZS");
+        newEvent("Z1");
+        newEvent("Z2");
+        newEvent("Z3");
 
         fScopes.updateEvents();
         fPatterns.updateEvents();
-        fSEs.setEnabled( false );
-        
-        this.requestFocus();
-    }//GEN-LAST:event_fSEsActionPerformed
+        fSEs.setEnabled(false);
 
-    private void fClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fClearActionPerformed
+        this.requestFocus();
+    }// GEN-LAST:event_fSEsActionPerformed
+
+    private void fClearActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_fClearActionPerformed
         // clear everything
 
         reset();
-        
+
         updateScope();
         updatePattern();
-        
+
         repaint();
         this.requestFocus();
-    }//GEN-LAST:event_fClearActionPerformed
+    }// GEN-LAST:event_fClearActionPerformed
 
-    private void fEEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fEEActionPerformed
+    private void fEEActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_fEEActionPerformed
         // edit events
 
-        if ( (new EditEventDialog( this )).showDialog() != null )
-        {
+        if ((new EditEventDialog(this)).showDialog() != null) {
             EventSelectionValidator.startEditUpdate();
             fScopes.updateEvents();
             fPatterns.updateEvents();
             EventSelectionValidator.stopEditUpdate();
         }
-        
+
         this.requestFocus();
-    }//GEN-LAST:event_fEEActionPerformed
+    }// GEN-LAST:event_fEEActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton fClear;
