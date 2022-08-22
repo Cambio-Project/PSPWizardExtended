@@ -38,98 +38,98 @@
 
 package psp.mappings;
 
+import java.util.Objects;
+
 import psp.constraints.Interval;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.sel.Event;
 import psp.sel.patterns.order.ChainEvents;
 
-public abstract class GenericMapper implements PatternMapper
-{
-    public String cnt( Event aZP ) 
-    {
+public abstract class GenericMapper implements PatternMapper {
+    protected LanguageDefinitions languageDefinitions;
+
+    public LanguageDefinitions getLanguageDefinitions() {
+        return languageDefinitions;
+    }
+
+    public GenericMapper(final LanguageDefinitions languageDefintiions) {
+        super();
+        setLanguageDefinitions(languageDefintiions);
+    }
+
+    public void setLanguageDefinitions(final LanguageDefinitions languageDefinitions) {
+        Objects.nonNull(languageDefinitions);
+        this.languageDefinitions = languageDefinitions;
+    };
+
+    public String cnt(Event aZP) {
         return "";
     }
 
-    public String time(TimeBound aPTimeBound) 
-    {
+    public String time(TimeBound aPTimeBound) {
         return "";
     }
 
-    public String lmintime(TimeBound aPTimeBound) 
-    {
+    public String lmintime(TimeBound aPTimeBound) {
         return "";
     }
 
-    public String umintime(TimeBound aPTimeBound) 
-    {
+    public String umintime(TimeBound aPTimeBound) {
         return "";
     }
 
-    public String utb(TimeBound aPTimeBound) 
-    {
+    public String utb(TimeBound aPTimeBound) {
         return "";
     }
 
-    public String trigger(Interval aPTimeBound) 
-    {
+    public String trigger(Interval aPTimeBound) {
         return "";
     }
 
-    public String gap(Interval aPTimeBound) 
-    {
+    public String gap(Interval aPTimeBound) {
         return "";
     }
 
-    public String elapsed(Interval aPTimeBound) 
-    {
+    public String elapsed(Interval aPTimeBound) {
         return "";
     }
 
-    public String maxgap(Interval aPTimeBound) 
-    {
+    public String maxgap(Interval aPTimeBound) {
         return "";
     }
 
-    public String gapNP(int n, ChainEvents Tis, Interval aPTimeBound) 
-    {
+    public String gapNP(int n, ChainEvents Tis, Interval aPTimeBound) {
         return "";
     }
 
-    public String gapPN(int n, ChainEvents Tis, Interval aPTimeBound) 
-    {
+    public String gapPN(int n, ChainEvents Tis, Interval aPTimeBound) {
         return "";
     }
 
-    public String tL(TimeBound aPTimeBound) 
-    {
+    public String tL(TimeBound aPTimeBound) {
         return "";
     }
 
-    public String tU(TimeBound aPTimeBound) 
-    {
+    public String tU(TimeBound aPTimeBound) {
         return "";
     }
 
-    public String prop(ProbabilityBound aPropBound) 
-    {
+    public String prop(ProbabilityBound aPropBound) {
         return "";
     }
-    
+
     private boolean fMappingError;
 
-    protected void clearError()
-    {
+    protected void clearError() {
         fMappingError = false;
     }
-    
-    protected void markError()
-    {
+
+    protected void markError() {
         fMappingError = true;
     }
-    
-    public boolean hasMappingErrorOccurred()
-    {
+
+    public boolean hasMappingErrorOccurred() {
         return fMappingError;
     }
 }

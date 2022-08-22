@@ -41,45 +41,41 @@ package psp.mappings;
 import psp.sel.patterns.Pattern;
 import psp.sel.scopes.Scope;
 
-public class SELMapper extends GenericMapper
-{
-    public boolean isScopeSupported( Scope aScope ) 
-    {
+public class SELMapper extends GenericMapper {
+    public SELMapper() {
+        super(new LanguageDefinitions(null, null, null, null, null, null, null, null, null, null));
+    }
+
+    public boolean isScopeSupported(Scope aScope) {
         return true;
     }
 
-    public boolean isPatternSupported( Pattern aPattern ) 
-    {
+    public boolean isPatternSupported(Pattern aPattern) {
         return true;
     }
 
-    public boolean isCombinationSupported( Scope aScope, Pattern aPattern )
-    {
+    public boolean isCombinationSupported(Scope aScope, Pattern aPattern) {
         return true;
     }
 
-    public String getMapping( Scope aScope, Pattern aPattern ) 
-    {
+    public String getMapping(Scope aScope, Pattern aPattern) {
         StringBuilder sb = new StringBuilder();
-        
-        if ( aScope != null && aPattern != null )
-        {
-            sb.append( aScope.getSpecificationAsSEL() );
-            sb.append( ", " );
-            sb.append( aPattern.getSpecificationAsSEL() );
-            sb.append( '.' );
+
+        if (aScope != null && aPattern != null) {
+            sb.append(aScope.getSpecificationAsSEL());
+            sb.append(", ");
+            sb.append(aPattern.getSpecificationAsSEL());
+            sb.append('.');
         }
-        
+
         return sb.toString();
     }
-    
-    public String getNotSupportedMessage()
-    {
+
+    public String getNotSupportedMessage() {
         return "Mapping not supported in Structured English Grammar.";
     }
 
-    public String toString()
-    {
+    public String toString() {
         return "SEG";
     }
 }

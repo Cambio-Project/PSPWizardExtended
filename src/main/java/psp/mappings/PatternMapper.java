@@ -41,19 +41,22 @@ package psp.mappings;
 import psp.sel.patterns.Pattern;
 import psp.sel.scopes.Scope;
 
-public interface PatternMapper extends PSPFrameworkSupport
-{
-    public boolean isScopeSupported( Scope aScope );
+public interface PatternMapper extends PSPFrameworkSupport {
+    public boolean isScopeSupported(Scope aScope);
 
-    public boolean isPatternSupported( Pattern aPattern );
-    
-    public boolean isCombinationSupported( Scope aScope, Pattern aPattern );
-    
-    public String getMapping( Scope aScope, Pattern aPattern );
+    public boolean isPatternSupported(Pattern aPattern);
+
+    public boolean isCombinationSupported(Scope aScope, Pattern aPattern);
+
+    public String getMapping(Scope aScope, Pattern aPattern);
 
     public boolean hasMappingErrorOccurred();
-    
+
     public String getNotSupportedMessage();
-    
+
     public String toString();
+
+    public LanguageDefinitions getLanguageDefinitions();
+
+    public void setLanguageDefinitions(final LanguageDefinitions languageDefinitions);
 }

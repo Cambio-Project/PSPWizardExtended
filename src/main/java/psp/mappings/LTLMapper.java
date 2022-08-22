@@ -10,7 +10,7 @@
  *
  *   Marco Autili, Universita` dell'Aquila
  *   Lars Grunske, University of Stuttgart
- *   Markus Lumpe, Swinburne University of Technology
+ *   Markus languageDefintiions.getUntil()mpe, Swinburne University of Technology
  *   Patrizio Pelliccione, University of Gothenburg
  *   Antony Tang, Swinburne University of Technology
  *
@@ -46,2075 +46,1947 @@ import psp.sel.patterns.order.*;
 import psp.sel.patterns.occurrence.*;
 import psp.sel.scopes.Scope;
 
-public class LTLMapper extends GenericMapper
-{
-    private static final String lInf = "∞";
-    private static final String lAlways = "☐";
-    private static final String lEventually = "◇";
-    private static final String lN = "○";
-    private static final String lArrow = " → ";
-    private static final String lNot = "¬";
-    private static final String lAnd = " ∧ ";
-    private static final String lOr = " ∨ ";
-    private static final String lU = " U";
-    private static final String lW = " W";
-    
-    public boolean isScopeSupported( Scope aScope ) 
-    {
+public class LTLMapper extends GenericMapper {
+    private static final String defaultInf = "∞";
+    private static final String defaultAlways = "☐";
+    private static final String defaultEventually = "◇";
+    private static final String defaultNext = "○";
+    private static final String defaultImplication = " → ";
+    private static final String defaultNot = "¬";
+    private static final String defaultAnd = " ∧ ";
+    private static final String defaultOr = " ∨ ";
+    private static final String defaultUntil = " U";
+    private static final String defaultWeakUntil = " W";
+    private static final LanguageDefinitions DEFAULT_LANGUAGE_DEFINITION = new LanguageDefinitions(defaultInf,
+        defaultAlways, defaultEventually, defaultNext, defaultImplication, defaultNot, defaultAnd, defaultOr,
+        defaultUntil, defaultWeakUntil);
+
+    public LTLMapper() {
+        super(DEFAULT_LANGUAGE_DEFINITION);
+    }
+
+    public boolean isScopeSupported(Scope aScope) {
         return true;
     }
 
-    public boolean isPatternSupported( Pattern aPattern ) 
-    {
-        switch ( aPattern.getType() )
-        {
+    public boolean isPatternSupported(Pattern aPattern) {
+        switch (aPattern.getType()) {
             case PSPConstants.P_BoundedExistence:
             case PSPConstants.P_TransientState:
             case PSPConstants.P_SteadyState:
                 return false;
             default:
         }
-        
+
         return true;
     }
 
-    public boolean isCombinationSupported( Scope aScope, Pattern aPattern )
-    {
-        return isPatternSupported( aPattern );
+    public boolean isCombinationSupported(Scope aScope, Pattern aPattern) {
+        return isPatternSupported(aPattern);
     }
 
     // pattern mapping
-    
-    public String getMapping( Scope aScope, Pattern aPattern ) 
-    {
+
+    public String getMapping(Scope aScope, Pattern aPattern) {
         clearError();
-        
+
         try // if something goes wrong
         {
-            switch ( aPattern.getType() )
-            {
+            switch (aPattern.getType()) {
                 case PSPConstants.P_Universality:
-                    return mapUniversality( aScope, (Universality)aPattern );
+                    return mapUniversality(aScope, (Universality) aPattern);
                 case PSPConstants.P_Absence:
-                    return mapAbsence( aScope, (Absence)aPattern );
+                    return mapAbsence(aScope, (Absence) aPattern);
                 case PSPConstants.P_Existence:
-                    return mapExistence( aScope, (Existence)aPattern );
+                    return mapExistence(aScope, (Existence) aPattern);
                 case PSPConstants.P_BoundedExistence:
                 case PSPConstants.P_TransientState:
                 case PSPConstants.P_SteadyState:
                 case PSPConstants.P_MinimumDuration:
                 case PSPConstants.P_MaximumDuration:
-                    return "";                          // not supported indicator
+                    return ""; // not supported indicator
                 case PSPConstants.P_Recurrence:
-                    return mapRecurrence( aScope, (Recurrence)aPattern );
+                    return mapRecurrence(aScope, (Recurrence) aPattern);
                 case PSPConstants.P_Precedence:
-                    return mapPrecedence( aScope, (Precedence)aPattern );
+                    return mapPrecedence(aScope, (Precedence) aPattern);
                 case PSPConstants.P_PrecedenceChain1N:
-                    return mapPrecedenceChain1N( aScope, (PrecedenceChain1N)aPattern );
+                    return mapPrecedenceChain1N(aScope, (PrecedenceChain1N) aPattern);
                 case PSPConstants.P_PrecedenceChainN1:
-                    return mapPrecedenceChainN1( aScope, (PrecedenceChainN1)aPattern );
+                    return mapPrecedenceChainN1(aScope, (PrecedenceChainN1) aPattern);
                 case PSPConstants.P_Until:
-                    return mapUntil( aScope, (Until)aPattern );
+                    return mapUntil(aScope, (Until) aPattern);
                 case PSPConstants.P_Response:
-                    return mapResponse( aScope, (Response)aPattern );
+                    return mapResponse(aScope, (Response) aPattern);
                 case PSPConstants.P_ResponseChain1N:
-                    return mapResponseChain1N( aScope, (ResponseChain1N)aPattern );
+                    return mapResponseChain1N(aScope, (ResponseChain1N) aPattern);
                 case PSPConstants.P_ResponseChainN1:
-                    return mapResponseChainN1( aScope, (ResponseChainN1)aPattern );
+                    return mapResponseChainN1(aScope, (ResponseChainN1) aPattern);
                 case PSPConstants.P_ResponseInvariance:
-                    return mapResponseInvariance( aScope, (ResponseInvariance)aPattern );
+                    return mapResponseInvariance(aScope, (ResponseInvariance) aPattern);
             }
-        }
-        catch ( Exception e )
-        {
+        } catch (Exception e) {
             markError();
             return e.getMessage();
         }
-        
+
         return "";
     }
 
-    private String mapUniversality( Scope aScope, Universality aPattern )
-    {   
+    private String mapUniversality(Scope aScope, Universality aPattern) {
         StringBuilder sb = new StringBuilder();
 
-        switch ( aScope.getType() )
-        {
+        switch (aScope.getType()) {
             case PSPConstants.S_Globally:
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
                 break;
             case PSPConstants.S_BeforeR:
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lOr );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getNot());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQ:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_BetweenQandR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( lAnd );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lOr );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getNot());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQuntilR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lW );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getWeakUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
                 break;
         }
-        
+
         return sb.toString();
     }
-    
-    private String mapAbsence( Scope aScope, Absence aPattern )
-    {   
+
+    private String mapAbsence(Scope aScope, Absence aPattern) {
         StringBuilder sb = new StringBuilder();
 
-        switch ( aScope.getType() )
-        {
+        switch (aScope.getType()) {
             case PSPConstants.S_Globally:
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( lNot );
-                sb.append( aPattern.getP().getAsEvent() );
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aPattern.getP().getAsEvent());
                 break;
             case PSPConstants.S_BeforeR:
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( lNot );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lOr );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( lNot );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getNot());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQ:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( lNot );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_BetweenQandR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( lAnd );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( lNot );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lOr );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( lNot );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getNot());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQuntilR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( lNot );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lW );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getWeakUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
                 break;
         }
-        
+
         return sb.toString();
     }
-    
-    private String mapExistence( Scope aScope, Existence aPattern )
-    {   
+
+    private String mapExistence(Scope aScope, Existence aPattern) {
         StringBuilder sb = new StringBuilder();
 
-        switch ( aScope.getType() )
-        {
+        switch (aScope.getType()) {
             case PSPConstants.S_Globally:
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
                 break;
             case PSPConstants.S_BeforeR:
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lW );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getWeakUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQ:
-                sb.append( lAlways );
-                sb.append( lNot );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lOr );
-                sb.append( lEventually );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getNot());
+                sb.append(languageDefinitions.getEventually());
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_BetweenQandR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lW );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getWeakUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQuntilR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
                 break;
         }
-        
+
         return sb.toString();
     }
-    
-    private String mapRecurrence( Scope aScope, Recurrence aPattern )
-    {   
+
+    private String mapRecurrence(Scope aScope, Recurrence aPattern) {
         StringBuilder sb = new StringBuilder();
 
-        switch ( aScope.getType() )
-        {
+        switch (aScope.getType()) {
             case PSPConstants.S_Globally:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_BeforeR:
-                sb.append( lEventually );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lOr );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getEventually());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQ:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(")");
+                sb.append(")");
                 break;
             case PSPConstants.S_BetweenQandR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lEventually );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lOr );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQuntilR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lOr );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lW );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getWeakUntil());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
                 break;
         }
-        
+
         return sb.toString();
     }
-    
-    private String mapPrecedence( Scope aScope, Precedence aPattern )
-    {
+
+    private String mapPrecedence(Scope aScope, Precedence aPattern) {
         StringBuilder sb = new StringBuilder();
-        
-        switch ( aScope.getType() )
-        {
+
+        switch (aScope.getType()) {
             case PSPConstants.S_Globally:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_BeforeR:
-                sb.append( lEventually );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( lOr );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );                
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );                
+                sb.append(languageDefinitions.getEventually());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(languageDefinitions.getNot());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
                 break;
             case PSPConstants.S_AfterQ:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(")");
+                sb.append(")");
                 break;
             case PSPConstants.S_BetweenQandR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lEventually );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( lOr );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(languageDefinitions.getNot());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQuntilR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( lOr );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lW );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(languageDefinitions.getNot());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getWeakUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
                 break;
         }
-        
+
         return sb.toString();
     }
-    
+
     // Tis addressed from 0 to n-1.
-    
-    private void PC1N_Ch( StringBuilder sb, ChainEvents Tis, int i )
-    {
-        if ( i < Tis.size() )
-        {
-            ChainEvent Ti = Tis.getTi( i );
+
+    private void PC1N_Ch(StringBuilder sb, ChainEvents Tis, int i) {
+        if (i < Tis.size()) {
+            ChainEvent Ti = Tis.getTi(i);
 
             EventConstraint lZi = Ti.getConstraint();
-            String lcntZi = lZi != null ? cnt( lZi.getEvent() ) : "true";
+            String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
 
-            if ( lcntZi.equals( "true" ) )
-            {
+            if (lcntZi.equals("true")) {
                 // no Zi
-                sb.append( lAnd );
-                sb.append( lN );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( Ti.getEvent().getAsEvent() );
-                PC1N_Ch( sb, Tis, i+1 );
-                sb.append( ")" );
-                sb.append( ")" );            
-            }
-            else
-            {
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNext());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(Ti.getEvent().getAsEvent());
+                PC1N_Ch(sb, Tis, i + 1);
+                sb.append(")");
+                sb.append(")");
+            } else {
                 // with Zi
-                sb.append( lAnd );
-                sb.append( lcntZi );
-                sb.append( lAnd );
-                sb.append( lN );
-                sb.append( "(" );
-                sb.append( lcntZi );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( Ti.getEvent().getAsEvent() );
-                PC1N_Ch( sb, Tis, i+1 );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAnd());
+                sb.append(lcntZi);
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNext());
+                sb.append("(");
+                sb.append(lcntZi);
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(Ti.getEvent().getAsEvent());
+                PC1N_Ch(sb, Tis, i + 1);
+                sb.append(")");
+                sb.append(")");
             }
         }
     }
 
-    private String mapPrecedenceChain1N( Scope aScope, PrecedenceChain1N aPattern )
-    {   
+    private String mapPrecedenceChain1N(Scope aScope, PrecedenceChain1N aPattern) {
         StringBuilder sb = new StringBuilder();
 
         EventConstraint lZS = aPattern.getSConstraint();
-        String lcntZS = lZS != null ? cnt( lZS.getEvent() ) : "true";
-        boolean lHasConstraint = !lcntZS.equals( "true" );
+        String lcntZS = lZS != null ? cnt(lZS.getEvent()) : "true";
+        boolean lHasConstraint = !lcntZS.equals("true");
         ChainEvents Tis = aPattern.getTis();
 
-        switch ( aScope.getType() )
-        {
+        switch (aScope.getType()) {
             case PSPConstants.S_Globally:
-                sb.append( lAlways );
-                sb.append( "(" );            
-                if ( lHasConstraint )
-                {
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                if (lHasConstraint) {
                     // has ZS
-                    sb.append( lcntZS );
-                    sb.append( lU );
-                }
-                else
-                {
+                    sb.append(lcntZS);
+                    sb.append(languageDefinitions.getUntil());
+                } else {
                     // no ZS
-                    sb.append( lEventually );
+                    sb.append(languageDefinitions.getEventually());
                 }
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                PC1N_Ch( sb, Tis, 0 );
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( ")" );
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                PC1N_Ch(sb, Tis, 0);
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_BeforeR:
-                sb.append( lEventually );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                if ( lHasConstraint )
-                {
+                sb.append(languageDefinitions.getEventually());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                if (lHasConstraint) {
                     // has ZS
-                    sb.append( lcntZS );
-                    sb.append( lU );
-                }
-                else
-                {
+                    sb.append(lcntZS);
+                    sb.append(languageDefinitions.getUntil());
+                } else {
                     // no ZS
-                    sb.append( lEventually );
+                    sb.append(languageDefinitions.getEventually());
                 }
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                PC1N_Ch( sb, Tis, 0 );
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lOr );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                PC1N_Ch(sb, Tis, 0);
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getNot());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQ:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );                
-                sb.append( "(" );
-                if ( lHasConstraint )
-                {
-                    sb.append( lcntZS );
-                    sb.append( lU );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                if (lHasConstraint) {
+                    sb.append(lcntZS);
+                    sb.append(languageDefinitions.getUntil());
+                } else {
+                    sb.append(languageDefinitions.getEventually());
                 }
-                else
-                {
-                    sb.append( lEventually );
-                }
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                PC1N_Ch( sb, Tis, 0 );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                PC1N_Ch(sb, Tis, 0);
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
                 break;
             case PSPConstants.S_BetweenQandR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( lAnd );
-                sb.append( lEventually );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( "(" );
-                if ( lHasConstraint )
-                {
-                    sb.append( lcntZS );
-                    sb.append( lU );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append("(");
+                if (lHasConstraint) {
+                    sb.append(lcntZS);
+                    sb.append(languageDefinitions.getUntil());
+                } else {
+                    sb.append(languageDefinitions.getEventually());
                 }
-                else
-                {
-                    sb.append( lEventually );
-                }
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                PC1N_Ch( sb, Tis, 0 );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lOr );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                PC1N_Ch(sb, Tis, 0);
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getNot());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQuntilR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( "(" );
-                if ( lHasConstraint )
-                {
-                    sb.append( lcntZS );
-                    sb.append( lU );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append("(");
+                if (lHasConstraint) {
+                    sb.append(lcntZS);
+                    sb.append(languageDefinitions.getUntil());
+                } else {
+                    sb.append(languageDefinitions.getEventually());
                 }
-                else
-                {
-                    sb.append( lEventually );
-                }
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                PC1N_Ch( sb, Tis, 0 );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lOr );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lW );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                PC1N_Ch(sb, Tis, 0);
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getNot());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getWeakUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
                 break;
         }
-        
+
         return sb.toString();
     }
 
     // Tis addressed from 0 to n-1.
-    
-    private void PCN1_Ch( StringBuilder sb, PrecedenceChainN1 aPattern, int i )
-    {
+
+    private void PCN1_Ch(StringBuilder sb, PrecedenceChainN1 aPattern, int i) {
         ChainEvents Tis = aPattern.getTis();
-        
-        if ( i < Tis.size() )
-        {
-            ChainEvent Ti = Tis.getTi( i );
+
+        if (i < Tis.size()) {
+            ChainEvent Ti = Tis.getTi(i);
 
             EventConstraint lZi = Ti.getConstraint();
-            String lcntZi = lZi != null ? cnt( lZi.getEvent() ) : "true";
+            String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
 
-            if ( lcntZi.equals( "true" ) )
-            {
+            if (lcntZi.equals("true")) {
                 // no Zi
-                sb.append( lAnd );
-                sb.append( lN );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( Ti.getEvent().getAsEvent() );
-                PCN1_Ch( sb, aPattern, i+1 );
-                sb.append( ")" );
-                sb.append( ")" );            
-            }
-            else
-            {
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNext());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(Ti.getEvent().getAsEvent());
+                PCN1_Ch(sb, aPattern, i + 1);
+                sb.append(")");
+                sb.append(")");
+            } else {
                 // with Zi
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lcntZi );
-                sb.append( lAnd );
-                sb.append( lN );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( lNot );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lcntZi );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( Ti.getEvent().getAsEvent() );
-                PCN1_Ch( sb, aPattern, i+1 );
-                sb.append( ")" );
-                sb.append( ")" );            
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(lcntZi);
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNext());
+                sb.append("(");
+                sb.append("(");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(lcntZi);
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(Ti.getEvent().getAsEvent());
+                PCN1_Ch(sb, aPattern, i + 1);
+                sb.append(")");
+                sb.append(")");
             }
         }
     }
 
-    private String mapPrecedenceChainN1( Scope aScope, PrecedenceChainN1 aPattern )
-    {   
+    private String mapPrecedenceChainN1(Scope aScope, PrecedenceChainN1 aPattern) {
         StringBuilder sb = new StringBuilder();
 
         EventConstraint lZP = aPattern.getPConstraint();
-        String lcntZP = lZP != null ? cnt( lZP.getEvent() ) : "true";
-        boolean lHasConstraint = !lcntZP.equals( "true" );
+        String lcntZP = lZP != null ? cnt(lZP.getEvent()) : "true";
+        boolean lHasConstraint = !lcntZP.equals("true");
         ChainEvents Tis = aPattern.getTis();
-        
-        switch ( aScope.getType() )
-        {
+
+        switch (aScope.getType()) {
             case PSPConstants.S_Globally:
-                sb.append( lAlways );
-                sb.append( "(" );            
-                sb.append( lEventually );
-                sb.append( " " );            
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );            
-                if ( lHasConstraint )
-                {
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                if (lHasConstraint) {
                     // has ZS
-                    sb.append( "(" );            
-                    sb.append( lNot );
-                    sb.append( aPattern.getP().getAsEvent() );
-                    sb.append( lAnd );
-                    sb.append( lcntZP );
-                    sb.append( ")" );            
-                    sb.append( lU );
-                }
-                else
-                {
+                    sb.append("(");
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aPattern.getP().getAsEvent());
+                    sb.append(languageDefinitions.getAnd());
+                    sb.append(lcntZP);
+                    sb.append(")");
+                    sb.append(languageDefinitions.getUntil());
+                } else {
                     // no ZS
-                    sb.append( lEventually );
+                    sb.append(languageDefinitions.getEventually());
                 }
-                sb.append( " " );            
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                PCN1_Ch( sb, aPattern, 0 );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                PCN1_Ch(sb, aPattern, 0);
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
                 break;
             case PSPConstants.S_BeforeR:
-                sb.append( lEventually );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( "(" );
-                if ( lHasConstraint )
-                {
+                sb.append(languageDefinitions.getEventually());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append("(");
+                if (lHasConstraint) {
                     // has ZS
-                    sb.append( "(" );            
-                    sb.append( lEventually );
-                    sb.append( " " );            
-                    sb.append( aPattern.getP().getAsEvent() );
-                    sb.append( lArrow );
-                    sb.append( "(" );            
-                    sb.append( "(" );            
-                    sb.append( lNot );
-                    sb.append( aPattern.getP().getAsEvent() );
-                    sb.append( lAnd );
-                    sb.append( lcntZP );
-                    sb.append( ")" );            
-                    sb.append( lU );
-                    sb.append( " " );            
-                    sb.append( "(" );
-                    sb.append( aPattern.getS().getAsEvent() );
-                    PCN1_Ch( sb, aPattern, 0 );
-                    sb.append( ")" );
-                    sb.append( ")" );
-                    sb.append( ")" );
-                }
-                else
-                {
+                    sb.append("(");
+                    sb.append(languageDefinitions.getEventually());
+                    sb.append(" ");
+                    sb.append(aPattern.getP().getAsEvent());
+                    sb.append(languageDefinitions.getImplication());
+                    sb.append("(");
+                    sb.append("(");
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aPattern.getP().getAsEvent());
+                    sb.append(languageDefinitions.getAnd());
+                    sb.append(lcntZP);
+                    sb.append(")");
+                    sb.append(languageDefinitions.getUntil());
+                    sb.append(" ");
+                    sb.append("(");
+                    sb.append(aPattern.getS().getAsEvent());
+                    PCN1_Ch(sb, aPattern, 0);
+                    sb.append(")");
+                    sb.append(")");
+                    sb.append(")");
+                } else {
                     // no ZS
-                    sb.append( lEventually );
-                    sb.append( " " );            
-                    sb.append( aPattern.getP().getAsEvent() );
-                    sb.append( lArrow );
-                    sb.append( "(" );            
-                    sb.append( lEventually );
-                    sb.append( " " );            
-                    sb.append( "(" );
-                    sb.append( aPattern.getS().getAsEvent() );
-                    PCN1_Ch( sb, aPattern, 0 );
-                    sb.append( ")" );
-                    sb.append( ")" );
+                    sb.append(languageDefinitions.getEventually());
+                    sb.append(" ");
+                    sb.append(aPattern.getP().getAsEvent());
+                    sb.append(languageDefinitions.getImplication());
+                    sb.append("(");
+                    sb.append(languageDefinitions.getEventually());
+                    sb.append(" ");
+                    sb.append("(");
+                    sb.append(aPattern.getS().getAsEvent());
+                    PCN1_Ch(sb, aPattern, 0);
+                    sb.append(")");
+                    sb.append(")");
                 }
-                sb.append( lOr );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getNot());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQ:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );            
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                if ( lHasConstraint )
-                {
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                if (lHasConstraint) {
                     // has ZS
-                    sb.append( "(" );            
-                    sb.append( lNot );
-                    sb.append( aPattern.getP().getAsEvent() );
-                    sb.append( lAnd );
-                    sb.append( lcntZP );
-                    sb.append( ")" );            
-                    sb.append( lU );
-                }
-                else
-                {
+                    sb.append("(");
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aPattern.getP().getAsEvent());
+                    sb.append(languageDefinitions.getAnd());
+                    sb.append(lcntZP);
+                    sb.append(")");
+                    sb.append(languageDefinitions.getUntil());
+                } else {
                     // no ZS
-                    sb.append( lEventually );
+                    sb.append(languageDefinitions.getEventually());
                 }
-                sb.append( " " );            
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                PCN1_Ch( sb, aPattern, 0 );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                PCN1_Ch(sb, aPattern, 0);
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
                 break;
             case PSPConstants.S_BetweenQandR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( lAnd );
-                sb.append( lEventually );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );            
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                if ( lHasConstraint )
-                {
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                if (lHasConstraint) {
                     // has ZS
-                    sb.append( "(" );            
-                    sb.append( lNot );
-                    sb.append( aPattern.getP().getAsEvent() );
-                    sb.append( lAnd );
-                    sb.append( lcntZP );
-                    sb.append( ")" );            
-                    sb.append( lU );
-                }
-                else
-                {
+                    sb.append("(");
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aPattern.getP().getAsEvent());
+                    sb.append(languageDefinitions.getAnd());
+                    sb.append(lcntZP);
+                    sb.append(")");
+                    sb.append(languageDefinitions.getUntil());
+                } else {
                     // no ZS
-                    sb.append( lEventually );
+                    sb.append(languageDefinitions.getEventually());
                 }
-                sb.append( " " );            
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                PCN1_Ch( sb, aPattern, 0 );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lOr );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                PCN1_Ch(sb, aPattern, 0);
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getNot());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQuntilR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                if ( lHasConstraint )
-                {
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                if (lHasConstraint) {
                     // has ZS
-                    sb.append( lEventually );
-                    sb.append( " " );            
-                    sb.append( aPattern.getP().getAsEvent() );
-                    sb.append( lArrow );
-                    sb.append( "(" );            
-                    sb.append( "(" );            
-                    sb.append( lNot );
-                    sb.append( aPattern.getP().getAsEvent() );
-                    sb.append( lAnd );
-                    sb.append( lcntZP );
-                    sb.append( ")" );            
-                    sb.append( lU );
-                    sb.append( " " );            
-                    sb.append( "(" );
-                    sb.append( aPattern.getS().getAsEvent() );
-                    PCN1_Ch( sb, aPattern, 0 );
-                    sb.append( ")" );
-                    sb.append( ")" );
-                }
-                else
-                {
+                    sb.append(languageDefinitions.getEventually());
+                    sb.append(" ");
+                    sb.append(aPattern.getP().getAsEvent());
+                    sb.append(languageDefinitions.getImplication());
+                    sb.append("(");
+                    sb.append("(");
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aPattern.getP().getAsEvent());
+                    sb.append(languageDefinitions.getAnd());
+                    sb.append(lcntZP);
+                    sb.append(")");
+                    sb.append(languageDefinitions.getUntil());
+                    sb.append(" ");
+                    sb.append("(");
+                    sb.append(aPattern.getS().getAsEvent());
+                    PCN1_Ch(sb, aPattern, 0);
+                    sb.append(")");
+                    sb.append(")");
+                } else {
                     // no ZS
-                    sb.append( "(" );            
-                    sb.append( lEventually );
-                    sb.append( " " );            
-                    sb.append( aPattern.getP().getAsEvent() );
-                    sb.append( lArrow );
-                    sb.append( "(" );            
-                    sb.append( lEventually );
-                    sb.append( " " );            
-                    sb.append( "(" );
-                    sb.append( aPattern.getS().getAsEvent() );
-                    PCN1_Ch( sb, aPattern, 0 );
-                    sb.append( ")" );
-                    sb.append( ")" );
-                    sb.append( ")" );
+                    sb.append("(");
+                    sb.append(languageDefinitions.getEventually());
+                    sb.append(" ");
+                    sb.append(aPattern.getP().getAsEvent());
+                    sb.append(languageDefinitions.getImplication());
+                    sb.append("(");
+                    sb.append(languageDefinitions.getEventually());
+                    sb.append(" ");
+                    sb.append("(");
+                    sb.append(aPattern.getS().getAsEvent());
+                    PCN1_Ch(sb, aPattern, 0);
+                    sb.append(")");
+                    sb.append(")");
+                    sb.append(")");
                 }
-                sb.append( lOr );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( lW );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getNot());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getWeakUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
                 break;
         }
-        
+
         return sb.toString();
     }
-    
-    private String mapUntil( Scope aScope, Until aPattern )
-    {    
+
+    private String mapUntil(Scope aScope, Until aPattern) {
         StringBuilder sb = new StringBuilder();
 
-        switch ( aScope.getType() )
-        {
+        switch (aScope.getType()) {
             case PSPConstants.S_Globally:
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aPattern.getS().getAsEvent() );
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aPattern.getS().getAsEvent());
                 break;
             case PSPConstants.S_BeforeR:
-                sb.append( lEventually );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );                
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( lOr );
-                sb.append( aScope.getR().getAsEvent() );                
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getEventually());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQ:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(")");
+                sb.append(")");
                 break;
             case PSPConstants.S_BetweenQandR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );                
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( lOr );
-                sb.append( aScope.getR().getAsEvent() );                
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQuntilR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( ")" );
-                sb.append( lW );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getWeakUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
                 break;
         }
-        
+
         return sb.toString();
     }
-    
-    private String mapResponse( Scope aScope, Response aPattern )
-    {   
-        StringBuilder sb = new StringBuilder();
-        
-        EventConstraint lZS = aPattern.getSConstraint();
-        String lcntZS = lZS != null ? cnt( lZS.getEvent() ) : "true";
-        boolean lHasConstraint = !lcntZS.equals( "true" );
 
-        switch ( aScope.getType() )
-        {
-            case PSPConstants.S_Globally:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                if ( lHasConstraint )
-                {
-                    sb.append( lcntZS );
-                    sb.append( lU );
-                }
-                else
-                {
-                    sb.append( lEventually );
-                }
-                sb.append( " " );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( ")" );
-                break;
-            case PSPConstants.S_BeforeR:
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                if ( lHasConstraint )
-                {
-                    sb.append( "(" );
-                    sb.append( lNot );
-                    sb.append( aScope.getR().getAsEvent() );                
-                    sb.append( lAnd );
-                    sb.append( lcntZS );
-                    sb.append( ")" );
-                }
-                else
-                {
-                    sb.append( lNot );
-                    sb.append( aScope.getR().getAsEvent() );                
-                }
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );                
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );                
-                break;
-            case PSPConstants.S_AfterQ:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                if ( lHasConstraint )
-                {
-                    sb.append( lcntZS );
-                    sb.append( lU );
-                }
-                else
-                {
-                    sb.append( lEventually );
-                }
-                sb.append( " " );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                break;
-            case PSPConstants.S_BetweenQandR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                if ( lHasConstraint )
-                {
-                    sb.append( "(" );
-                    sb.append( lNot );
-                    sb.append( aScope.getR().getAsEvent() );                
-                    sb.append( lAnd );
-                    sb.append( lcntZS );
-                    sb.append( ")" );
-                }
-                else
-                {
-                    sb.append( lNot );
-                    sb.append( aScope.getR().getAsEvent() );                
-                    sb.append( lAnd );
-                    sb.deleteCharAt( sb.length() - 1 );
-                }
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                break;
-            case PSPConstants.S_AfterQuntilR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                if ( lHasConstraint )
-                {
-                    sb.append( "(" );
-                    sb.append( lNot );
-                    sb.append( aScope.getR().getAsEvent() );                
-                    sb.append( lAnd );
-                    sb.append( lcntZS );
-                    sb.append( ")" );
-                }
-                else
-                {
-                    sb.append( lNot );
-                    sb.append( aScope.getR().getAsEvent() );                
-                }
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lW );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                break;
-        }
-        
-        return sb.toString();
-    }
-    
-    // Tis addressed from 0 to n-1.
-    
-    private void RC1N_Ch( StringBuilder sb, ChainEvents Tis, int i )
-    {
-        if ( i < Tis.size() )
-        {
-            ChainEvent Ti = Tis.getTi( i );
-
-            EventConstraint lZi = Ti.getConstraint();
-            String lcntZi = lZi != null ? cnt( lZi.getEvent() ) : "true";
-            boolean lHasConstraint = !lcntZi.equals( "true" );
-
-            if ( lHasConstraint )
-            {
-                // with Zi
-                sb.append( lAnd );
-                sb.append( lcntZi );
-                sb.append( lAnd );
-                sb.append( lN );
-                sb.append( "(" );
-                sb.append( lcntZi );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( Ti.getEvent().getAsEvent() );
-                RC1N_Ch( sb, Tis, i+1 );
-                sb.append( ")" );
-                sb.append( ")" );
-            }
-            else
-            {
-                // no Zi
-                sb.append( lAnd );
-                sb.append( lN );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( Ti.getEvent().getAsEvent() );
-                RC1N_Ch( sb, Tis, i+1 );
-                sb.append( ")" );
-                sb.append( ")" );            
-            }
-        }
-    }
-    
-    private void RC1N_ChR( StringBuilder sb, ChainEvents Tis, Event R, int i )
-    {
-        if ( i < Tis.size() )
-        {
-            ChainEvent Ti = Tis.getTi( i );
-
-            EventConstraint lZi = Ti.getConstraint();
-            String lcntZi = lZi != null ? cnt( lZi.getEvent() ) : "true";
-            boolean lHasConstraint = !lcntZi.equals( "true" );
-
-            if ( lHasConstraint )
-            {
-                // with Zi
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( R.getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lcntZi );
-                sb.append( lAnd );
-                sb.append( lN );
-                sb.append( "(" );
-                sb.append( lcntZi );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( Ti.getEvent().getAsEvent() );
-                RC1N_ChR( sb, Tis, R, i+1 );
-                sb.append( ")" );
-                sb.append( ")" );
-            }
-            else
-            {
-                // no Zi
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( R.getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lN );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( Ti.getEvent().getAsEvent() );
-                RC1N_ChR( sb, Tis, R, i+1 );
-                sb.append( ")" );
-                sb.append( ")" );            
-            }
-        }
-    }
-
-    private String mapResponseChain1N( Scope aScope, ResponseChain1N aPattern )
-    {
+    private String mapResponse(Scope aScope, Response aPattern) {
         StringBuilder sb = new StringBuilder();
 
         EventConstraint lZS = aPattern.getSConstraint();
-        String lcntZS = lZS != null ? cnt( lZS.getEvent() ) : "true";
-        boolean lHasConstraint = !lcntZS.equals( "true" );
+        String lcntZS = lZS != null ? cnt(lZS.getEvent()) : "true";
+        boolean lHasConstraint = !lcntZS.equals("true");
 
-        switch ( aScope.getType() )
-        {
+        switch (aScope.getType()) {
             case PSPConstants.S_Globally:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                if ( lHasConstraint )
-                {
-                    sb.append( lcntZS );
-                    sb.append( lU );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                if (lHasConstraint) {
+                    sb.append(lcntZS);
+                    sb.append(languageDefinitions.getUntil());
+                } else {
+                    sb.append(languageDefinitions.getEventually());
                 }
-                else
-                {
-                    sb.append( lEventually );
-                }
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                RC1N_Ch( sb, aPattern.getTis(), 0 );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(" ");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_BeforeR:
-                sb.append( lEventually );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                if ( lHasConstraint )
-                {
-                    sb.append( "(" );
-                    sb.append( lNot );
-                    sb.append( aScope.getR().getAsEvent() );
-                    sb.append( lAnd );
-                    sb.append( lcntZS );
-                    sb.append( ")" );
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                if (lHasConstraint) {
+                    sb.append("(");
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aScope.getR().getAsEvent());
+                    sb.append(languageDefinitions.getAnd());
+                    sb.append(lcntZS);
+                    sb.append(")");
+                } else {
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aScope.getR().getAsEvent());
                 }
-                else
-                {                
-                    sb.append( lNot );
-                    sb.append( aScope.getR().getAsEvent() );
-                }
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                RC1N_ChR( sb, aPattern.getTis(), aScope.getR(), 0 );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
                 break;
             case PSPConstants.S_AfterQ:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );                
-                sb.append( "(" );
-                if ( lHasConstraint )
-                {
-                    sb.append( lcntZS );
-                    sb.append( lU );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                if (lHasConstraint) {
+                    sb.append(lcntZS);
+                    sb.append(languageDefinitions.getUntil());
+                } else {
+                    sb.append(languageDefinitions.getEventually());
                 }
-                else
-                {
-                    sb.append( lEventually );
-                }
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                RC1N_Ch( sb, aPattern.getTis(), 0 );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(" ");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(")");
+                sb.append(")");
                 break;
             case PSPConstants.S_BetweenQandR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lEventually );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                if ( lHasConstraint )
-                {
-                    sb.append( "(" );
-                    sb.append( lNot );
-                    sb.append( aScope.getR().getAsEvent() );                
-                    sb.append( lAnd );
-                    sb.append( lcntZS );
-                    sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                if (lHasConstraint) {
+                    sb.append("(");
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aScope.getR().getAsEvent());
+                    sb.append(languageDefinitions.getAnd());
+                    sb.append(lcntZS);
+                    sb.append(")");
+                } else {
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aScope.getR().getAsEvent());
+                    sb.append(languageDefinitions.getAnd());
+                    sb.deleteCharAt(sb.length() - 1);
                 }
-                else
-                {
-                    sb.append( lNot );
-                    sb.append( aScope.getR().getAsEvent() );                
-                }
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                RC1N_ChR( sb, aPattern.getTis(), aScope.getR(), 0 );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQuntilR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                if ( lHasConstraint )
-                {
-                    sb.append( "(" );
-                    sb.append( lNot );
-                    sb.append( aScope.getR().getAsEvent() );                
-                    sb.append( lAnd );
-                    sb.append( lcntZS );
-                    sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                if (lHasConstraint) {
+                    sb.append("(");
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aScope.getR().getAsEvent());
+                    sb.append(languageDefinitions.getAnd());
+                    sb.append(lcntZS);
+                    sb.append(")");
+                } else {
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aScope.getR().getAsEvent());
                 }
-                else
-                {
-                    sb.append( lNot );
-                    sb.append( aScope.getR().getAsEvent() );                
-                }
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                RC1N_ChR( sb, aPattern.getTis(), aScope.getR(), 0 );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lW );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getWeakUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
                 break;
         }
-        
+
         return sb.toString();
     }
-    
+
     // Tis addressed from 0 to n-1.
-    
-    private void RCN1_Ch( StringBuilder sb, ResponseChainN1 aPattern, int i )
-    {
-        ChainEvents Tis = aPattern.getTis();
-        
-        if ( i < Tis.size() )
-        {
-            ChainEvent Ti = Tis.getTi( i );
+
+    private void RC1N_Ch(StringBuilder sb, ChainEvents Tis, int i) {
+        if (i < Tis.size()) {
+            ChainEvent Ti = Tis.getTi(i);
 
             EventConstraint lZi = Ti.getConstraint();
-            String lcntZi = lZi != null ? cnt( lZi.getEvent() ) : "true";
-            
-            if ( lcntZi.equals( "true" ) )
-            {
-                // no Zi
-                sb.append( lAnd );
-                sb.append( lN );
-                sb.append( "(" );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( Ti.getEvent().getAsEvent() );
-                RCN1_Ch( sb, aPattern, i+1 );
-                sb.append( ")" );
-                sb.append( ")" );            
-            }
-            else
-            {
-                // with Zi
-                sb.append( lAnd );
-                sb.append( lN );
-                sb.append( "(" );
-                sb.append( lcntZi );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( Ti.getEvent().getAsEvent() );
-                RCN1_Ch( sb, aPattern, i+1 );
-                sb.append( ")" );
-                sb.append( ")" );
-            }
-        }
-        else
-        {
-            EventConstraint lZP = aPattern.getPConstraint();
-            String lcntZP = lZP != null ? cnt( lZP.getEvent() ) : "true";
+            String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
+            boolean lHasConstraint = !lcntZi.equals("true");
 
-            sb.append( lArrow );
-            if ( lcntZP.equals( "true" ) )
-            {
-                // no Zi
-                sb.append( lEventually );
-            }
-            else
-            {
+            if (lHasConstraint) {
                 // with Zi
-                sb.append( lcntZP );
-                sb.append( lU );
+                sb.append(languageDefinitions.getAnd());
+                sb.append(lcntZi);
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNext());
+                sb.append("(");
+                sb.append(lcntZi);
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(Ti.getEvent().getAsEvent());
+                RC1N_Ch(sb, Tis, i + 1);
+                sb.append(")");
+                sb.append(")");
+            } else {
+                // no Zi
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNext());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(Ti.getEvent().getAsEvent());
+                RC1N_Ch(sb, Tis, i + 1);
+                sb.append(")");
+                sb.append(")");
             }
-            sb.append( " " );
-            sb.append( aPattern.getP().getAsEvent() );
         }
     }
-    
-    private void RCN1_ChR( StringBuilder sb, ResponseChainN1 aPattern, Event R, int i )
-    {
-        ChainEvents Tis = aPattern.getTis();
 
-        if ( i < Tis.size() )
-        {
-            ChainEvent Ti = Tis.getTi( i );
+    private void RC1N_ChR(StringBuilder sb, ChainEvents Tis, Event R, int i) {
+        if (i < Tis.size()) {
+            ChainEvent Ti = Tis.getTi(i);
 
             EventConstraint lZi = Ti.getConstraint();
-            String lcntZi = lZi != null ? cnt( lZi.getEvent() ) : "true";
+            String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
+            boolean lHasConstraint = !lcntZi.equals("true");
 
-            if ( lcntZi.equals( "true" ) )
-            {
-                // no Zi
-                sb.append( lAnd );
-                sb.append( lN );
-                sb.append( "(" );
-                sb.append( lNot );
-                sb.append( R.getAsEvent() );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( Ti.getEvent().getAsEvent() );
-                RCN1_ChR( sb, aPattern, R, i+1 );
-                sb.append( ")" );
-                sb.append( ")" );            
-            }
-            else
-            {
+            if (lHasConstraint) {
                 // with Zi
-                sb.append( lAnd );
-                sb.append( lN );
-                sb.append( "(" );
-                sb.append( lNot );
-                sb.append( R.getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lcntZi );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( Ti.getEvent().getAsEvent() );
-                RCN1_ChR( sb, aPattern, R, i+1 );
-                sb.append( ")" );
-                sb.append( ")" );            
-            }
-        }
-        else
-        {
-            EventConstraint lZP = aPattern.getPConstraint();
-            String lcntZP = lZP != null ? cnt( lZP.getEvent() ) : "true";
-
-            sb.append( lArrow );
-            if ( lcntZP.equals( "true" ) )
-            {
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(R.getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(lcntZi);
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNext());
+                sb.append("(");
+                sb.append(lcntZi);
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(Ti.getEvent().getAsEvent());
+                RC1N_ChR(sb, Tis, R, i + 1);
+                sb.append(")");
+                sb.append(")");
+            } else {
                 // no Zi
-                sb.append( lEventually );
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(R.getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNext());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(Ti.getEvent().getAsEvent());
+                RC1N_ChR(sb, Tis, R, i + 1);
+                sb.append(")");
+                sb.append(")");
             }
-            else
-            {
-                // with Zi
-                sb.append( lcntZP );
-                sb.append( lU );
-            }
-            sb.append( " " );
-            sb.append( aPattern.getP().getAsEvent() );
         }
     }
 
-    private String mapResponseChainN1( Scope aScope, ResponseChainN1 aPattern )
-    {
+    private String mapResponseChain1N(Scope aScope, ResponseChain1N aPattern) {
         StringBuilder sb = new StringBuilder();
 
-        switch ( aScope.getType() )
-        {
-           case PSPConstants.S_Globally:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                RCN1_Ch( sb, aPattern, 0 );
-                sb.append( ")" );
-                break;
-            case PSPConstants.S_BeforeR:
-                sb.append( lEventually );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                RCN1_ChR( sb, aPattern, aScope.getR(), 0 );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                break;
-            case PSPConstants.S_AfterQ:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                RCN1_Ch( sb, aPattern, 0 );
-                sb.append( ")" );
-                sb.append( ")" );
-                break;
-            case PSPConstants.S_BetweenQandR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( lAnd );
-                sb.append( lEventually );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                RCN1_ChR( sb, aPattern, aScope.getR(), 0 );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                break;
-            case PSPConstants.S_AfterQuntilR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                RCN1_ChR( sb, aPattern, aScope.getR(), 0 );
-                sb.append( ")" );
-                sb.append( lW );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                break;
-         }
-        
-        return sb.toString();
-    }
-    
-    private String mapResponseInvariance( Scope aScope, ResponseInvariance aPattern )
-    {
-        StringBuilder sb = new StringBuilder();
+        EventConstraint lZS = aPattern.getSConstraint();
+        String lcntZS = lZS != null ? cnt(lZS.getEvent()) : "true";
+        boolean lHasConstraint = !lcntZS.equals("true");
 
-        switch ( aScope.getType() )
-        {
+        switch (aScope.getType()) {
             case PSPConstants.S_Globally:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                if (lHasConstraint) {
+                    sb.append(lcntZS);
+                    sb.append(languageDefinitions.getUntil());
+                } else {
+                    sb.append(languageDefinitions.getEventually());
+                }
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                RC1N_Ch(sb, aPattern.getTis(), 0);
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
                 break;
             case PSPConstants.S_BeforeR:
-                sb.append( lEventually );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );                
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );                
-                sb.append( ")" );
+                sb.append(languageDefinitions.getEventually());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                if (lHasConstraint) {
+                    sb.append("(");
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aScope.getR().getAsEvent());
+                    sb.append(languageDefinitions.getAnd());
+                    sb.append(lcntZS);
+                    sb.append(")");
+                } else {
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aScope.getR().getAsEvent());
+                }
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                RC1N_ChR(sb, aPattern.getTis(), aScope.getR(), 0);
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
                 break;
             case PSPConstants.S_AfterQ:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                if (lHasConstraint) {
+                    sb.append(lcntZS);
+                    sb.append(languageDefinitions.getUntil());
+                } else {
+                    sb.append(languageDefinitions.getEventually());
+                }
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                RC1N_Ch(sb, aPattern.getTis(), 0);
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
                 break;
             case PSPConstants.S_BetweenQandR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lEventually );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );        
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lU );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                if (lHasConstraint) {
+                    sb.append("(");
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aScope.getR().getAsEvent());
+                    sb.append(languageDefinitions.getAnd());
+                    sb.append(lcntZS);
+                    sb.append(")");
+                } else {
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aScope.getR().getAsEvent());
+                }
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                RC1N_ChR(sb, aPattern.getTis(), aScope.getR(), 0);
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
                 break;
             case PSPConstants.S_AfterQuntilR:
-                sb.append( lAlways );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aScope.getQ().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( lArrow );
-                sb.append( "(" );
-                sb.append( "(" );
-                sb.append( aPattern.getP().getAsEvent() );
-                sb.append( lArrow );
-                sb.append( lAlways );
-                sb.append( " " );
-                sb.append( "(" );
-                sb.append( aPattern.getS().getAsEvent() );
-                sb.append( lAnd );
-                sb.append( lNot );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( ")" );
-                sb.append( lW );
-                sb.append( " " );
-                sb.append( aScope.getR().getAsEvent() );
-                sb.append( ")" );
-                sb.append( ")" );
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                if (lHasConstraint) {
+                    sb.append("(");
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aScope.getR().getAsEvent());
+                    sb.append(languageDefinitions.getAnd());
+                    sb.append(lcntZS);
+                    sb.append(")");
+                } else {
+                    sb.append(languageDefinitions.getNot());
+                    sb.append(aScope.getR().getAsEvent());
+                }
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                RC1N_ChR(sb, aPattern.getTis(), aScope.getR(), 0);
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getWeakUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
                 break;
         }
-       
+
         return sb.toString();
     }
-    
-    public String getNotSupportedMessage()
-    {
+
+    // Tis addressed from 0 to n-1.
+
+    private void RCN1_Ch(StringBuilder sb, ResponseChainN1 aPattern, int i) {
+        ChainEvents Tis = aPattern.getTis();
+
+        if (i < Tis.size()) {
+            ChainEvent Ti = Tis.getTi(i);
+
+            EventConstraint lZi = Ti.getConstraint();
+            String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
+
+            if (lcntZi.equals("true")) {
+                // no Zi
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNext());
+                sb.append("(");
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(Ti.getEvent().getAsEvent());
+                RCN1_Ch(sb, aPattern, i + 1);
+                sb.append(")");
+                sb.append(")");
+            } else {
+                // with Zi
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNext());
+                sb.append("(");
+                sb.append(lcntZi);
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(Ti.getEvent().getAsEvent());
+                RCN1_Ch(sb, aPattern, i + 1);
+                sb.append(")");
+                sb.append(")");
+            }
+        } else {
+            EventConstraint lZP = aPattern.getPConstraint();
+            String lcntZP = lZP != null ? cnt(lZP.getEvent()) : "true";
+
+            sb.append(languageDefinitions.getImplication());
+            if (lcntZP.equals("true")) {
+                // no Zi
+                sb.append(languageDefinitions.getEventually());
+            } else {
+                // with Zi
+                sb.append(lcntZP);
+                sb.append(languageDefinitions.getUntil());
+            }
+            sb.append(" ");
+            sb.append(aPattern.getP().getAsEvent());
+        }
+    }
+
+    private void RCN1_ChR(StringBuilder sb, ResponseChainN1 aPattern, Event R, int i) {
+        ChainEvents Tis = aPattern.getTis();
+
+        if (i < Tis.size()) {
+            ChainEvent Ti = Tis.getTi(i);
+
+            EventConstraint lZi = Ti.getConstraint();
+            String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
+
+            if (lcntZi.equals("true")) {
+                // no Zi
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNext());
+                sb.append("(");
+                sb.append(languageDefinitions.getNot());
+                sb.append(R.getAsEvent());
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(Ti.getEvent().getAsEvent());
+                RCN1_ChR(sb, aPattern, R, i + 1);
+                sb.append(")");
+                sb.append(")");
+            } else {
+                // with Zi
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNext());
+                sb.append("(");
+                sb.append(languageDefinitions.getNot());
+                sb.append(R.getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(lcntZi);
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(Ti.getEvent().getAsEvent());
+                RCN1_ChR(sb, aPattern, R, i + 1);
+                sb.append(")");
+                sb.append(")");
+            }
+        } else {
+            EventConstraint lZP = aPattern.getPConstraint();
+            String lcntZP = lZP != null ? cnt(lZP.getEvent()) : "true";
+
+            sb.append(languageDefinitions.getImplication());
+            if (lcntZP.equals("true")) {
+                // no Zi
+                sb.append(languageDefinitions.getEventually());
+            } else {
+                // with Zi
+                sb.append(lcntZP);
+                sb.append(languageDefinitions.getUntil());
+            }
+            sb.append(" ");
+            sb.append(aPattern.getP().getAsEvent());
+        }
+    }
+
+    private String mapResponseChainN1(Scope aScope, ResponseChainN1 aPattern) {
+        StringBuilder sb = new StringBuilder();
+
+        switch (aScope.getType()) {
+            case PSPConstants.S_Globally:
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                RCN1_Ch(sb, aPattern, 0);
+                sb.append(")");
+                break;
+            case PSPConstants.S_BeforeR:
+                sb.append(languageDefinitions.getEventually());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                RCN1_ChR(sb, aPattern, aScope.getR(), 0);
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                break;
+            case PSPConstants.S_AfterQ:
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                RCN1_Ch(sb, aPattern, 0);
+                sb.append(")");
+                sb.append(")");
+                break;
+            case PSPConstants.S_BetweenQandR:
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                RCN1_ChR(sb, aPattern, aScope.getR(), 0);
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                break;
+            case PSPConstants.S_AfterQuntilR:
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                RCN1_ChR(sb, aPattern, aScope.getR(), 0);
+                sb.append(")");
+                sb.append(languageDefinitions.getWeakUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                break;
+        }
+
+        return sb.toString();
+    }
+
+    private String mapResponseInvariance(Scope aScope, ResponseInvariance aPattern) {
+        StringBuilder sb = new StringBuilder();
+
+        switch (aScope.getType()) {
+            case PSPConstants.S_Globally:
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(")");
+                break;
+            case PSPConstants.S_BeforeR:
+                sb.append(languageDefinitions.getEventually());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                break;
+            case PSPConstants.S_AfterQ:
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                break;
+            case PSPConstants.S_BetweenQandR:
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getEventually());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                break;
+            case PSPConstants.S_AfterQuntilR:
+                sb.append(languageDefinitions.getAlways());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aScope.getQ().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(languageDefinitions.getImplication());
+                sb.append("(");
+                sb.append("(");
+                sb.append(aPattern.getP().getAsEvent());
+                sb.append(languageDefinitions.getImplication());
+                sb.append(languageDefinitions.getAlways());
+                sb.append(" ");
+                sb.append("(");
+                sb.append(aPattern.getS().getAsEvent());
+                sb.append(languageDefinitions.getAnd());
+                sb.append(languageDefinitions.getNot());
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                sb.append(")");
+                sb.append(languageDefinitions.getWeakUntil());
+                sb.append(" ");
+                sb.append(aScope.getR().getAsEvent());
+                sb.append(")");
+                sb.append(")");
+                break;
+        }
+
+        return sb.toString();
+    }
+
+    public String getNotSupportedMessage() {
         return "Mapping not supported in Linear Temporal Logic.";
     }
 
-    public String toString()
-    {
+    public String toString() {
         return "LTL";
     }
 }
