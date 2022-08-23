@@ -41,7 +41,7 @@ package psp.sel.patterns.order;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Order;
 
 public class Until extends Order
@@ -60,10 +60,10 @@ public class Until extends Order
 
     public Until()
     {
-        this( Event.getDefault(), Event.getDefault(), null, null );
+        this( EventImpl.getDefault(), EventImpl.getDefault(), null, null );
     }
 
-    public Until( Event aP, Event aS, TimeBound aPTimeBound, ProbabilityBound aProbBound )
+    public Until( EventImpl aP, EventImpl aS, TimeBound aPTimeBound, ProbabilityBound aProbBound )
     {
         super( aP, aS, null, aProbBound );
 

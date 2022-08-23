@@ -41,7 +41,7 @@ package psp.ui.panels.pattern.occurrence;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.engine.PSPController;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Pattern;
 import psp.sel.patterns.occurrence.Absence;
 import psp.ui.dialogs.ProbabilityBoundDialog;
@@ -109,7 +109,7 @@ public class AbsencePanel extends javax.swing.JPanel implements PatternPanelFeat
             fPSPController.updatePattern();
     }
 
-    private boolean isEventSelectionPossible( Event aEvent )
+    private boolean isEventSelectionPossible( EventImpl aEvent )
     {
         if ( fPSPController != null )
             return fPSPController.isPatternEventSelectionPossible( aEvent );
@@ -121,7 +121,7 @@ public class AbsencePanel extends javax.swing.JPanel implements PatternPanelFeat
     {
         fP.acceptSelection();
 
-        fSelectedPattern.setP( (Event)fP.getSelectedItem() );
+        fSelectedPattern.setP( (EventImpl)fP.getSelectedItem() );
 
         updatePattern();
     }
@@ -235,7 +235,7 @@ public class AbsencePanel extends javax.swing.JPanel implements PatternPanelFeat
 
     private void fPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fPActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fP.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fP.getSelectedItem();
         
         if ( lEvent != null )
         {

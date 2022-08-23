@@ -38,13 +38,17 @@
 
 package psp.mappings;
 
+import java.util.List;
 import java.util.Objects;
 
 import psp.constraints.Interval;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
-import psp.sel.Event;
+import psp.mappings.elements.Element;
+import psp.sel.EventImpl;
+import psp.sel.patterns.Pattern;
 import psp.sel.patterns.order.ChainEvents;
+import psp.sel.scopes.Scope;
 
 public abstract class GenericMapper implements PatternMapper {
     protected LanguageDefinitions languageDefinitions;
@@ -63,7 +67,7 @@ public abstract class GenericMapper implements PatternMapper {
         this.languageDefinitions = languageDefinitions;
     };
 
-    public String cnt(Event aZP) {
+    public String cnt(EventImpl aZP) {
         return "";
     }
 
@@ -132,4 +136,21 @@ public abstract class GenericMapper implements PatternMapper {
     public boolean hasMappingErrorOccurred() {
         return fMappingError;
     }
+
+    public abstract List<Element> mapToElements(Scope aScope, Pattern aPattern);
+
+    public String getMapping(Scope aScope, Pattern aPattern) {
+        List<Element> elements = mapToElements(aScope, aPattern);
+        return mapToString(elements);
+    }
+
+    public String mapToString(final List<Element> elements) {
+        StringBuilder sb = new StringBuilder();
+        for (final Element element : elements) {
+            sb.append(element.getContent());
+
+        }
+        return sb.toString();
+    }
+
 }

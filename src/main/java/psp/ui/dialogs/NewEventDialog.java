@@ -40,7 +40,7 @@ package psp.ui.dialogs;
 
 import javax.swing.JOptionPane;
 import psp.engine.PSPController;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public class NewEventDialog extends javax.swing.JDialog 
 {    
@@ -56,9 +56,9 @@ public class NewEventDialog extends javax.swing.JDialog
         getRootPane().setDefaultButton(fOk );
     }
 
-    private Event fDialogResult;
+    private EventImpl fDialogResult;
 
-    public Event showDialog() 
+    public EventImpl showDialog() 
     {
         fClearActionPerformed( null );
         
@@ -203,7 +203,7 @@ public class NewEventDialog extends javax.swing.JDialog
     private void fClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fClearActionPerformed
         // clear selections
         
-        fName.setText( Event.getFreshEventName() );
+        fName.setText( EventImpl.getFreshEventName() );
         fSpecification.setText( "true" );
     }//GEN-LAST:event_fClearActionPerformed
 

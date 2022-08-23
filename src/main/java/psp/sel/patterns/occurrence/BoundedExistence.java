@@ -41,7 +41,7 @@ package psp.sel.patterns.occurrence;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Occurrence;
 
 public class BoundedExistence extends Occurrence
@@ -60,10 +60,10 @@ public class BoundedExistence extends Occurrence
 
     public BoundedExistence()
     {
-        this( Event.getDefault(), 1, null, null );
+        this( EventImpl.getDefault(), 1, null, null );
     }
     
-    public BoundedExistence( Event aEventP, int aFrequency, TimeBound aTimeBound, ProbabilityBound aProbBound )
+    public BoundedExistence( EventImpl aEventP, int aFrequency, TimeBound aTimeBound, ProbabilityBound aProbBound )
     {
         super( aEventP, aTimeBound, aProbBound );
         

@@ -41,33 +41,33 @@ package psp.sel.patterns;
 import java.util.ArrayList;
 import psp.constraints.ProbabilityBound;
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.order.ChainEvents;
 
 public abstract class Order extends Pattern
 {
-    private Event fP;
-    private Event fS;
+    private EventImpl fP;
+    private EventImpl fS;
     private ChainEvents fTis;
     
     private ProbabilityBound fProbBound;
 
-    public Event getP()
+    public EventImpl getP()
     {
         return fP;
     }
 
-    public void setP( Event aP )
+    public void setP( EventImpl aP )
     {
         fP = aP;
     }
     
-    public Event getS()
+    public EventImpl getS()
     {
         return fS;
     }
     
-    public void setS( Event aS )
+    public void setS( EventImpl aS )
     {
         fS = aS;
     }
@@ -92,7 +92,7 @@ public abstract class Order extends Pattern
         fProbBound = aProbBound;
     }
     
-    public Order( Event aP, Event aS, ChainEvents aTis, ProbabilityBound aProbBound )
+    public Order( EventImpl aP, EventImpl aS, ChainEvents aTis, ProbabilityBound aProbBound )
     {
         fP = aP;
         fS = aS;
@@ -105,9 +105,9 @@ public abstract class Order extends Pattern
         return PSPConstants.PC_Order;
     }
 
-    public ArrayList<Event> getEvents() 
+    public ArrayList<EventImpl> getEvents() 
     {
-        ArrayList<Event> Result = new ArrayList<Event>();
+        ArrayList<EventImpl> Result = new ArrayList<EventImpl>();
 
         Result.add( getP() );
         if ( !Result.contains( getS() ) )

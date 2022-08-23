@@ -38,34 +38,34 @@
 
 package psp.sel.scopes;
 
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public abstract class Scope 
 {
-    private Event fQ;
-    private Event fR;
+    private EventImpl fQ;
+    private EventImpl fR;
     
-    public Event getQ()
+    public EventImpl getQ()
     {
         return fQ;
     }
 
-    public void setQ( Event aQ)
+    public void setQ( EventImpl aQ)
     {
-        fQ = aQ == null ? Event.getDefault() : aQ;
+        fQ = aQ == null ? EventImpl.getDefault() : aQ;
     }
 
-    public Event getR()
+    public EventImpl getR()
     {
         return fR;
     }
 
-    public void setR( Event aR)
+    public void setR( EventImpl aR)
     {
-        fR = aR == null ? Event.getDefault() : aR;
+        fR = aR == null ? EventImpl.getDefault() : aR;
     }
 
-    public Scope( Event aQ, Event aR )
+    public Scope( EventImpl aQ, EventImpl aR )
     {
         setQ( aQ );
         setR( aR );

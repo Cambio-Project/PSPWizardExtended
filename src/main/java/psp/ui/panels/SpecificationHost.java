@@ -39,16 +39,16 @@
 package psp.ui.panels;
 
 import javax.swing.JFrame;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public interface SpecificationHost 
 {
     public JFrame getHostFrame();
     
-    public boolean isScopeEventSelectionPossible( Event aEvent );
+    public boolean isScopeEventSelectionPossible( EventImpl aEvent );
     public void updateScope();
 
-    public boolean isPatternEventSelectionPossible( Event aEvent );
-    public boolean isPatternEventSelectionPossible( Event aEvent, Event aAltEvent );
+    public boolean isPatternEventSelectionPossible( EventImpl aEvent );
+    public boolean isPatternEventSelectionPossible( EventImpl aEvent, EventImpl aAltEvent );
     public void updatePattern();
 }

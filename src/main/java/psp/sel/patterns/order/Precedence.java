@@ -41,7 +41,7 @@ package psp.sel.patterns.order;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Order;
 
 public class Precedence extends Order
@@ -60,10 +60,10 @@ public class Precedence extends Order
     
     public Precedence()
     {
-        this( Event.getDefault(), Event.getDefault(), null, null );
+        this( EventImpl.getDefault(), EventImpl.getDefault(), null, null );
     }
     
-    public Precedence( Event aP, Event aS, TimeBound aPTimeBound, ProbabilityBound aProbBound )
+    public Precedence( EventImpl aP, EventImpl aS, TimeBound aPTimeBound, ProbabilityBound aProbBound )
     {
         super( aP, aS, null, aProbBound );
 

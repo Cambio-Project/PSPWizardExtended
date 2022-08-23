@@ -51,7 +51,7 @@ import psp.mappings.PrismMapper;
 import psp.mappings.QuantitativePrismMapper;
 import psp.mappings.SELMapper;
 import psp.mappings.TBVMapper;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Pattern;
 import psp.sel.scopes.Scope;
 import psp.ui.dialogs.EditEventDialog;
@@ -109,7 +109,7 @@ public class PSPWizard extends javax.swing.JFrame implements PSPController {
     }
 
     public void reset() {
-        Event.reset();
+        EventImpl.reset();
         fEvents = new EventStorage();
 
         fSelectedScope = null;
@@ -122,24 +122,24 @@ public class PSPWizard extends javax.swing.JFrame implements PSPController {
         fSEs.setEnabled(true);
         fESpec.setSelected(false);
         fEName.setSelected(true);
-        Event.EventStringMethod = Event.E_Name;
+        EventImpl.EventStringMethod = EventImpl.E_Name;
     }
 
     // event controller facet
 
-    public Event newEvent(String aName) {
-        Event Result = fEvents.newEvent(aName);
+    public EventImpl newEvent(String aName) {
+        EventImpl Result = fEvents.newEvent(aName);
 
         return Result;
     }
 
-    public Event newEvent(String aName, String aSpecification) {
-        Event Result = fEvents.newEvent(aName, aSpecification);
+    public EventImpl newEvent(String aName, String aSpecification) {
+        EventImpl Result = fEvents.newEvent(aName, aSpecification);
 
         return Result;
     }
 
-    public Iterator<Event> iterator() {
+    public Iterator<EventImpl> iterator() {
         return fEvents.iterator();
     }
 
@@ -149,7 +149,7 @@ public class PSPWizard extends javax.swing.JFrame implements PSPController {
 
     private Scope fSelectedScope;
 
-    public boolean isScopeEventSelectionPossible(Event aEvent) {
+    public boolean isScopeEventSelectionPossible(EventImpl aEvent) {
         return EventSelectionValidator.isScopeEventSelectionPossible(this, aEvent);
     }
 
@@ -165,11 +165,11 @@ public class PSPWizard extends javax.swing.JFrame implements PSPController {
     // Pattern events
     private Pattern fSelectedPattern;
 
-    public boolean isPatternEventSelectionPossible(Event aEvent) {
+    public boolean isPatternEventSelectionPossible(EventImpl aEvent) {
         return EventSelectionValidator.isPatternEventSelectionPossible(this, aEvent);
     }
 
-    public boolean isPatternEventSelectionPossible(Event aEvent, Event aAltEvent) {
+    public boolean isPatternEventSelectionPossible(EventImpl aEvent, EventImpl aAltEvent) {
         return EventSelectionValidator.isPatternEventSelectionPossible(this, aEvent, aAltEvent);
     }
 
@@ -501,12 +501,12 @@ public class PSPWizard extends javax.swing.JFrame implements PSPController {
 
         if (!fEName.isSelected()) {
             fESpec.setSelected(true);
-            Event.EventStringMethod = Event.E_Spec;
+            EventImpl.EventStringMethod = EventImpl.E_Spec;
         } else {
             if (fESpec.isSelected())
-                Event.EventStringMethod = Event.E_NameAndSpec;
+                EventImpl.EventStringMethod = EventImpl.E_NameAndSpec;
             else
-                Event.EventStringMethod = Event.E_Name;
+                EventImpl.EventStringMethod = EventImpl.E_Name;
         }
         updateSELandMapping();
         repaint();
@@ -517,12 +517,12 @@ public class PSPWizard extends javax.swing.JFrame implements PSPController {
 
         if (!fESpec.isSelected()) {
             fEName.setSelected(true);
-            Event.EventStringMethod = Event.E_Name;
+            EventImpl.EventStringMethod = EventImpl.E_Name;
         } else {
             if (fEName.isSelected())
-                Event.EventStringMethod = Event.E_NameAndSpec;
+                EventImpl.EventStringMethod = EventImpl.E_NameAndSpec;
             else
-                Event.EventStringMethod = Event.E_Spec;
+                EventImpl.EventStringMethod = EventImpl.E_Spec;
         }
         updateSELandMapping();
         repaint();

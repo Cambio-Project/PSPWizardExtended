@@ -44,7 +44,7 @@ import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.constraints.UpperTimeBound;
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.order.ChainEvent;
 import psp.sel.patterns.order.ChainEvents;
 
@@ -53,7 +53,7 @@ public abstract class MTLSupport extends GenericMapper {
         super(languageDefinitions);
     }
 
-    public String cnt(Event aZP) {
+    public String cnt(EventImpl aZP) {
         if (aZP != null)
             return languageDefinitions.getNot() + aZP.getAsEvent();
         else

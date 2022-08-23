@@ -41,12 +41,12 @@ package psp.mappings;
 import psp.constraints.Interval;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.order.ChainEvents;
 
 public interface PSPFrameworkSupport 
 {
-    public String cnt( Event aZP );
+    public String cnt( EventImpl aZP );
 
     public String time( TimeBound aPTimeBound );
     public String lmintime( TimeBound aPTimeBound );

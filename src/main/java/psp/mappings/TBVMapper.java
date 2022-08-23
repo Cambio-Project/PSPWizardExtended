@@ -1,16 +1,25 @@
 package psp.mappings;
 
+import psp.mappings.elements.AlwaysElement;
+import psp.mappings.elements.AndElement;
+import psp.mappings.elements.EventuallyElement;
+import psp.mappings.elements.ImplicationElement;
+import psp.mappings.elements.NotElement;
+import psp.mappings.elements.OrElement;
+import psp.mappings.elements.UntilElement;
+import psp.mappings.elements.WeakUntilElement;
+
 public class TBVMapper extends MTLMapper {
     private static final String defaultInf = "∞";
-    private static final String defaultAlways = "always";
-    private static final String defaultEventually = "once";
+    private static final AlwaysElement defaultAlways = new AlwaysElement("always");
+    private static final EventuallyElement defaultEventually = new EventuallyElement("once");
     // private static final String defaultNext = "○";
-    private static final String defaultImplication = " -> ";
-    private static final String defaultNot = "!";
-    private static final String defaultAnd = " and ";
-    private static final String defaultOr = " or ";
-    private static final String defaultUntil = " since";
-    private static final String defaultWeakUntil = " weak_since ";
+    private static final ImplicationElement defaultImplication = new ImplicationElement(" -> ");
+    private static final NotElement defaultNot = new NotElement("!");
+    private static final AndElement defaultAnd = new AndElement(" and ");
+    private static final OrElement defaultOr = new OrElement(" or ");
+    private static final UntilElement defaultUntil = new UntilElement(" since");
+    private static final WeakUntilElement defaultWeakUntil = new WeakUntilElement(" weak_since ");
     private static final LanguageDefinitions TBV_LANGUAGE_DEFINITION = new LanguageDefinitions(defaultInf,
         defaultAlways, defaultEventually, null, defaultImplication, defaultNot, defaultAnd, defaultOr, defaultUntil,
         defaultWeakUntil);

@@ -40,7 +40,7 @@ package psp.sel.patterns.order;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public class ChainEvents implements Iterable<ChainEvent>
 {
@@ -77,13 +77,13 @@ public class ChainEvents implements Iterable<ChainEvent>
         fTis = new ArrayList<ChainEvent>( aTis );
     }
     
-    public ArrayList<Event> getEvents()
+    public ArrayList<EventImpl> getEvents()
     {
-        ArrayList<Event> Result = new ArrayList<Event>();
+        ArrayList<EventImpl> Result = new ArrayList<EventImpl>();
     
         for ( ChainEvent ce : fTis )
         {
-            for ( Event e : ce.getEvents() )
+            for ( EventImpl e : ce.getEvents() )
             {
                 if ( !Result.contains( e ) )
                     Result.add( e );

@@ -42,14 +42,14 @@ import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.constraints.UpperTimeBound;
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Occurrence;
 
 public class TransientState extends Occurrence
 {
     public TransientState()
     {
-        this( Event.getDefault(), 0, null, null );
+        this( EventImpl.getDefault(), 0, null, null );
     }
 
     private long fUpperLimit;
@@ -81,7 +81,7 @@ public class TransientState extends Occurrence
         return new UpperTimeBound( getP(), fUpperLimit, fTimeUnit );
     }
     
-    public TransientState( Event aEventP, long aUpperLimit, String aTimeUnit, ProbabilityBound aProbBound )
+    public TransientState( EventImpl aEventP, long aUpperLimit, String aTimeUnit, ProbabilityBound aProbBound )
     {
         super( aEventP, null, aProbBound );
 

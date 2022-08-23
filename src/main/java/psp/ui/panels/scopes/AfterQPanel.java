@@ -39,7 +39,7 @@
 package psp.ui.panels.scopes;
 
 import psp.engine.PSPController;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.scopes.AfterQ;
 import psp.sel.scopes.Scope;
 
@@ -85,13 +85,13 @@ public class AfterQPanel extends javax.swing.JPanel implements ScopePanelFeature
 
     private void updateScope()
     {
-        fSelectedScope.setQ( (Event)fScopeA.getSelectedItem() );
+        fSelectedScope.setQ( (EventImpl)fScopeA.getSelectedItem() );
 
         if ( fPSPController != null )
             fPSPController.updateScope();
     }
     
-    private boolean isEventSelectionPossible( Event aEvent )
+    private boolean isEventSelectionPossible( EventImpl aEvent )
     {
         if ( fPSPController != null )
             return fPSPController.isScopeEventSelectionPossible( aEvent );
@@ -148,7 +148,7 @@ public class AfterQPanel extends javax.swing.JPanel implements ScopePanelFeature
 
     private void fScopeAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fScopeAActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fScopeA.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fScopeA.getSelectedItem();
         
         if ( lEvent != null )
         {

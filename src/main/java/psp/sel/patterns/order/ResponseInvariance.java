@@ -41,7 +41,7 @@ package psp.sel.patterns.order;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Order;
 
 public class ResponseInvariance extends Order
@@ -60,10 +60,10 @@ public class ResponseInvariance extends Order
     
     public ResponseInvariance()
     {
-        this( Event.getDefault(), Event.getDefault(), null, null );
+        this( EventImpl.getDefault(), EventImpl.getDefault(), null, null );
     }
 
-    public ResponseInvariance( Event aEventP, Event aEventS, TimeBound aSTimeBound, ProbabilityBound aProbBound )
+    public ResponseInvariance( EventImpl aEventP, EventImpl aEventS, TimeBound aSTimeBound, ProbabilityBound aProbBound )
     {
         super( aEventP, aEventS, null, aProbBound );
 

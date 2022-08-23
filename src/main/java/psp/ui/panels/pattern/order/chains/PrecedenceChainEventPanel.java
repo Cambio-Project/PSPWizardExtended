@@ -40,7 +40,7 @@ package psp.ui.panels.pattern.order.chains;
 
 import psp.constraints.TimeBound;
 import psp.engine.PSPController;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.order.ChainEvent;
 import psp.ui.dialogs.TimeBoundDialog;
 import psp.ui.dialogs.UpperTimeBoundDialog;
@@ -95,14 +95,14 @@ public class PrecedenceChainEventPanel extends javax.swing.JPanel implements Cha
 
     private void updateChainEvent()
     {
-        fChainEvent.setEvent( (Event)fTi.getSelectedItem() );
-        fChainEvent.setConstraint( (Event)fZi.getSelectedItem() );
+        fChainEvent.setEvent( (EventImpl)fTi.getSelectedItem() );
+        fChainEvent.setConstraint( (EventImpl)fZi.getSelectedItem() );
 
         if ( fHostPanel != null )
             fHostPanel.updateSelection();
     }
     
-    private boolean isEventSelectionPossible( Event aEvent )
+    private boolean isEventSelectionPossible( EventImpl aEvent )
     {
         if ( fPSPController != null )
             return fPSPController.isPatternEventSelectionPossible( aEvent );
@@ -274,7 +274,7 @@ public class PrecedenceChainEventPanel extends javax.swing.JPanel implements Cha
     private void fTiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fTiActionPerformed
         // event selected
 
-        Event lEvent = (Event)fTi.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fTi.getSelectedItem();
         
         if ( lEvent != null )
         {
@@ -290,7 +290,7 @@ public class PrecedenceChainEventPanel extends javax.swing.JPanel implements Cha
 
     private void fZiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fZiActionPerformed
         // constraint event selected
-        Event lEvent = (Event)fZi.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fZi.getSelectedItem();
         
         if ( lEvent != null )
         {

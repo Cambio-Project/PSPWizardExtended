@@ -42,14 +42,14 @@ import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.constraints.UpperTimeBound;
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Occurrence;
 
 public class MaximumDuration extends Occurrence
 {
     public MaximumDuration()
     {
-        this( Event.getDefault(), 0, null, null );
+        this( EventImpl.getDefault(), 0, null, null );
     }
 
     private long fUpperLimit;
@@ -81,7 +81,7 @@ public class MaximumDuration extends Occurrence
         fTimeUnit = aTimeUnit;
     }
     
-    public MaximumDuration( Event aEventP, long aUpperLimit, String aTimeUnit, ProbabilityBound aProbBound )
+    public MaximumDuration( EventImpl aEventP, long aUpperLimit, String aTimeUnit, ProbabilityBound aProbBound )
     {
         super( aEventP, null, aProbBound );
 

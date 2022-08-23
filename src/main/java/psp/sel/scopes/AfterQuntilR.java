@@ -39,7 +39,7 @@
 package psp.sel.scopes;
 
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public class AfterQuntilR extends Scope
 {
@@ -48,7 +48,7 @@ public class AfterQuntilR extends Scope
         super( null, null );
     }
     
-    public AfterQuntilR( Event aQ, Event aR )
+    public AfterQuntilR( EventImpl aQ, EventImpl aR )
     {
         super( aQ, aR );
     }

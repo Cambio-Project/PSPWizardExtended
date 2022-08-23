@@ -40,15 +40,15 @@ package psp.engine;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
-public class EventStorage implements Iterable<Event>
+public class EventStorage implements Iterable<EventImpl>
 {
-    private ArrayList<Event> fElements;
+    private ArrayList<EventImpl> fElements;
     
     public EventStorage()
     {
-        fElements = new ArrayList<Event>();
+        fElements = new ArrayList<EventImpl>();
     }
     
     public int size()
@@ -56,12 +56,12 @@ public class EventStorage implements Iterable<Event>
         return fElements.size();
     }
 
-    public Event get( int aIndex )
+    public EventImpl get( int aIndex )
     {
         return fElements.get( aIndex );
     }
 
-    private boolean addEvent( Event aEvent )
+    private boolean addEvent( EventImpl aEvent )
     {
         if ( !fElements.contains( aEvent ) )
         {
@@ -75,9 +75,9 @@ public class EventStorage implements Iterable<Event>
     }
 
     // gui support to add new event
-    public Event newEvent( String aDescriptor )
+    public EventImpl newEvent( String aDescriptor )
     {
-        Event Result = new Event( aDescriptor );
+        EventImpl Result = new EventImpl( aDescriptor );
         
         if ( addEvent( Result ) )
         {
@@ -87,9 +87,9 @@ public class EventStorage implements Iterable<Event>
             return null;
     }
 
-    public Event newEvent( String aName, String aSpecification )
+    public EventImpl newEvent( String aName, String aSpecification )
     {
-        Event Result = new Event( aName, aSpecification );
+        EventImpl Result = new EventImpl( aName, aSpecification );
         
         if ( addEvent( Result ) )
         {
@@ -99,7 +99,7 @@ public class EventStorage implements Iterable<Event>
             return null;
     }
 
-    public Iterator<Event> iterator() 
+    public Iterator<EventImpl> iterator() 
     {
         return fElements.iterator();
     }

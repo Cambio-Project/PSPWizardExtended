@@ -40,17 +40,17 @@ package psp.sel.patterns.occurrence;
 
 import psp.constraints.ProbabilityBound;
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Occurrence;
 
 public class SteadyState extends Occurrence
 {
     public SteadyState()
     {
-        this( Event.getDefault(), null );
+        this( EventImpl.getDefault(), null );
     }
     
-    public SteadyState( Event aEventP, ProbabilityBound aProbBound )
+    public SteadyState( EventImpl aEventP, ProbabilityBound aProbBound )
     {
         super( aEventP, null, aProbBound );
     }

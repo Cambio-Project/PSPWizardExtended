@@ -41,7 +41,7 @@ package psp.ui.panels.pattern.order;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.engine.PSPController;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Pattern;
 import psp.sel.patterns.order.ResponseInvariance;
 import psp.ui.dialogs.ProbabilityBoundDialog;
@@ -112,7 +112,7 @@ public class ResponseInvariancePanel extends javax.swing.JPanel implements Patte
             fPSPController.updatePattern();
     }
 
-    private boolean isEventSelectionPossible( Event aEvent )
+    private boolean isEventSelectionPossible( EventImpl aEvent )
     {
         if ( fPSPController != null )
             return fPSPController.isPatternEventSelectionPossible( aEvent );
@@ -124,7 +124,7 @@ public class ResponseInvariancePanel extends javax.swing.JPanel implements Patte
     {
         fP.acceptSelection();
 
-        fSelectedPattern.setP( (Event)fP.getSelectedItem() );
+        fSelectedPattern.setP( (EventImpl)fP.getSelectedItem() );
 
         updatePattern();
     }
@@ -133,7 +133,7 @@ public class ResponseInvariancePanel extends javax.swing.JPanel implements Patte
     {
         fS.acceptSelection();
 
-        fSelectedPattern.setS( (Event)fS.getSelectedItem() );
+        fSelectedPattern.setS( (EventImpl)fS.getSelectedItem() );
 
         updatePattern();
     }
@@ -275,7 +275,7 @@ public class ResponseInvariancePanel extends javax.swing.JPanel implements Patte
 
     private void fPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fPActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fP.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fP.getSelectedItem();
         
         if ( lEvent != null )
         {
@@ -290,7 +290,7 @@ public class ResponseInvariancePanel extends javax.swing.JPanel implements Patte
 
     private void fSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fS.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fS.getSelectedItem();
         
         if ( lEvent != null )
         {

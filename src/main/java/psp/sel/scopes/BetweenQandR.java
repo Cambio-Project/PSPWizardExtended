@@ -39,7 +39,7 @@
 package psp.sel.scopes;
 
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public class BetweenQandR extends Scope
 {
@@ -48,7 +48,7 @@ public class BetweenQandR extends Scope
         this( null, null );
     }
 
-    public BetweenQandR( Event aQ, Event aR )
+    public BetweenQandR( EventImpl aQ, EventImpl aR )
     {
         super( aQ, aR );
     }

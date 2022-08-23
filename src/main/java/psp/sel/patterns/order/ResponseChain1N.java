@@ -43,7 +43,7 @@ import psp.constraints.EventConstraint;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Order;
 
 public class ResponseChain1N extends Order
@@ -73,10 +73,10 @@ public class ResponseChain1N extends Order
 
     public ResponseChain1N()
     {
-        this( Event.getDefault(), Event.getDefault(), new ChainEvents(), null, null, null );
+        this( EventImpl.getDefault(), EventImpl.getDefault(), new ChainEvents(), null, null, null );
     }
 
-    public ResponseChain1N( Event aEventP, Event aEventS, ChainEvents aEventTis,
+    public ResponseChain1N( EventImpl aEventP, EventImpl aEventS, ChainEvents aEventTis,
                             TimeBound aTimeBoundS, EventConstraint aSConstraint, ProbabilityBound aProbBound )
     {
         super( aEventP, aEventS, aEventTis, aProbBound );
@@ -90,11 +90,11 @@ public class ResponseChain1N extends Order
         return PSPConstants.P_ResponseChain1N;
     }
 
-    public ArrayList<Event> getEvents() 
+    public ArrayList<EventImpl> getEvents() 
     {
-        ArrayList<Event> Result = super.getEvents();
+        ArrayList<EventImpl> Result = super.getEvents();
 
-        for ( Event e : getTis().getEvents() )
+        for ( EventImpl e : getTis().getEvents() )
         {
             if ( !Result.contains( e ) )
                     Result.add( e );

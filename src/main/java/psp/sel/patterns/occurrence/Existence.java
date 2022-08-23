@@ -41,17 +41,17 @@ package psp.sel.patterns.occurrence;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Occurrence;
 
 public class Existence extends Occurrence
 {
     public Existence()
     {
-        this( Event.getDefault(), null, null );
+        this( EventImpl.getDefault(), null, null );
     }
 
-    public Existence( Event aEventP, TimeBound aTimeBound, ProbabilityBound aProbBound )
+    public Existence( EventImpl aEventP, TimeBound aTimeBound, ProbabilityBound aProbBound )
     {
         super( aEventP, aTimeBound, aProbBound );
     }

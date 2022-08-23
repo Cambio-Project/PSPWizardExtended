@@ -39,14 +39,14 @@
 package psp.constraints;
 
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public abstract class TimeBound extends PSPConstraint
 {
-    private Event fTimedEvent;
+    private EventImpl fTimedEvent;
     private String fTimeUnit;
 
-    public Event getTimedEvent()
+    public EventImpl getTimedEvent()
     {
         return fTimedEvent;
     }
@@ -61,12 +61,12 @@ public abstract class TimeBound extends PSPConstraint
         fTimeUnit = aTimeUnit;
     }
     
-    public TimeBound( Event aTimedEvent )
+    public TimeBound( EventImpl aTimedEvent )
     {
         this( aTimedEvent, null );
     }
 
-    public TimeBound( Event aTimedEvent, String aTimeUnit )
+    public TimeBound( EventImpl aTimedEvent, String aTimeUnit )
     {
         fTimedEvent = aTimedEvent;
 

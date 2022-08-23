@@ -41,7 +41,7 @@ package psp.ui.panels.pattern.order;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.engine.PSPController;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Pattern;
 import psp.sel.patterns.order.Precedence;
 import psp.ui.dialogs.IntervalTimeBoundDialog;
@@ -116,7 +116,7 @@ public class PrecedencePanel extends javax.swing.JPanel implements PatternPanelF
             fPSPController.updatePattern();
     }
 
-    private boolean isEventSelectionPossible( Event aEvent )
+    private boolean isEventSelectionPossible( EventImpl aEvent )
     {
         if ( fPSPController != null )
             return fPSPController.isPatternEventSelectionPossible( aEvent );
@@ -124,7 +124,7 @@ public class PrecedencePanel extends javax.swing.JPanel implements PatternPanelF
         return true;
     }
 
-    private boolean isSSelectionPossible( Event aS, Event aSAlt )
+    private boolean isSSelectionPossible( EventImpl aS, EventImpl aSAlt )
     {
         if ( fPSPController != null )
             return fPSPController.isPatternEventSelectionPossible( aS, aSAlt );
@@ -138,7 +138,7 @@ public class PrecedencePanel extends javax.swing.JPanel implements PatternPanelF
         fP2.setSelectedItem( fP1.getSelectedItem() );
         fP2.acceptSelection();
 
-        fSelectedPattern.setP( (Event)fP1.getSelectedItem() );
+        fSelectedPattern.setP( (EventImpl)fP1.getSelectedItem() );
 
         updatePattern();
     }
@@ -149,7 +149,7 @@ public class PrecedencePanel extends javax.swing.JPanel implements PatternPanelF
         fP1.setSelectedItem( fP2.getSelectedItem() );
         fP1.acceptSelection();
 
-        fSelectedPattern.setP( (Event)fP2.getSelectedItem() );
+        fSelectedPattern.setP( (EventImpl)fP2.getSelectedItem() );
 
         updatePattern();
     }
@@ -158,7 +158,7 @@ public class PrecedencePanel extends javax.swing.JPanel implements PatternPanelF
     {
         fS.acceptSelection();
 
-        fSelectedPattern.setS( (Event)fS.getSelectedItem() );
+        fSelectedPattern.setS( (EventImpl)fS.getSelectedItem() );
 
         updatePattern();
     }
@@ -326,11 +326,11 @@ public class PrecedencePanel extends javax.swing.JPanel implements PatternPanelF
 
     private void fP1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fP1ActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fP1.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fP1.getSelectedItem();
         
         if ( lEvent != null )
         {
-            if ( fP1.isStable( lEvent ) || isSSelectionPossible( lEvent, (Event)fP2.getSelectedItem() ) )
+            if ( fP1.isStable( lEvent ) || isSSelectionPossible( lEvent, (EventImpl)fP2.getSelectedItem() ) )
             {
                 fP1.acceptSelection();
                 updateP1();
@@ -342,11 +342,11 @@ public class PrecedencePanel extends javax.swing.JPanel implements PatternPanelF
 
     private void fP2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fP2ActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fP2.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fP2.getSelectedItem();
         
         if ( lEvent != null )
         {
-            if ( fP2.isStable( lEvent ) || isSSelectionPossible( lEvent, (Event)fP1.getSelectedItem() ) )
+            if ( fP2.isStable( lEvent ) || isSSelectionPossible( lEvent, (EventImpl)fP1.getSelectedItem() ) )
             {
                 updateP2();
             }
@@ -357,7 +357,7 @@ public class PrecedencePanel extends javax.swing.JPanel implements PatternPanelF
 
     private void fSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fS.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fS.getSelectedItem();
         
         if ( lEvent != null )
         {

@@ -43,7 +43,7 @@ import javax.swing.event.DocumentListener;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.engine.PSPController;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Pattern;
 import psp.sel.patterns.occurrence.BoundedExistence;
 import psp.ui.dialogs.ProbabilityBoundDialog;
@@ -147,7 +147,7 @@ public class BoundedExistencePanel extends javax.swing.JPanel implements Pattern
             fPSPController.updatePattern();
     }
 
-    private boolean isEventSelectionPossible( Event aEvent )
+    private boolean isEventSelectionPossible( EventImpl aEvent )
     {
         if ( fPSPController != null )
             return fPSPController.isPatternEventSelectionPossible( aEvent );
@@ -159,7 +159,7 @@ public class BoundedExistencePanel extends javax.swing.JPanel implements Pattern
     {
         fP.acceptSelection();
 
-        fSelectedPattern.setP( (Event)fP.getSelectedItem() );
+        fSelectedPattern.setP( (EventImpl)fP.getSelectedItem() );
 
         updatePattern();
     }
@@ -288,7 +288,7 @@ public class BoundedExistencePanel extends javax.swing.JPanel implements Pattern
 
     private void fPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fPActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fP.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fP.getSelectedItem();
         
         if ( lEvent != null )
         {

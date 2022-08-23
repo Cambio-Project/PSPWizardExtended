@@ -42,7 +42,7 @@ import psp.constraints.EventConstraint;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.engine.PSPController;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Pattern;
 import psp.sel.patterns.order.Response;
 import psp.ui.dialogs.ProbabilityBoundDialog;
@@ -71,7 +71,7 @@ public class ResponsePanel extends javax.swing.JPanel implements PatternPanelFea
             if ( fSelectedPattern.getSConstraint() != null )
                 fZS.setSelectedItem( fSelectedPattern.getSConstraint().getEvent() );
             else
-                fZS.setSelectedItem( Event.getConstraintDefault() );
+                fZS.setSelectedItem( EventImpl.getConstraintDefault() );
 
             if ( fSelectedPattern.getSTimeBound() == null )
                 fTimeBound.setText( "Time Bound" );
@@ -119,7 +119,7 @@ public class ResponsePanel extends javax.swing.JPanel implements PatternPanelFea
             fPSPController.updatePattern();
     }
 
-    private boolean isEventSelectionPossible( Event aEvent )
+    private boolean isEventSelectionPossible( EventImpl aEvent )
     {
         if ( fPSPController != null )
             return fPSPController.isPatternEventSelectionPossible( aEvent );
@@ -131,7 +131,7 @@ public class ResponsePanel extends javax.swing.JPanel implements PatternPanelFea
     {
         fP.acceptSelection();
 
-        fSelectedPattern.setP( (Event)fP.getSelectedItem() );
+        fSelectedPattern.setP( (EventImpl)fP.getSelectedItem() );
 
         updatePattern();
     }
@@ -140,7 +140,7 @@ public class ResponsePanel extends javax.swing.JPanel implements PatternPanelFea
     {
         fS.acceptSelection();
 
-        fSelectedPattern.setS( (Event)fS.getSelectedItem() );
+        fSelectedPattern.setS( (EventImpl)fS.getSelectedItem() );
 
         updatePattern();
     }
@@ -149,7 +149,7 @@ public class ResponsePanel extends javax.swing.JPanel implements PatternPanelFea
     {
         fZS.acceptSelection();
 
-        fSelectedPattern.setSConstraint( EventConstraint.newEventConstraint( (Event)fZS.getSelectedItem() ) );
+        fSelectedPattern.setSConstraint( EventConstraint.newEventConstraint( (EventImpl)fZS.getSelectedItem() ) );
 
         updatePattern();
     }
@@ -306,7 +306,7 @@ public class ResponsePanel extends javax.swing.JPanel implements PatternPanelFea
 
     private void fPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fPActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fP.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fP.getSelectedItem();
         
         if ( lEvent != null )
         {
@@ -321,7 +321,7 @@ public class ResponsePanel extends javax.swing.JPanel implements PatternPanelFea
 
     private void fSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fS.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fS.getSelectedItem();
         
         if ( lEvent != null )
         {
@@ -336,7 +336,7 @@ public class ResponsePanel extends javax.swing.JPanel implements PatternPanelFea
 
     private void fZSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fZSActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fZS.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fZS.getSelectedItem();
         
         if ( lEvent != null )
         {

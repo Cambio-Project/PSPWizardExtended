@@ -42,7 +42,7 @@ import psp.constraints.EventConstraint;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.engine.PSPController;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Pattern;
 import psp.sel.patterns.order.ChainEvents;
 import psp.sel.patterns.order.PrecedenceChainN1;
@@ -74,7 +74,7 @@ public class PrecedenceChainN1Panel extends javax.swing.JPanel implements Patter
             if ( fSelectedPattern.getPConstraint() != null )
                 fZP.setSelectedItem( fSelectedPattern.getPConstraint().getEvent() );
             else
-                fZP.setSelectedItem( Event.getConstraintDefault() );
+                fZP.setSelectedItem( EventImpl.getConstraintDefault() );
 
             fTi.setChainSequence( fSelectedPattern.getTis().getTis() );
             
@@ -135,7 +135,7 @@ public class PrecedenceChainN1Panel extends javax.swing.JPanel implements Patter
             fPSPController.updatePattern();
     }
 
-    private boolean isEventSelectionPossible( Event aEvent )
+    private boolean isEventSelectionPossible( EventImpl aEvent )
     {
         if ( fPSPController != null )
             return fPSPController.isPatternEventSelectionPossible( aEvent );
@@ -143,7 +143,7 @@ public class PrecedenceChainN1Panel extends javax.swing.JPanel implements Patter
         return true;
     }
 
-    private boolean isSSelectionPossible( Event aS, Event aSAlt )
+    private boolean isSSelectionPossible( EventImpl aS, EventImpl aSAlt )
     {
         if ( fPSPController != null )
             return fPSPController.isPatternEventSelectionPossible( aS, aSAlt );
@@ -157,7 +157,7 @@ public class PrecedenceChainN1Panel extends javax.swing.JPanel implements Patter
         fP2.setSelectedItem( fP1.getSelectedItem() );
         fP2.acceptSelection();
 
-        fSelectedPattern.setP( (Event)fP1.getSelectedItem() );
+        fSelectedPattern.setP( (EventImpl)fP1.getSelectedItem() );
 
         updatePattern();
     }
@@ -168,7 +168,7 @@ public class PrecedenceChainN1Panel extends javax.swing.JPanel implements Patter
         fP1.setSelectedItem( fP2.getSelectedItem() );
         fP1.acceptSelection();
 
-        fSelectedPattern.setP( (Event)fP2.getSelectedItem() );
+        fSelectedPattern.setP( (EventImpl)fP2.getSelectedItem() );
 
         updatePattern();
     }
@@ -177,7 +177,7 @@ public class PrecedenceChainN1Panel extends javax.swing.JPanel implements Patter
     {
         fS.acceptSelection();
 
-        fSelectedPattern.setS( (Event)fS.getSelectedItem() );
+        fSelectedPattern.setS( (EventImpl)fS.getSelectedItem() );
 
         updatePattern();
     }
@@ -186,7 +186,7 @@ public class PrecedenceChainN1Panel extends javax.swing.JPanel implements Patter
     {
         fZP.acceptSelection();
 
-        fSelectedPattern.setPConstraint( EventConstraint.newEventConstraint( (Event)fZP.getSelectedItem() ) );
+        fSelectedPattern.setPConstraint( EventConstraint.newEventConstraint( (EventImpl)fZP.getSelectedItem() ) );
 
         updatePattern();
     }
@@ -372,11 +372,11 @@ public class PrecedenceChainN1Panel extends javax.swing.JPanel implements Patter
 
     private void fP1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fP1ActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fP1.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fP1.getSelectedItem();
         
         if ( lEvent != null )
         {
-            if ( fP1.isStable( lEvent ) || isSSelectionPossible( lEvent, (Event)fP2.getSelectedItem() ) )
+            if ( fP1.isStable( lEvent ) || isSSelectionPossible( lEvent, (EventImpl)fP2.getSelectedItem() ) )
             {
                 fP1.acceptSelection();
                 updateP1();
@@ -388,11 +388,11 @@ public class PrecedenceChainN1Panel extends javax.swing.JPanel implements Patter
 
     private void fP2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fP2ActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fP2.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fP2.getSelectedItem();
         
         if ( lEvent != null )
         {
-            if ( fP2.isStable( lEvent ) || isSSelectionPossible( lEvent, (Event)fP1.getSelectedItem() ) )
+            if ( fP2.isStable( lEvent ) || isSSelectionPossible( lEvent, (EventImpl)fP1.getSelectedItem() ) )
             {
                 updateP2();
             }
@@ -403,7 +403,7 @@ public class PrecedenceChainN1Panel extends javax.swing.JPanel implements Patter
 
     private void fSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fS.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fS.getSelectedItem();
         
         if ( lEvent != null )
         {
@@ -418,7 +418,7 @@ public class PrecedenceChainN1Panel extends javax.swing.JPanel implements Patter
 
     private void fZPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fZPActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fZP.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fZP.getSelectedItem();
         
         if ( lEvent != null )
         {

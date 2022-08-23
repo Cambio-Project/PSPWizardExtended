@@ -42,7 +42,7 @@ import psp.constraints.EventConstraint;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.engine.PSPController;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Pattern;
 import psp.sel.patterns.order.ChainEvents;
 import psp.sel.patterns.order.ResponseChainN1;
@@ -72,7 +72,7 @@ public class ResponseChainN1Panel extends javax.swing.JPanel implements PatternP
             if ( fSelectedPattern.getPConstraint() != null )
                 fZP.setSelectedItem( fSelectedPattern.getPConstraint().getEvent() );
             else
-                fZP.setSelectedItem( Event.getConstraintDefault() );
+                fZP.setSelectedItem( EventImpl.getConstraintDefault() );
 
             fTi.setChainSequence( fSelectedPattern.getTis().getTis() );
             
@@ -131,7 +131,7 @@ public class ResponseChainN1Panel extends javax.swing.JPanel implements PatternP
             fPSPController.updatePattern();
     }
 
-    private boolean isEventSelectionPossible( Event aEvent )
+    private boolean isEventSelectionPossible( EventImpl aEvent )
     {
         if ( fPSPController != null )
             return fPSPController.isPatternEventSelectionPossible( aEvent );
@@ -143,7 +143,7 @@ public class ResponseChainN1Panel extends javax.swing.JPanel implements PatternP
     {
         fS.acceptSelection();
 
-        fSelectedPattern.setS( (Event)fS.getSelectedItem() );
+        fSelectedPattern.setS( (EventImpl)fS.getSelectedItem() );
 
         updatePattern();
     }
@@ -152,7 +152,7 @@ public class ResponseChainN1Panel extends javax.swing.JPanel implements PatternP
     {
         fP.acceptSelection();
 
-        fSelectedPattern.setP( (Event)fP.getSelectedItem() );
+        fSelectedPattern.setP( (EventImpl)fP.getSelectedItem() );
 
         updatePattern();
     }
@@ -161,7 +161,7 @@ public class ResponseChainN1Panel extends javax.swing.JPanel implements PatternP
     {
         fZP.acceptSelection();
 
-        fSelectedPattern.setPConstraint( EventConstraint.newEventConstraint( (Event)fZP.getSelectedItem() ) );
+        fSelectedPattern.setPConstraint( EventConstraint.newEventConstraint( (EventImpl)fZP.getSelectedItem() ) );
 
         updatePattern();
     }
@@ -322,7 +322,7 @@ public class ResponseChainN1Panel extends javax.swing.JPanel implements PatternP
 
     private void fSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fSActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fS.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fS.getSelectedItem();
         
         if ( lEvent != null )
         {
@@ -337,7 +337,7 @@ public class ResponseChainN1Panel extends javax.swing.JPanel implements PatternP
 
     private void fPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fPActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fP.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fP.getSelectedItem();
         
         if ( lEvent != null )
         {
@@ -352,7 +352,7 @@ public class ResponseChainN1Panel extends javax.swing.JPanel implements PatternP
 
     private void fZPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fZPActionPerformed
         // check that selected Event is not used in pattern
-        Event lEvent = (Event)fZP.getSelectedItem();
+        EventImpl lEvent = (EventImpl)fZP.getSelectedItem();
         
         if ( lEvent != null )
         {

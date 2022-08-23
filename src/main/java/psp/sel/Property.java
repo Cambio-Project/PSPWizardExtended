@@ -48,7 +48,7 @@ public class Property implements Comparable<Property>
     private String fDescriptor;
     private Scope fScope;
     private Pattern fPattern;
-    private ArrayList<Event> fEvents;
+    private ArrayList<EventImpl> fEvents;
     
     public String getDescriptor()
     {
@@ -78,7 +78,7 @@ public class Property implements Comparable<Property>
         
     }
     
-    public ArrayList<Event> getEvents()
+    public ArrayList<EventImpl> getEvents()
     {
         return fEvents;
     }
@@ -88,7 +88,7 @@ public class Property implements Comparable<Property>
         fDescriptor = aDescriptor;
         fScope = new Globally();
         fPattern = null;
-        fEvents = new ArrayList<Event>();
+        fEvents = new ArrayList<EventImpl>();
     }
     
     public String getSpecification()

@@ -39,7 +39,7 @@
 package psp.sel.patterns;
 
 import java.util.ArrayList;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public abstract class Pattern 
 {
@@ -47,7 +47,7 @@ public abstract class Pattern
 
     public abstract int getType();
 
-    public abstract ArrayList<Event> getEvents();
+    public abstract ArrayList<EventImpl> getEvents();
    
     public abstract String getSpecificationAsSEL();
 

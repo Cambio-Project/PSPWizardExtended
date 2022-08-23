@@ -38,6 +38,11 @@
 
 package psp.mappings;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import psp.mappings.elements.Element;
+import psp.mappings.elements.MiscElement;
 import psp.sel.patterns.Pattern;
 import psp.sel.scopes.Scope;
 
@@ -58,17 +63,19 @@ public class SELMapper extends GenericMapper {
         return true;
     }
 
-    public String getMapping(Scope aScope, Pattern aPattern) {
-        StringBuilder sb = new StringBuilder();
-
+    @Override
+    public  List<Element> mapToElements(Scope aScope, Pattern aPattern) {
+        //StringBuilder sb = new StringBuilder();
+        List<Element> elements = new ArrayList();
+        
         if (aScope != null && aPattern != null) {
-            sb.append(aScope.getSpecificationAsSEL());
-            sb.append(", ");
-            sb.append(aPattern.getSpecificationAsSEL());
-            sb.append('.');
+            elements.add(new MiscElement(aScope.getSpecificationAsSEL()));
+            elements.add(new MiscElement(", "));
+            elements.add(new MiscElement(aPattern.getSpecificationAsSEL()));
+            elements.add(new MiscElement("."));
         }
 
-        return sb.toString();
+        return elements;
     }
 
     public String getNotSupportedMessage() {
@@ -78,4 +85,5 @@ public class SELMapper extends GenericMapper {
     public String toString() {
         return "SEG";
     }
+
 }

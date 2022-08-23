@@ -43,7 +43,7 @@ import psp.constraints.EventConstraint;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Order;
 
 public class Response extends Order
@@ -73,10 +73,10 @@ public class Response extends Order
 
     public Response()
     {
-        this( Event.getDefault(), Event.getDefault(), null, null, null );
+        this( EventImpl.getDefault(), EventImpl.getDefault(), null, null, null );
     }
     
-    public Response( Event aP, Event aS, TimeBound aSTimeBound, Event aSConstraint, ProbabilityBound aProbBound )
+    public Response( EventImpl aP, EventImpl aS, TimeBound aSTimeBound, EventImpl aSConstraint, ProbabilityBound aProbBound )
     {
         super( aP, aS, null, aProbBound );
 
@@ -93,9 +93,9 @@ public class Response extends Order
         return PSPConstants.P_Response;
     }
 
-    public ArrayList<Event> getEvents() 
+    public ArrayList<EventImpl> getEvents() 
     {
-        ArrayList<Event> Result = super.getEvents();
+        ArrayList<EventImpl> Result = super.getEvents();
 
         if ( fSConstraint != null )
         {

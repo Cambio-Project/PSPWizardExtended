@@ -39,7 +39,7 @@
 package psp.constraints;
 
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public class Interval extends TimeBound
 {
@@ -56,7 +56,7 @@ public class Interval extends TimeBound
         return fLowerLimit;
     }
 
-    public Interval( Event aTimedEvent, long aLowerLimit, long aUpperLimit, String aTimeUnit )
+    public Interval( EventImpl aTimedEvent, long aLowerLimit, long aUpperLimit, String aTimeUnit )
     {
         super( aTimedEvent, aTimeUnit );
         

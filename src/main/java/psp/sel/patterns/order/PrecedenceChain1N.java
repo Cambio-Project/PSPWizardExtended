@@ -43,7 +43,7 @@ import psp.constraints.EventConstraint;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Order;
 
 public class PrecedenceChain1N extends Order
@@ -73,10 +73,10 @@ public class PrecedenceChain1N extends Order
     
     public PrecedenceChain1N()
     {
-        this( Event.getDefault(), Event.getDefault(), new ChainEvents(), null, null, null );
+        this( EventImpl.getDefault(), EventImpl.getDefault(), new ChainEvents(), null, null, null );
     }
 
-    public PrecedenceChain1N( Event aP, Event aS, ChainEvents aTis,
+    public PrecedenceChain1N( EventImpl aP, EventImpl aS, ChainEvents aTis,
                               TimeBound aTimeBoundS, EventConstraint aSConstraint, ProbabilityBound aProbBound )
     {
         super( aP, aS, aTis, aProbBound );
@@ -90,11 +90,11 @@ public class PrecedenceChain1N extends Order
         return PSPConstants.P_PrecedenceChain1N;
     }
 
-    public ArrayList<Event> getEvents() 
+    public ArrayList<EventImpl> getEvents() 
     {
-        ArrayList<Event> Result = super.getEvents();
+        ArrayList<EventImpl> Result = super.getEvents();
 
-        for ( Event e : getTis().getEvents() )
+        for ( EventImpl e : getTis().getEvents() )
         {
             if ( !Result.contains( e ) )
                     Result.add( e );

@@ -38,7 +38,7 @@
 
 package psp.sel.scopes;
 
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.engine.PSPConstants;
 
 public class AfterQ extends Scope
@@ -48,7 +48,7 @@ public class AfterQ extends Scope
         this( null );
     }
 
-    public AfterQ( Event aQ )
+    public AfterQ( EventImpl aQ )
     {
         super( aQ, null );
     }

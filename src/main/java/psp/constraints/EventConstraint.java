@@ -39,13 +39,13 @@
 package psp.constraints;
 
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public class EventConstraint extends PSPConstraint
 {
-    private Event fEvent;
+    private EventImpl fEvent;
 
-    public static EventConstraint newEventConstraint( Event aEvent )
+    public static EventConstraint newEventConstraint( EventImpl aEvent )
     {
         EventConstraint Result = null;
 
@@ -58,17 +58,17 @@ public class EventConstraint extends PSPConstraint
         return Result;
     }
     
-    public Event getEvent()
+    public EventImpl getEvent()
     {
         return fEvent;
     }
 
-    public void setEvent( Event aEvent )
+    public void setEvent( EventImpl aEvent )
     {
         fEvent = aEvent;
     }
 
-    public EventConstraint( Event aEvent )
+    public EventConstraint( EventImpl aEvent )
     {
         fEvent = aEvent;
     }

@@ -40,13 +40,13 @@ package psp.ui.util;
 
 import javax.swing.JComboBox;
 import psp.engine.PSPController;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public class EventComboBox extends JComboBox
 {
-    private Event fStableEvent;
+    private EventImpl fStableEvent;
 
-    public boolean isStable( Event aEvent )
+    public boolean isStable( EventImpl aEvent )
     {
         return aEvent.equals( fStableEvent );
     }
@@ -57,7 +57,7 @@ public class EventComboBox extends JComboBox
 
         // add unspecified event
         fIsReverting = false;        
-        addItem( Event.getDefault() );
+        addItem( EventImpl.getDefault() );
         setSelectedIndex( 0 );
         
         // 12 X characters wide
@@ -78,7 +78,7 @@ public class EventComboBox extends JComboBox
     
     public void acceptSelection()
     {
-        fStableEvent = (Event)getSelectedItem();
+        fStableEvent = (EventImpl)getSelectedItem();
     }
 
     public void revertSelection()
@@ -102,14 +102,14 @@ public class EventComboBox extends JComboBox
         if ( fPSPController != null )
         {
             // save selected events
-            Event lCurrent = (Event)getSelectedItem();
+            EventImpl lCurrent = (EventImpl)getSelectedItem();
 
             removeAllItems();
 
             // add unspecified event
-            addItem( Event.getDefault() );
+            addItem( EventImpl.getDefault() );
 
-            for ( Event e : fPSPController )
+            for ( EventImpl e : fPSPController )
                 addItem( e );
         
             setSelectedItem( lCurrent );

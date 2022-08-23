@@ -39,7 +39,7 @@
 package psp.sel.scopes;
 
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public class BeforeR extends Scope
 {
@@ -48,7 +48,7 @@ public class BeforeR extends Scope
         this( null );
     }
 
-    public BeforeR( Event aR )
+    public BeforeR( EventImpl aR )
     {
         super( null, aR );
     }

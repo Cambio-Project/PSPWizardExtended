@@ -41,23 +41,23 @@ package psp.sel.patterns.order;
 import java.util.ArrayList;
 import psp.constraints.EventConstraint;
 import psp.constraints.TimeBound;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public class ChainEvent 
 {
     public static final int PrecedenceChain = 1;
     public static final int ResponseChain = 2;
 
-    private Event fEvent;
+    private EventImpl fEvent;
     private EventConstraint fConstraint;
     private TimeBound fTimeBound;
 
-    public Event getEvent()
+    public EventImpl getEvent()
     {
         return fEvent;
     }
     
-    public void setEvent( Event aEvent )
+    public void setEvent( EventImpl aEvent )
     {
         fEvent = aEvent;
     }
@@ -67,7 +67,7 @@ public class ChainEvent
         return fConstraint;
     }
     
-    public void setConstraint( Event aConstraintEvent )
+    public void setConstraint( EventImpl aConstraintEvent )
     {
         fConstraint = null;
 
@@ -78,9 +78,9 @@ public class ChainEvent
         }
     }
 
-    public ArrayList<Event> getEvents()
+    public ArrayList<EventImpl> getEvents()
     {
-        ArrayList<Event> Result = new ArrayList<Event>();
+        ArrayList<EventImpl> Result = new ArrayList<EventImpl>();
         
         if ( fEvent != null )
             Result.add( fEvent );
@@ -106,10 +106,10 @@ public class ChainEvent
 
     public ChainEvent()
     {
-        this( Event.getDefault(), null, null );
+        this( EventImpl.getDefault(), null, null );
     }
     
-    public ChainEvent( Event aEvent, Event aConstraintEvent, TimeBound aTimeBound )
+    public ChainEvent( EventImpl aEvent, EventImpl aConstraintEvent, TimeBound aTimeBound )
     {
         setEvent( aEvent );        
         setConstraint( aConstraintEvent );

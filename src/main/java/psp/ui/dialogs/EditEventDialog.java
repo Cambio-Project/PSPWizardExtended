@@ -40,7 +40,7 @@ package psp.ui.dialogs;
 
 import javax.swing.JOptionPane;
 import psp.engine.PSPController;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public class EditEventDialog extends javax.swing.JDialog 
 {    
@@ -56,14 +56,14 @@ public class EditEventDialog extends javax.swing.JDialog
         getRootPane().setDefaultButton(fOk );
     }
 
-    private Event fDialogResult;
+    private EventImpl fDialogResult;
     private EditEvent fEditEvent;
     
     private static class EditEvent
     {
-        public Event fEvent;
+        public EventImpl fEvent;
         
-        public EditEvent( Event aEvent )
+        public EditEvent( EventImpl aEvent )
         {
             fEvent = aEvent;
         }
@@ -74,11 +74,11 @@ public class EditEventDialog extends javax.swing.JDialog
         }
     }
     
-    public Event showDialog() 
+    public EventImpl showDialog() 
     {
         fEventList.removeAllItems();
         
-        for ( Event e : fPSPController )
+        for ( EventImpl e : fPSPController )
         {
             if ( !e.isDefault() )
                 fEventList.addItem( new EditEvent( e ) );

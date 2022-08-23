@@ -39,7 +39,7 @@
 package psp.ui.panels.scopes;
 
 import psp.engine.PSPController;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.scopes.AfterQuntilR;
 import psp.sel.scopes.Scope;
 import psp.ui.util.EventComboBox;
@@ -89,14 +89,14 @@ public class AfterQuntilRPanel extends javax.swing.JPanel implements ScopePanelF
 
     private void updateScope()
     {
-        fSelectedScope.setQ( (Event)fScopeA.getSelectedItem() );
-        fSelectedScope.setR( (Event)fScopeB.getSelectedItem() );
+        fSelectedScope.setQ( (EventImpl)fScopeA.getSelectedItem() );
+        fSelectedScope.setR( (EventImpl)fScopeB.getSelectedItem() );
 
         if ( fPSPController != null )
             fPSPController.updateScope();
     }
  
-    private boolean isEventSelectionPossible( Event aEvent )
+    private boolean isEventSelectionPossible( EventImpl aEvent )
     {
         if ( fPSPController != null )
             return fPSPController.isScopeEventSelectionPossible( aEvent );
@@ -106,7 +106,7 @@ public class AfterQuntilRPanel extends javax.swing.JPanel implements ScopePanelF
 
     private void checkSelection( EventComboBox aScope )
     {
-        Event lEvent = (Event)aScope.getSelectedItem();
+        EventImpl lEvent = (EventImpl)aScope.getSelectedItem();
         
         if ( lEvent != null )
         {

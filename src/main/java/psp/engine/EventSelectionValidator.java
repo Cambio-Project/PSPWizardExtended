@@ -41,13 +41,13 @@ package psp.engine;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 import psp.sel.patterns.Pattern;
 import psp.sel.scopes.Scope;
 
 public class EventSelectionValidator 
 {
-    private static Event fScopeEvents[] = new Event[2];
+    private static EventImpl fScopeEvents[] = new EventImpl[2];
     
     public static void updateScopeEvents( Scope aScope ) 
     {
@@ -55,13 +55,13 @@ public class EventSelectionValidator
         fScopeEvents[1] = aScope.getR();
     }
     
-    private static boolean isEventUsedInScope( Event aEvent )
+    private static boolean isEventUsedInScope( EventImpl aEvent )
     {
         if ( aEvent != null )
         {
             for ( int i = 0; i < 2; i++ )
             {
-                Event lEvent = fScopeEvents[i];
+                EventImpl lEvent = fScopeEvents[i];
 
                 if ( lEvent == null || lEvent.isDefault() )
                     continue;
@@ -87,7 +87,7 @@ public class EventSelectionValidator
         fIsEditUpdate = false;
     }
     
-    public static boolean isScopeEventSelectionPossible( JFrame aMessageFrame, Event aEvent ) 
+    public static boolean isScopeEventSelectionPossible( JFrame aMessageFrame, EventImpl aEvent ) 
     {
         if ( fIsEditUpdate )
             return true;
@@ -105,7 +105,7 @@ public class EventSelectionValidator
             return true;
     }
     
-    private static ArrayList<Event> fPatternEvents = new ArrayList<Event>();
+    private static ArrayList<EventImpl> fPatternEvents = new ArrayList<EventImpl>();
 
     public static void clearSelection()
     {
@@ -122,11 +122,11 @@ public class EventSelectionValidator
             fPatternEvents.addAll( aPattern.getEvents() );
     }
     
-    private static boolean isEventUsedInPattern( Event aEvent )
+    private static boolean isEventUsedInPattern( EventImpl aEvent )
     {
         if ( aEvent != null )
         {
-            for ( Event pe : fPatternEvents )
+            for ( EventImpl pe : fPatternEvents )
             {
                 if ( pe.isDefault() )
                     continue;
@@ -140,7 +140,7 @@ public class EventSelectionValidator
         return false;
     }
 
-    public static boolean isPatternEventSelectionPossible( JFrame aMessageFrame, Event aEvent ) 
+    public static boolean isPatternEventSelectionPossible( JFrame aMessageFrame, EventImpl aEvent ) 
     {
         if ( fIsEditUpdate )
             return true;
@@ -159,7 +159,7 @@ public class EventSelectionValidator
         return true;
     }
 
-    public static boolean isPatternEventSelectionPossible( JFrame aMessageFrame, Event aEvent, Event aAltEvent )
+    public static boolean isPatternEventSelectionPossible( JFrame aMessageFrame, EventImpl aEvent, EventImpl aAltEvent )
     {
         if ( aEvent != null  )
         {

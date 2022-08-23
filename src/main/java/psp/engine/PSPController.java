@@ -39,23 +39,23 @@
 package psp.engine;
 
 import javax.swing.JFrame;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
-public interface PSPController extends Iterable<Event>
+public interface PSPController extends Iterable<EventImpl>
 {
     // reset PSP Wizard
     public void reset();
 
     public JFrame getHostFrame();
 
-    public Event newEvent( String aName );
-    public Event newEvent( String aName, String aSpecification );
+    public EventImpl newEvent( String aName );
+    public EventImpl newEvent( String aName, String aSpecification );
         
-    public boolean isScopeEventSelectionPossible( Event aEvent );
+    public boolean isScopeEventSelectionPossible( EventImpl aEvent );
     public void updateScope();
     
 
-    public boolean isPatternEventSelectionPossible( Event aEvent );
-    public boolean isPatternEventSelectionPossible( Event aEvent, Event aAltEvent );
+    public boolean isPatternEventSelectionPossible( EventImpl aEvent );
+    public boolean isPatternEventSelectionPossible( EventImpl aEvent, EventImpl aAltEvent );
     public void updatePattern();
 }

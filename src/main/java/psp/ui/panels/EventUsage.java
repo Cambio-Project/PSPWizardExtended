@@ -38,10 +38,10 @@
 
 package psp.ui.panels;
 
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public interface EventUsage 
 {
-    public void addEventUsage( Event aEvent );
-    public void removeEventUsage( Event aEvent );    
+    public void addEventUsage( EventImpl aEvent );
+    public void removeEventUsage( EventImpl aEvent );    
 }

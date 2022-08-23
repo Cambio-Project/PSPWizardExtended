@@ -42,20 +42,20 @@ import java.util.ArrayList;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.engine.PSPConstants;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public abstract class Occurrence extends Pattern
 {
-    private Event fP;
+    private EventImpl fP;
     private TimeBound fPTimeBound;
     private ProbabilityBound fProbBound;
 
-    public Event getP()
+    public EventImpl getP()
     {
         return fP;
     }
     
-    public void setP( Event aP )
+    public void setP( EventImpl aP )
     {
         fP = aP;
     }
@@ -80,7 +80,7 @@ public abstract class Occurrence extends Pattern
         fProbBound = aProbBound;
     }
 
-    public Occurrence( Event aP, TimeBound aPTimeBound, ProbabilityBound aProbBound )
+    public Occurrence( EventImpl aP, TimeBound aPTimeBound, ProbabilityBound aProbBound )
     {
         fP = aP;
         fPTimeBound = aPTimeBound;
@@ -92,9 +92,9 @@ public abstract class Occurrence extends Pattern
         return PSPConstants.PC_Occurrence;
     }
         
-    public ArrayList<Event> getEvents() 
+    public ArrayList<EventImpl> getEvents() 
     {
-        ArrayList<Event> Result = new ArrayList<Event>();
+        ArrayList<EventImpl> Result = new ArrayList<EventImpl>();
         
         Result.add( getP() );
         

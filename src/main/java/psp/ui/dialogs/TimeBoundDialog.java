@@ -46,7 +46,7 @@ import psp.constraints.TimeBound;
 import psp.constraints.UpperTimeBound;
 import psp.engine.PSPConstants;
 import psp.engine.PSPController;
-import psp.sel.Event;
+import psp.sel.EventImpl;
 
 public class TimeBoundDialog extends javax.swing.JDialog 
 {   
@@ -108,9 +108,9 @@ public class TimeBoundDialog extends javax.swing.JDialog
 
     private TimeBound fDialogResult;
     private TimeBound fOldResult;
-    private Event fAssociatedEvent;
+    private EventImpl fAssociatedEvent;
     
-    public TimeBound showDialog( Event aAssociatedEvent, TimeBound aExistingTimeBound ) 
+    public TimeBound showDialog( EventImpl aAssociatedEvent, TimeBound aExistingTimeBound ) 
     {
         fResetActionPerformed( null );
 

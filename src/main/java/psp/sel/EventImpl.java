@@ -38,13 +38,14 @@
 
 package psp.sel;
 
-public class Event implements Comparable<Event>
-{
+import psp.mappings.elements.Event;
+
+public class EventImpl implements Comparable<EventImpl>, Event {
     private String fName;
     private String fSpecification;
- 
-    private static Event Default = new Event( "N/A" );
-    private static Event Constraint = new Event( "Constraint" );
+
+    private static EventImpl Default = new EventImpl("N/A");
+    private static EventImpl Constraint = new EventImpl("Constraint");
 
     public static final int E_Name = 1;
     public static final int E_Spec = 2;
@@ -52,133 +53,116 @@ public class Event implements Comparable<Event>
 
     // can be set globally
     public static int EventStringMethod = E_Name;
-    
+
     private static long fEventCounter = 1;
-    
-    public static void reset()
-    {
+
+    public static void reset() {
         fEventCounter = 1;
     }
-    
-    public static String getFreshEventName()
-    {
-        return String.format( "SF%04d", fEventCounter++ );
+
+    public static String getFreshEventName() {
+        return String.format("SF%04d", fEventCounter++);
     }
-    
-    public static Event getDefault()
-    {
+
+    public static EventImpl getDefault() {
         return Default;
     }
 
-    public static Event getConstraintDefault()
-    {
+    public static EventImpl getConstraintDefault() {
         return Constraint;
     }
 
-    public boolean isDefault()
-    {
-        return fName.equals( "N/A" ) || fName.equals( "Constraint" );
+    public boolean isDefault() {
+        return fName.equals("N/A") || fName.equals("Constraint");
     }
 
-    public String getName()
-    {
+    public String getName() {
         return fName;
     }
-    
-    public String getSpecification()
-    {
+
+    public String getSpecification() {
         return fSpecification;
     }
 
-    public void setSpecification( String aSpecification )
-    {
+    public void setSpecification(String aSpecification) {
         fSpecification = aSpecification;
     }
 
-    public Event( String aName )
-    {
-        this( aName, aName );
+    public EventImpl(String aName) {
+        this(aName, aName);
     }
 
-    public Event( String aName, String aSpecification )
-    {
+    public EventImpl(String aName, String aSpecification) {
         fName = aName;
         fSpecification = aSpecification;
     }
 
-    public int compareTo( Event aOtherEvent ) 
-    {
-        return fName.compareTo( aOtherEvent.fName );
+    public int compareTo(EventImpl aOtherEvent) {
+        return fName.compareTo(aOtherEvent.fName);
     }
 
-    public int hashCode() 
-    {
+    public int hashCode() {
         return fName.hashCode();
     }
-    
-    public boolean equals( Object aOtherEvent )
-    {
-        if ( aOtherEvent instanceof Event )
-        {
-            return ((Event)aOtherEvent).fName.equals( fName );
+
+    public boolean equals(Object aOtherEvent) {
+        if (aOtherEvent instanceof EventImpl) {
+            return ((EventImpl) aOtherEvent).fName.equals(fName);
         }
-        
+
         return false;
     }
 
-    private String getEventString()
-    {
+    private String getEventString() {
         StringBuilder sb = new StringBuilder();
-        
-        if ( isDefault() )
-        {
-            sb.append( fName );
-        }
-        else
-        {        
-            switch ( EventStringMethod )
-            {
+
+        if (isDefault()) {
+            sb.append(fName);
+        } else {
+            switch (EventStringMethod) {
                 case E_Name:
-                    sb.append( fName );
+                    sb.append(fName);
                     break;
                 case E_Spec:
-                    sb.append( fSpecification );
+                    sb.append(fSpecification);
                     break;
                 default:
-                    sb.append( fName );
-                    sb.append( "::" );
-                    sb.append( fSpecification );
+                    sb.append(fName);
+                    sb.append("::");
+                    sb.append(fSpecification);
                     break;
             }
         }
-        
-        return sb.toString();
-    }
-    
-    public String getAsEvent()
-    {
-        StringBuilder sb = new StringBuilder();
-        
-        sb.append( "(" );
-        sb.append( getEventString() );
-        sb.append( ")" );
-        
+
         return sb.toString();
     }
 
-    public String getAsSELEvent()
-    {
+    public String getAsEvent() {
         StringBuilder sb = new StringBuilder();
-        
-        sb.append( "{" );
-        sb.append( getEventString() );
-        sb.append( "}" );
-        
+
+        sb.append("(");
+        sb.append(getEventString());
+        sb.append(")");
+
         return sb.toString();
     }
 
-    public String toString()
-    {
+    public String getAsSELEvent() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("{");
+        sb.append(getEventString());
+        sb.append("}");
+
+        return sb.toString();
+    }
+
+    public String toString() {
         return getEventString();
+    }
+
+    @Override
+    public String getContent() {
+        return getAsEvent();
     }
 }
