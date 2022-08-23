@@ -1055,7 +1055,7 @@ public class MTLMapper extends MTLSupport {
             EventConstraint lZi = Ti.getConstraint();
             String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
 
-            if (new MiscElement(lcntZi).equals("true")) {
+            if (lcntZi.equals("true")) {
                 // no Zi
                 elements.add(languageDefinitions.getAnd());
                 elements.add(languageDefinitions.getNext());
@@ -1283,7 +1283,7 @@ public class MTLMapper extends MTLSupport {
             EventConstraint lZi = Ti.getConstraint();
             String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
 
-            if (new MiscElement(lcntZi).equals("true")) {
+            if (lcntZi.equals("true")) {
                 // no Zi
                 elements.add(languageDefinitions.getAnd());
                 elements.add(languageDefinitions.getNext());
@@ -2140,7 +2140,7 @@ public class MTLMapper extends MTLSupport {
             EventConstraint lZi = Ti.getConstraint();
             String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
 
-            if (new MiscElement(lcntZi).equals("true")) {
+            if (lcntZi.equals("true")) {
                 // no Zi
                 elements.add(languageDefinitions.getAnd());
                 elements.add(languageDefinitions.getNext());
@@ -2173,7 +2173,7 @@ public class MTLMapper extends MTLSupport {
             String lcntZP = lZP != null ? cnt(lZP.getEvent()) : "true";
 
             elements.add(languageDefinitions.getImplication());
-            if (new MiscElement(lcntZP).equals("true")) {
+            if (lcntZP.equals("true")) {
                 // no Zi
                 elements.add(languageDefinitions.getEventually());
             } else {
@@ -2196,7 +2196,7 @@ public class MTLMapper extends MTLSupport {
             EventConstraint lZi = Ti.getConstraint();
             String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
 
-            if (new MiscElement(lcntZi).equals("true")) {
+            if (lcntZi.equals("true")) {
                 // no Zi
                 elements.add(languageDefinitions.getAnd());
                 elements.add(languageDefinitions.getNext());
@@ -2234,7 +2234,7 @@ public class MTLMapper extends MTLSupport {
             String lcntZP = lZP != null ? cnt(lZP.getEvent()) : "true";
 
             elements.add(languageDefinitions.getImplication());
-            if (new MiscElement(lcntZP).equals("true")) {
+            if (lcntZP.equals("true")) {
                 // no Zi
                 elements.add(languageDefinitions.getEventually());
             } else {
