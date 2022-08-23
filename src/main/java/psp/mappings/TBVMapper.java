@@ -4,18 +4,19 @@ import psp.mappings.elements.AlwaysElement;
 import psp.mappings.elements.AndElement;
 import psp.mappings.elements.EventuallyElement;
 import psp.mappings.elements.ImplicationElement;
+import psp.mappings.elements.NextElement;
 import psp.mappings.elements.NotElement;
 import psp.mappings.elements.OrElement;
 import psp.mappings.elements.UntilElement;
 import psp.mappings.elements.WeakUntilElement;
 
 public class TBVMapper extends MTLMapper {
-    private static final String defaultInf = "∞";
+    private static final String defaultInf = "inf";
     private static final AlwaysElement defaultAlways = new AlwaysElement("always");
     private static final EventuallyElement defaultEventually = new EventuallyElement("once");
-    // private static final String defaultNext = "○";
+    private static final NextElement defaultNext = new NextElement("pre");
     private static final ImplicationElement defaultImplication = new ImplicationElement(" -> ");
-    private static final NotElement defaultNot = new NotElement("!");
+    private static final NotElement defaultNot = new NotElement(" not ");
     private static final AndElement defaultAnd = new AndElement(" and ");
     private static final OrElement defaultOr = new OrElement(" or ");
     private static final UntilElement defaultUntil = new UntilElement(" since");
