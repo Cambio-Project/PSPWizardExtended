@@ -2,7 +2,7 @@ package psp.mappings.elements;
 
 import java.util.Objects;
 
-public class EventuallyElement implements TemporalOperators {
+public class EventuallyElement implements TemporalOperators, UnaryOperator {
     private final String definition;
 
     public EventuallyElement(String definition) {

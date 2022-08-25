@@ -38,6 +38,7 @@
 
 package psp.mappings;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,6 +46,7 @@ import psp.constraints.Interval;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
 import psp.mappings.elements.Element;
+import psp.mappings.postprocessing.MappingPostprocessor;
 import psp.sel.EventImpl;
 import psp.sel.patterns.Pattern;
 import psp.sel.patterns.order.ChainEvents;
@@ -52,6 +54,7 @@ import psp.sel.scopes.Scope;
 
 public abstract class GenericMapper implements PatternMapper {
     protected LanguageDefinitions languageDefinitions;
+    private final List<MappingPostprocessor> processors = new ArrayList<>();
 
     public LanguageDefinitions getLanguageDefinitions() {
         return languageDefinitions;
@@ -141,16 +144,25 @@ public abstract class GenericMapper implements PatternMapper {
 
     public String getMapping(Scope aScope, Pattern aPattern) {
         List<Element> elements = mapToElements(aScope, aPattern);
+        for (final MappingPostprocessor processor : processors) {
+            elements = processor.process(elements);
+        }
         return mapToString(elements);
     }
 
     public String mapToString(final List<Element> elements) {
         StringBuilder sb = new StringBuilder();
         for (final Element element : elements) {
+            if (element == null) {
+                break;
+            }
             sb.append(element.getContent());
 
         }
         return sb.toString();
     }
 
+    public void register(final MappingPostprocessor processor) {
+        processors.add(processor);
+    }
 }

@@ -9,7 +9,7 @@ import psp.mappings.elements.NotElement;
 import psp.mappings.elements.OrElement;
 import psp.mappings.elements.UntilElement;
 import psp.mappings.elements.WeakUntilElement;
-import psp.mappings.postprocessing.WeakUntilResolver;
+import psp.mappings.postprocessing.WeakUntilSubstituter;
 
 public class TBVMapper extends MTLMapper {
     private static final String defaultInf = "inf";
@@ -29,6 +29,7 @@ public class TBVMapper extends MTLMapper {
     public TBVMapper() {
         super();
         this.setLanguageDefinitions(TBV_LANGUAGE_DEFINITION);
+        this.register(new WeakUntilSubstituter(TBV_LANGUAGE_DEFINITION));
     }
 
     public String toString() {

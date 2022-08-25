@@ -2,7 +2,7 @@ package psp.mappings.elements;
 
 import java.util.Objects;
 
-public class NotElement implements BooleanOperators {
+public class NotElement implements BooleanOperators, UnaryOperator {
     private final String definition;
 
     public NotElement(String definition) {
