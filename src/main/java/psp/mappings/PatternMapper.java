@@ -39,6 +39,7 @@
 package psp.mappings;
 
 import psp.mappings.postprocessing.MappingPostprocessor;
+import psp.mappings.postprocessing.PatternFormatter;
 import psp.sel.patterns.Pattern;
 import psp.sel.scopes.Scope;
 
@@ -62,4 +63,6 @@ public interface PatternMapper extends PSPFrameworkSupport {
     public void setLanguageDefinitions(final LanguageDefinitions languageDefinitions);
 
     public void register(final MappingPostprocessor processor);
+
+    public void register(final PatternFormatter formatter);
 }

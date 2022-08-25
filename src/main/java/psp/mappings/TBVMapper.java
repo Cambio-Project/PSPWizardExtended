@@ -9,6 +9,7 @@ import psp.mappings.elements.NotElement;
 import psp.mappings.elements.OrElement;
 import psp.mappings.elements.UntilElement;
 import psp.mappings.elements.WeakUntilElement;
+import psp.mappings.postprocessing.MultipleWhiteSpaceReplacer;
 import psp.mappings.postprocessing.WeakUntilSubstituter;
 
 public class TBVMapper extends MTLMapper {
@@ -30,6 +31,7 @@ public class TBVMapper extends MTLMapper {
         super();
         this.setLanguageDefinitions(TBV_LANGUAGE_DEFINITION);
         this.register(new WeakUntilSubstituter(TBV_LANGUAGE_DEFINITION));
+        this.register(new MultipleWhiteSpaceReplacer());
     }
 
     public String toString() {
