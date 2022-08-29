@@ -49,8 +49,12 @@ import psp.sel.patterns.order.ChainEvent;
 import psp.sel.patterns.order.ChainEvents;
 
 public abstract class MTLSupport extends GenericMapper {
-    public MTLSupport(final LanguageDefinitions languageDefinitions) {
+    private TimeLanguageDefinitions timeLanguageDefinitions;
+
+    public MTLSupport(final LanguageDefinitions languageDefinitions,
+        final TimeLanguageDefinitions timeLanguageDefinitions) {
         super(languageDefinitions);
+        this.timeLanguageDefinitions = timeLanguageDefinitions;
     }
 
     public String cnt(EventImpl aZP) {
@@ -67,14 +71,14 @@ public abstract class MTLSupport extends GenericMapper {
             String lTLP = tL(aPTimeBound);
             String lTUP = tU(aPTimeBound);
 
-            sb.append("[");
+            sb.append(timeLanguageDefinitions.getDefaultStartTimeBoundBracket());
             sb.append(lTLP);
             sb.append(",");
             sb.append(lTUP);
             if (lTUP.equals(languageDefinitions.getInf()))
-                sb.append(")");
+                sb.append(timeLanguageDefinitions.getInfinityEndTimeBoundBracket());
             else
-                sb.append("]");
+                sb.append(timeLanguageDefinitions.getDefaultEndTimeBoundBracket());
         }
 
         return sb.toString();
@@ -84,11 +88,11 @@ public abstract class MTLSupport extends GenericMapper {
         StringBuilder sb = new StringBuilder();
 
         if (aPTimeBound != null) {
-            sb.append("[");
+            sb.append(timeLanguageDefinitions.getDefaultStartTimeBoundBracket());
             sb.append(tL(aPTimeBound));
             sb.append(",");
             sb.append(languageDefinitions.getInf());
-            sb.append(")");
+            sb.append(timeLanguageDefinitions.getInfinityEndTimeBoundBracket());
         }
 
         return sb.toString();
@@ -98,11 +102,11 @@ public abstract class MTLSupport extends GenericMapper {
         StringBuilder sb = new StringBuilder();
 
         if (aPTimeBound != null) {
-            sb.append("[");
+            sb.append(timeLanguageDefinitions.getDefaultStartTimeBoundBracket());
             sb.append("0");
             sb.append(",");
             sb.append(tL(aPTimeBound));
-            sb.append("]");
+            sb.append(timeLanguageDefinitions.getDefaultEndTimeBoundBracket());
         }
 
         return sb.toString();
@@ -116,11 +120,11 @@ public abstract class MTLSupport extends GenericMapper {
             if (lUTP.equals(languageDefinitions.getInf()))
                 markError(); // inf makes no sense
 
-            sb.append("[");
+            sb.append(timeLanguageDefinitions.getDefaultStartTimeBoundBracket());
             sb.append("0");
             sb.append(",");
             sb.append(tU(aPTimeBound));
-            sb.append("]");
+            sb.append(timeLanguageDefinitions.getDefaultEndTimeBoundBracket());
         }
 
         return sb.toString();
@@ -134,9 +138,13 @@ public abstract class MTLSupport extends GenericMapper {
 
             if (lUP == Long.MAX_VALUE) {
                 markError(); // inf? makes no sense
-                Result = String.format("[%s,%s]", languageDefinitions.getInf(), languageDefinitions.getInf());
+                Result = String.format(
+                    timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "%s,%s"
+                        + timeLanguageDefinitions.getDefaultEndTimeBoundBracket(),
+                    languageDefinitions.getInf(), languageDefinitions.getInf());
             } else
-                Result = String.format("[%d,%d]", lUP, lUP);
+                Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "%d,%d"
+                    + timeLanguageDefinitions.getDefaultEndTimeBoundBracket(), lUP, lUP);
         }
 
         return Result;
@@ -150,14 +158,18 @@ public abstract class MTLSupport extends GenericMapper {
             long lLP = aPTimeBound.getLowerLimit();
 
             if (lUP == Long.MAX_VALUE)
-                Result = String.format("[0,%s)", languageDefinitions.getInf()); // inf - x = inf
+                Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%s"
+                    + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), languageDefinitions.getInf()); // inf -
+                                                                                                               // x =
+                                                                                                               // inf
             else {
                 long lDelta = lUP - lLP;
 
                 if (lDelta < 0)
                     markError(); // negative gap
 
-                Result = String.format("[0,%d)", lDelta);
+                Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%d"
+                    + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), lDelta);
             }
         }
 
@@ -171,9 +183,11 @@ public abstract class MTLSupport extends GenericMapper {
             long lUP = ((Interval) aPTimeBound).getUpperLimit();
 
             if (lUP == Long.MAX_VALUE)
-                Result = String.format("[0,%s)", languageDefinitions.getInf()); // inf
+                Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%s"
+                    + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), languageDefinitions.getInf()); // inf
             else
-                Result = String.format("[0,%d)", lUP);
+                Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%d"
+                    + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), lUP);
         }
 
         return Result;
@@ -188,14 +202,17 @@ public abstract class MTLSupport extends GenericMapper {
 
             if (lUP == Long.MAX_VALUE) {
                 markError();
-                Result = String.format("[0,%s]", languageDefinitions.getInf()); // inf - x = inf
+                Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%s"
+                    + timeLanguageDefinitions.getDefaultEndTimeBoundBracket(), languageDefinitions.getInf()); // inf - x
+                                                                                                              // = inf
             } else {
                 long lDelta = lUP - lLP;
 
                 if (lDelta < 0)
                     markError(); // negative gap?
 
-                Result = String.format("[0,%d]", lDelta);
+                Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%d"
+                    + timeLanguageDefinitions.getDefaultEndTimeBoundBracket(), lDelta);
             }
         }
 
@@ -259,9 +276,11 @@ public abstract class MTLSupport extends GenericMapper {
             }
 
             if (lTUP == Long.MAX_VALUE)
-                Result = String.format("[0,%s)", languageDefinitions.getInf());
+                Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%s"
+                    + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), languageDefinitions.getInf());
             else
-                Result = String.format("[0,%d)", lTUP);
+                Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%d"
+                    + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), lTUP);
         }
 
         return Result; // "" if some time component is missing
@@ -289,7 +308,8 @@ public abstract class MTLSupport extends GenericMapper {
                 }
             }
 
-            Result = String.format("[0,%d]", lTUP);
+            Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%d"
+                + timeLanguageDefinitions.getDefaultEndTimeBoundBracket(), lTUP);
         }
 
         return Result; // "" if some time component is missing
@@ -364,5 +384,9 @@ public abstract class MTLSupport extends GenericMapper {
 
     public String toString() {
         return "MTL";
+    }
+
+    public void setTimeLanguageDefinitions(final TimeLanguageDefinitions timeLanguageDefinitions) {
+        this.timeLanguageDefinitions = timeLanguageDefinitions;
     }
 }

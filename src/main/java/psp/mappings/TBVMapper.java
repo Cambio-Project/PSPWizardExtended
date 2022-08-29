@@ -30,6 +30,7 @@ public class TBVMapper extends MTLMapper {
     public TBVMapper() {
         super();
         this.setLanguageDefinitions(TBV_LANGUAGE_DEFINITION);
+        this.setTimeLanguageDefinitions(new TimeLanguageDefinitions("[", "]", "[", "]"));
         this.register(new WeakUntilSubstituter(TBV_LANGUAGE_DEFINITION));
         this.register(new MultipleWhiteSpaceReplacer());
     }

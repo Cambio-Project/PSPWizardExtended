@@ -84,7 +84,7 @@ public class MTLMapper extends MTLSupport {
         defaultUntil, defaultWeakUntil);
 
     public MTLMapper() {
-        super(DEFAULT_LANGUAGE_DEFINITION);
+        super(DEFAULT_LANGUAGE_DEFINITION, new TimeLanguageDefinitions("[", "]", "(", ")"));
     }
 
     public boolean isScopeSupported(Scope aScope) {
@@ -1805,7 +1805,7 @@ public class MTLMapper extends MTLSupport {
                     elements.add(languageDefinitions.getNot());
                     elements.add(aScope.getR());
                     elements.add(languageDefinitions.getAnd());
-                    //TODO: sb.deleteCharAt(sb.length() - 1);
+                    // TODO: sb.deleteCharAt(sb.length() - 1);
                 }
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new TimeBoundElement(time(aPattern.getSTimeBound())));
