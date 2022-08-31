@@ -169,10 +169,6 @@ public class LTLMapper extends GenericMapper {
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
-                elements.add(languageDefinitions.getNot());
-                elements.add(languageDefinitions.getAlways());
-                elements.add(new SpaceElement());
-                elements.add(aPattern.getP());
                 elements.add(new RoundBracketCloseElement());
                 break;
             case PSPConstants.S_AfterQ:
@@ -191,7 +187,6 @@ public class LTLMapper extends GenericMapper {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
-                elements.add(languageDefinitions.getAlways());
                 elements.add(new SpaceElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
@@ -207,10 +202,6 @@ public class LTLMapper extends GenericMapper {
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
-                elements.add(languageDefinitions.getNot());
-                elements.add(languageDefinitions.getAlways());
-                elements.add(new SpaceElement());
-                elements.add(aPattern.getP());
                 elements.add(new RoundBracketCloseElement());
                 break;
             case PSPConstants.S_AfterQuntilR:
@@ -225,15 +216,18 @@ public class LTLMapper extends GenericMapper {
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(aPattern.getP());
                 elements.add(languageDefinitions.getWeakUntil());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 break;
         }
 
-return elements;    }
+        return elements;
+    }
 
     private List<Element> mapAbsence(Scope aScope, Absence aPattern) {
         List<Element> elements = new ArrayList<>();
@@ -245,9 +239,11 @@ return elements;    }
                 elements.add(aPattern.getP());
                 break;
             case PSPConstants.S_BeforeR:
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
@@ -269,8 +265,10 @@ return elements;    }
                 elements.add(languageDefinitions.getImplication());
                 elements.add(languageDefinitions.getAlways());
                 elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 break;
             case PSPConstants.S_BetweenQandR:
@@ -279,15 +277,15 @@ return elements;    }
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
-                elements.add(languageDefinitions.getAlways());
-                elements.add(new SpaceElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
@@ -296,11 +294,6 @@ return elements;    }
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
-                elements.add(languageDefinitions.getNot());
-                elements.add(languageDefinitions.getAlways());
-                elements.add(new SpaceElement());
-                elements.add(languageDefinitions.getNot());
-                elements.add(aPattern.getP());
                 elements.add(new RoundBracketCloseElement());
                 break;
             case PSPConstants.S_AfterQuntilR:
@@ -309,22 +302,23 @@ return elements;    }
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
-                elements.add(languageDefinitions.getAlways());
-                elements.add(new SpaceElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
                 elements.add(languageDefinitions.getWeakUntil());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 break;
         }
 
-return elements;    }
+        return elements;
+    }
 
     private List<Element> mapExistence(Scope aScope, Existence aPattern) {
         List<Element> elements = new ArrayList<>();
@@ -418,7 +412,8 @@ return elements;    }
                 break;
         }
 
-return elements;    }
+        return elements;
+    }
 
     private List<Element> mapRecurrence(Scope aScope, Recurrence aPattern) {
         List<Element> elements = new ArrayList<>();
@@ -518,7 +513,8 @@ return elements;    }
                 break;
         }
 
-return elements;    }
+        return elements;
+    }
 
     private List<Element> mapPrecedence(Scope aScope, Precedence aPattern) {
         List<Element> elements = new ArrayList<>();
@@ -640,7 +636,8 @@ return elements;    }
                 break;
         }
 
-return elements;    }
+        return elements;
+    }
 
     // Tis addressed from 0 to n-1.
 
@@ -850,7 +847,8 @@ return elements;    }
                 break;
         }
 
-return elements;    }
+        return elements;
+    }
 
     // Tis addressed from 0 to n-1.
 
@@ -1136,7 +1134,8 @@ return elements;    }
                 break;
         }
 
-return elements;    }
+        return elements;
+    }
 
     private List<Element> mapUntil(Scope aScope, psp.sel.patterns.order.Until aPattern) {
         List<Element> elements = new ArrayList<>();
@@ -1238,7 +1237,8 @@ return elements;    }
                 break;
         }
 
-return elements;    }
+        return elements;
+    }
 
     private List<Element> mapResponse(Scope aScope, Response aPattern) {
         List<Element> elements = new ArrayList<>();
@@ -1347,7 +1347,7 @@ return elements;    }
                     elements.add(languageDefinitions.getNot());
                     elements.add(aScope.getR());
                     elements.add(languageDefinitions.getAnd());
-                    //sb.deleteCharAt(sb.length() - 1);
+                    // sb.deleteCharAt(sb.length() - 1);
                 }
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new SpaceElement());
@@ -1410,7 +1410,8 @@ return elements;    }
                 break;
         }
 
-return elements;    }
+        return elements;
+    }
 
     // Tis addressed from 0 to n-1.
 
@@ -1654,7 +1655,8 @@ return elements;    }
                 break;
         }
 
-return elements;    }
+        return elements;
+    }
 
     // Tis addressed from 0 to n-1.
 
@@ -1852,7 +1854,8 @@ return elements;    }
                 break;
         }
 
-return elements;    }
+        return elements;
+    }
 
     private List<Element> mapResponseInvariance(Scope aScope, ResponseInvariance aPattern) {
         List<Element> elements = new ArrayList<>();
@@ -1975,7 +1978,8 @@ return elements;    }
                 break;
         }
 
-return elements;    }
+        return elements;
+    }
 
     public String getNotSupportedMessage() {
         return "Mapping not supported in Linear Temporal Logic.";
