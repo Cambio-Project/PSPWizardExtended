@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import psp.mappings.LanguageDefinitions;
-import psp.mappings.TBVMapper;
+import psp.mappings.UntimedTBVMapper;
 import psp.mappings.elements.AlwaysElement;
 import psp.mappings.elements.AndElement;
 import psp.mappings.elements.Element;
@@ -35,7 +35,7 @@ public class WeakUntilSubstituterTest {
 
     @BeforeEach
     public void setup() {
-        final TBVMapper mapper = new TBVMapper();
+        final UntimedTBVMapper mapper = new UntimedTBVMapper();
         languageDefinitions = mapper.getLanguageDefinitions();
         resolver = new WeakUntilSubstituter(languageDefinitions);
         elementToProcess = new ArrayList<>();
