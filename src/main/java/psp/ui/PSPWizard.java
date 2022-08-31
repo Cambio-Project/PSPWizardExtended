@@ -50,7 +50,8 @@ import psp.mappings.PatternMapper;
 import psp.mappings.PrismMapper;
 import psp.mappings.QuantitativePrismMapper;
 import psp.mappings.SELMapper;
-import psp.mappings.TBVMapper;
+import psp.mappings.TimedTBVMapper;
+import psp.mappings.UntimedTBVMapper;
 import psp.sel.EventImpl;
 import psp.sel.patterns.Pattern;
 import psp.sel.scopes.Scope;
@@ -66,7 +67,8 @@ public class PSPWizard extends javax.swing.JFrame implements PSPController {
         fMappings.addItem(new MTLMapper());
         fMappings.addItem(new PrismMapper());
         fMappings.addItem(new QuantitativePrismMapper());
-        fMappings.addItem(new TBVMapper());
+        fMappings.addItem(new TimedTBVMapper());
+        fMappings.addItem(new UntimedTBVMapper());
     }
 
     public PSPWizard() {
@@ -531,6 +533,11 @@ public class PSPWizard extends javax.swing.JFrame implements PSPController {
     private void fSEsActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_fSEsActionPerformed
         // add sample events
 
+        newEvent("A(a)");
+        newEvent("B(b)");
+        newEvent("C(c)");
+        newEvent("D(d)");
+        
         newEvent("P");
         newEvent("S");
         newEvent("T");
