@@ -12,7 +12,7 @@ import psp.mappings.elements.WeakUntilElement;
 import psp.mappings.postprocessing.MultipleWhiteSpaceReplacer;
 import psp.mappings.postprocessing.WeakUntilSubstituter;
 
-public class TBVMapper extends MTLMapper {
+public class UntimedTBVMapper extends LTLMapper {
     private static final String defaultInf = "inf";
     private static final AlwaysElement defaultAlways = new AlwaysElement("always");
     private static final EventuallyElement defaultEventually = new EventuallyElement("once");
@@ -27,15 +27,14 @@ public class TBVMapper extends MTLMapper {
         defaultAlways, defaultEventually, defaultNext, defaultImplication, defaultNot, defaultAnd, defaultOr,
         defaultUntil, defaultWeakUntil);
 
-    public TBVMapper() {
+    public UntimedTBVMapper() {
         super();
         this.setLanguageDefinitions(TBV_LANGUAGE_DEFINITION);
-        this.setTimeLanguageDefinitions(new TimeLanguageDefinitions("[", "]", "[", "]"));
         this.register(new WeakUntilSubstituter(TBV_LANGUAGE_DEFINITION));
         this.register(new MultipleWhiteSpaceReplacer());
     }
 
     public String toString() {
-        return "TBV";
+        return "TBV (untimed)";
     }
 }
