@@ -160,9 +160,11 @@ public class LTLMapper extends GenericMapper {
                 elements.add(aPattern.getP());
                 break;
             case PSPConstants.S_BeforeR:
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aPattern.getP());
@@ -176,9 +178,11 @@ public class LTLMapper extends GenericMapper {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getAlways());
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 break;
             case PSPConstants.S_BetweenQandR:
@@ -192,9 +196,11 @@ public class LTLMapper extends GenericMapper {
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
@@ -341,10 +347,13 @@ public class LTLMapper extends GenericMapper {
                 elements.add(new RoundBracketCloseElement());
                 break;
             case PSPConstants.S_AfterQ:
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getAlways());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getQ());
-                elements.add(languageDefinitions.getNot());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
@@ -353,6 +362,7 @@ public class LTLMapper extends GenericMapper {
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 break;
             case PSPConstants.S_BetweenQandR:
                 elements.add(languageDefinitions.getAlways());
@@ -360,8 +370,6 @@ public class LTLMapper extends GenericMapper {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
-                elements.add(languageDefinitions.getAlways());
-                elements.add(new SpaceElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
                 elements.add(languageDefinitions.getAnd());
@@ -390,7 +398,6 @@ public class LTLMapper extends GenericMapper {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
-                elements.add(languageDefinitions.getAlways());
                 elements.add(new SpaceElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
@@ -411,7 +418,6 @@ public class LTLMapper extends GenericMapper {
                 elements.add(new RoundBracketCloseElement());
                 break;
         }
-
         return elements;
     }
 
@@ -427,8 +433,10 @@ public class LTLMapper extends GenericMapper {
                 elements.add(new RoundBracketCloseElement());
                 break;
             case PSPConstants.S_BeforeR:
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
@@ -436,7 +444,7 @@ public class LTLMapper extends GenericMapper {
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aPattern.getP());
-                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getOr());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
@@ -450,11 +458,13 @@ public class LTLMapper extends GenericMapper {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getAlways());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 break;
@@ -467,8 +477,10 @@ public class LTLMapper extends GenericMapper {
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
@@ -477,7 +489,7 @@ public class LTLMapper extends GenericMapper {
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aPattern.getP());
-                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getOr());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
@@ -502,7 +514,7 @@ public class LTLMapper extends GenericMapper {
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aPattern.getP());
-                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getOr());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
@@ -544,7 +556,7 @@ public class LTLMapper extends GenericMapper {
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getS());
-                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getOr());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
@@ -593,7 +605,7 @@ public class LTLMapper extends GenericMapper {
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getS());
-                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getOr());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
@@ -623,7 +635,7 @@ public class LTLMapper extends GenericMapper {
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getS());
-                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getOr());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
@@ -730,7 +742,7 @@ public class LTLMapper extends GenericMapper {
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
-                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getOr());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
@@ -795,7 +807,7 @@ public class LTLMapper extends GenericMapper {
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
-                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getOr());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
@@ -834,7 +846,7 @@ public class LTLMapper extends GenericMapper {
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
-                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getOr());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
@@ -980,7 +992,7 @@ public class LTLMapper extends GenericMapper {
                     elements.add(new RoundBracketCloseElement());
                     elements.add(new RoundBracketCloseElement());
                 }
-                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getOr());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
@@ -1064,7 +1076,7 @@ public class LTLMapper extends GenericMapper {
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
-                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getOr());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
@@ -1122,7 +1134,7 @@ public class LTLMapper extends GenericMapper {
                     elements.add(new RoundBracketCloseElement());
                     elements.add(new RoundBracketCloseElement());
                 }
-                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getOr());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
@@ -1161,7 +1173,7 @@ public class LTLMapper extends GenericMapper {
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aPattern.getS());
-                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getOr());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
@@ -1204,7 +1216,7 @@ public class LTLMapper extends GenericMapper {
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aPattern.getS());
-                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getOr());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
