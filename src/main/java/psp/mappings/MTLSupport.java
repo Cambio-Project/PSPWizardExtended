@@ -59,7 +59,7 @@ public abstract class MTLSupport extends GenericMapper {
 
     public String cnt(EventImpl aZP) {
         if (aZP != null)
-            return languageDefinitions.getNot() + aZP.getAsEvent();
+            return languageDefinitions.getNot().getContent() + aZP.getAsEvent();
         else
             return "true";
     }
