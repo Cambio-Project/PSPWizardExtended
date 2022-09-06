@@ -2613,6 +2613,7 @@ public class MTLMapper extends MTLSupport {
                 break;
             case PSPConstants.S_AfterQuntilR:
                 elements.add(languageDefinitions.getAlways());
+                elements.add(languageDefinitions.getAlways());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
