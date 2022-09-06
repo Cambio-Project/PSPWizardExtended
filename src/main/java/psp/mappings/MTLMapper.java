@@ -1753,9 +1753,11 @@ public class MTLMapper extends MTLSupport {
                 elements.add(aPattern.getS());
                 break;
             case PSPConstants.S_BeforeR:
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(lmintime(aPattern.getPTimeBound())));
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
@@ -1797,10 +1799,12 @@ public class MTLMapper extends MTLSupport {
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(lmintime(aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
@@ -1827,11 +1831,13 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getAlways());
                 elements.add(new TimeBoundElement(umintime(aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
