@@ -991,59 +991,79 @@ public class MTLMapper extends MTLSupport {
             case PSPConstants.S_Globally:
                 elements.add(languageDefinitions.getAlways());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(trigger((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(gap((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getS());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 break;
             case PSPConstants.S_BeforeR:
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(trigger((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(gap((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getS());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(elapsed((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 break;
             case PSPConstants.S_AfterQ:
                 elements.add(languageDefinitions.getAlways());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(trigger((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(gap((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getS());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 break;
@@ -1056,31 +1076,41 @@ public class MTLMapper extends MTLSupport {
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(trigger((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(gap((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getS());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(elapsed((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 break;
             case PSPConstants.S_AfterQuntilR:
@@ -1094,26 +1124,34 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(trigger((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(gap((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getS());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(elapsed((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getWeakUntil());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 break;
         }
@@ -1133,6 +1171,7 @@ public class MTLMapper extends MTLSupport {
             if (lcntZi.equals("true")) {
                 // no Zi
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNext());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
@@ -1143,11 +1182,11 @@ public class MTLMapper extends MTLSupport {
                 PC1N_Ch(elements, Tis, i + 1);
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
             } else {
                 // with Zi
                 elements.add(languageDefinitions.getAnd());
-                elements.add(new MiscElement(lcntZi));
-                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNext());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(new MiscElement(lcntZi));
@@ -1156,7 +1195,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(Ti.getEvent());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new MiscElement(lcntZi));
                 PC1N_Ch(elements, Tis, i + 1);
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
             }
@@ -1175,59 +1217,69 @@ public class MTLMapper extends MTLSupport {
             case PSPConstants.S_Globally:
                 elements.add(languageDefinitions.getAlways());
                 elements.add(new RoundBracketOpenElement());
-                if (lHasConstraint) {
-                    // has ZS
-                    elements.add(new MiscElement(lcntZS));
-                    elements.add(languageDefinitions.getUntil());
-                } else {
-                    // no ZS
-                    elements.add(languageDefinitions.getEventually());
-                }
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(trigger((Interval) aPattern.getSTimeBound())));
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aPattern.getS());
+                if (lHasConstraint) {
+                    // has ZS
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZS));
+                }
                 PC1N_Ch(elements, Tis, 0);
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(maxgap((Interval) aPattern.getSTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 break;
             case PSPConstants.S_BeforeR:
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
-                if (lHasConstraint) {
-                    // has ZS
-                    elements.add(new MiscElement(lcntZS));
-                    elements.add(languageDefinitions.getUntil());
-                } else {
-                    // no ZS
-                    elements.add(languageDefinitions.getEventually());
-                }
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(trigger((Interval) aPattern.getSTimeBound())));
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aPattern.getS());
+                if (lHasConstraint) {
+                    // has ZS
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZS));
+                }
                 PC1N_Ch(elements, Tis, 0);
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(maxgap((Interval) aPattern.getSTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(gapNP(Tis.size(), Tis, (Interval) aPattern.getSTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 break;
             case PSPConstants.S_AfterQ:
@@ -1235,21 +1287,23 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getAlways());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aPattern.getP());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
-                if (lHasConstraint) {
-                    elements.add(new MiscElement(lcntZS));
-                    elements.add(languageDefinitions.getUntil());
-                } else {
-                    elements.add(languageDefinitions.getEventually());
-                }
+                elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(trigger((Interval) aPattern.getSTimeBound())));
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aPattern.getS());
+                if (lHasConstraint) {
+                    // has ZS
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZS));
+                }
                 PC1N_Ch(elements, Tis, 0);
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
@@ -1264,40 +1318,48 @@ public class MTLMapper extends MTLSupport {
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
-                if (lHasConstraint) {
-                    elements.add(new MiscElement(lcntZS));
-                    elements.add(languageDefinitions.getUntil());
-                } else {
-                    elements.add(languageDefinitions.getEventually());
-                }
+                elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(trigger((Interval) aPattern.getSTimeBound())));
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aPattern.getS());
+                if (lHasConstraint) {
+                    // has ZS
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZS));
+                }
                 PC1N_Ch(elements, Tis, 0);
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(maxgap((Interval) aPattern.getSTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(gapNP(Tis.size(), Tis, (Interval) aPattern.getSTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 break;
             case PSPConstants.S_AfterQuntilR:
@@ -1312,38 +1374,43 @@ public class MTLMapper extends MTLSupport {
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
-                if (lHasConstraint) {
-                    elements.add(new MiscElement(lcntZS));
-                    elements.add(languageDefinitions.getUntil());
-                } else {
-                    elements.add(languageDefinitions.getEventually());
-                }
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(trigger((Interval) aPattern.getSTimeBound())));
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aPattern.getS());
+                if (lHasConstraint) {
+                    // has ZS
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZS));
+                }
                 PC1N_Ch(elements, Tis, 0);
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(maxgap((Interval) aPattern.getSTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(gapNP(Tis.size(), Tis, (Interval) aPattern.getSTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getWeakUntil());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 break;
         }
-
         return elements;
     }
 
@@ -1358,9 +1425,11 @@ public class MTLMapper extends MTLSupport {
             EventConstraint lZi = Ti.getConstraint();
             String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
 
+            // unconstrained
             if (lcntZi.equals("true")) {
                 // no Zi
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNext());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
@@ -1371,6 +1440,7 @@ public class MTLMapper extends MTLSupport {
                 PCN1_Ch(elements, aPattern, i + 1);
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
             } else {
                 // with Zi
                 elements.add(languageDefinitions.getAnd());
@@ -1379,6 +1449,7 @@ public class MTLMapper extends MTLSupport {
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new MiscElement(lcntZi));
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNext());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
@@ -1393,6 +1464,7 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(Ti.getEvent());
                 PCN1_Ch(elements, aPattern, i + 1);
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
             }
@@ -1411,10 +1483,12 @@ public class MTLMapper extends MTLSupport {
             case PSPConstants.S_Globally:
                 elements.add(languageDefinitions.getAlways());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(trigger((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
                 if (lHasConstraint) {
@@ -1440,18 +1514,22 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketCloseElement());
                 break;
             case PSPConstants.S_BeforeR:
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
                 if (lHasConstraint) {
                     // has ZS
                     elements.add(new RoundBracketOpenElement());
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getEventually());
                     elements.add(new TimeBoundElement(trigger((Interval) aPattern.getPTimeBound())));
                     elements.add(new SpaceElement());
                     elements.add(aPattern.getP());
+                    elements.add(new RoundBracketCloseElement());
                     elements.add(languageDefinitions.getImplication());
                     elements.add(new RoundBracketOpenElement());
                     elements.add(new RoundBracketOpenElement());
@@ -1471,10 +1549,12 @@ public class MTLMapper extends MTLSupport {
                     elements.add(new RoundBracketCloseElement());
                 } else {
                     // no ZS
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getEventually());
                     elements.add(new TimeBoundElement(trigger((Interval) aPattern.getPTimeBound())));
                     elements.add(new SpaceElement());
                     elements.add(aPattern.getP());
+                    elements.add(new RoundBracketCloseElement());
                     elements.add(languageDefinitions.getImplication());
                     elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getEventually());
@@ -1487,10 +1567,12 @@ public class MTLMapper extends MTLSupport {
                     elements.add(new RoundBracketCloseElement());
                 }
                 elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(elapsed((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new SpaceElement());
@@ -1502,12 +1584,15 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(trigger((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
                 if (lHasConstraint) {
@@ -1528,6 +1613,7 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aPattern.getS());
                 PCN1_Ch(elements, aPattern, 0);
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
@@ -1542,16 +1628,21 @@ public class MTLMapper extends MTLSupport {
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(trigger((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
                 if (lHasConstraint) {
@@ -1576,14 +1667,17 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(elapsed((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 break;
             case PSPConstants.S_AfterQuntilR:
@@ -1597,14 +1691,18 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(new TimeBoundElement(trigger((Interval) aPattern.getPTimeBound())));
+                elements.add(new SpaceElement());
+                elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
                 if (lHasConstraint) {
                     // has ZS
-                    elements.add(languageDefinitions.getEventually());
-                    elements.add(new TimeBoundElement(trigger((Interval) aPattern.getPTimeBound())));
-                    elements.add(new SpaceElement());
-                    elements.add(aPattern.getP());
-                    elements.add(languageDefinitions.getImplication());
-                    elements.add(new RoundBracketOpenElement());
                     elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aPattern.getP());
@@ -1612,41 +1710,30 @@ public class MTLMapper extends MTLSupport {
                     elements.add(new MiscElement(lcntZP));
                     elements.add(new RoundBracketCloseElement());
                     elements.add(languageDefinitions.getUntil());
-                    elements.add(new TimeBoundElement(gapPN(0, Tis, (Interval) aPattern.getPTimeBound())));
-                    elements.add(new SpaceElement());
-                    elements.add(new RoundBracketOpenElement());
-                    elements.add(aPattern.getS());
-                    PCN1_Ch(elements, aPattern, 0);
-                    elements.add(new RoundBracketCloseElement());
-                    elements.add(new RoundBracketCloseElement());
                 } else {
                     // no ZS
-                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getEventually());
-                    elements.add(new TimeBoundElement(trigger((Interval) aPattern.getPTimeBound())));
-                    elements.add(new SpaceElement());
-                    elements.add(aPattern.getP());
-                    elements.add(languageDefinitions.getImplication());
-                    elements.add(new RoundBracketOpenElement());
-                    elements.add(languageDefinitions.getEventually());
-                    elements.add(new TimeBoundElement(gapPN(0, Tis, (Interval) aPattern.getPTimeBound())));
-                    elements.add(new SpaceElement());
-                    elements.add(new RoundBracketOpenElement());
-                    elements.add(aPattern.getS());
-                    PCN1_Ch(elements, aPattern, 0);
-                    elements.add(new RoundBracketCloseElement());
-                    elements.add(new RoundBracketCloseElement());
-                    elements.add(new RoundBracketCloseElement());
                 }
+                elements.add(new TimeBoundElement(gapPN(0, Tis, (Interval) aPattern.getPTimeBound())));
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                PCN1_Ch(elements, aPattern, 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(new TimeBoundElement(elapsed((Interval) aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getWeakUntil());
                 elements.add(new SpaceElement());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 break;
         }
