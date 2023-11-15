@@ -19,3 +19,11 @@ This allows you to create a Virtual Machine using Vagrant & Virtual box which co
 
 This repository was constructed by [Manav Verma](https://github.com/mverma4) under the supervision of [Dr. Emerson Murphy-Hill](https://github.com/CaptainEmerson). Thanks to Dr.Markus Lumpe, Dr.Indika Meedeniya and Dr.Lars Grunske for their help in establishing this repository.
 
+___
+## Usage of the Rest-API
+
+### Additional Requirements: 
+- min. Java 17
+
+### Usage:
+
