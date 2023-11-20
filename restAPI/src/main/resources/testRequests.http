@@ -1,0 +1,20 @@
+###
+POST http://localhost:8080/transformPattern
+Content-Type: application/json
+
+{
+  "scope": "Globally",
+  "pattern": "Universality",
+  "patternProps": {
+    "event": "valueEvent",
+    "time": "valueT",
+    "probability": "valueP"
+  },
+  "events": [
+    {
+      "name": "valueEvent",
+      "specification": "testSpecification"
+    }
+  ],
+  "targetLogic": "LTL"
+}
