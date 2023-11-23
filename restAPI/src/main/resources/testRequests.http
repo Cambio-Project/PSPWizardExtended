@@ -6,13 +6,13 @@ Content-Type: application/json
   "scope": "Globally",
   "pattern": "Universality",
   "patternProps": {
-    "event": "valueEvent",
-    "time": "valueT",
-    "probability": "valueP"
+    "event": "Event1",
+    "timeBound": "valueT",
+    "probabilityBound": "valueP"
   },
   "events": [
     {
-      "name": "valueEvent",
+      "name": "Event1",
       "specification": "testSpecification"
     }
   ],
