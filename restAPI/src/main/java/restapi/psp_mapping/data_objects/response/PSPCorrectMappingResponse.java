@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PSPCorrectMappingResponse implements PSPMappingResponse{
 
-  private String seg;
+  private final String seg;
   @JsonProperty("mapped_psp")
   private String mappedPSP;
 

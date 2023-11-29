@@ -13,8 +13,6 @@ import restapi.psp_mapping.data_objects.request.PSPMappingRequest;
 import restapi.psp_mapping.data_objects.request.PSPMappingScope;
 import restapi.psp_mapping.data_objects.response.PSPCorrectMappingResponse;
 
-import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 
 @Service
