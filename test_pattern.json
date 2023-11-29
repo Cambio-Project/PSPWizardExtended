@@ -1,0 +1,36 @@
+{
+    "scope": {
+        "type": "Globally",
+        "q_event": {
+            "name": "",
+            "specification": ""
+        },
+        "r_event": {
+            "name": "",
+            "specification": ""
+        }
+    },
+    "pattern": {
+        "type": "Universality",
+        "event": {
+            "name": "My_first_event",
+            "specification": ""
+        },
+        "pattern_specifications": {
+            "time_unit": "",
+            "upper_limit": "",
+            "frequency": ""
+        },
+        "time_bound": {
+            "type": "",
+            "time_unit": "",
+            "upper_limit": "",
+            "lower_limit": ""
+        },
+        "probability_bound": {
+            "type": "",
+            "probability": ""
+        }
+    },
+    "target_logic": "MTL"
+}
