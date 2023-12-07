@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2011-2014 Swinburne University of Technology
  *
- * This file is part of PSPWizard, a tool for machine-assisted 
+ * This file is part of PSPWizard, a tool for machine-assisted
  * definition of temporal formulae capturing pattern-based system
  * properties, developed at the Faculty of Science, Engineering and
  * Technology at Swinburne University of Technology, Australia.
@@ -41,18 +41,18 @@ package psp.sel.patterns;
 import java.util.ArrayList;
 import psp.sel.EventImpl;
 
-public abstract class Pattern 
+public abstract class Pattern
 {
     public abstract int getPatternCategory();
 
     public abstract int getType();
 
     public abstract ArrayList<EventImpl> getEvents();
-   
+
     public abstract String getSpecificationAsSEL();
 
 //    public abstract ArrayList<Event> getEvents();
-    
+
     private static String fNames[] = {
                                         "",
                                         // Occurrence
@@ -75,8 +75,8 @@ public abstract class Pattern
                                         "ResponseChainN1",
                                         "ResponseInvariance"
                                };
-    
-    public String toString()     
+
+    public String toString()
     {
         return fNames[getType()];
     }

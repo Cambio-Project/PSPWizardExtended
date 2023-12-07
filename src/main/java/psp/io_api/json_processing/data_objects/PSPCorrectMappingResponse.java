@@ -1,4 +1,4 @@
-package psp.io_api.data_objects;
+package psp.io_api.json_processing.data_objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

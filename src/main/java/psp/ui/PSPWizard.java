@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2011-2014 Swinburne University of Technology
  *
- * This file is part of PSPWizard, a tool for machine-assisted 
+ * This file is part of PSPWizard, a tool for machine-assisted
  * definition of temporal formulae capturing pattern-based system
  * properties, developed at the Faculty of Science, Engineering and
  * Technology at Swinburne University of Technology, Australia.
@@ -537,7 +537,7 @@ public class PSPWizard extends javax.swing.JFrame implements PSPController {
         newEvent("B(b)");
         newEvent("C(c)");
         newEvent("D(d)");
-        
+
         newEvent("P");
         newEvent("S");
         newEvent("T");
