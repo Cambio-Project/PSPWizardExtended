@@ -1,4 +1,4 @@
-package psp.io_api.exceptions;
+package restapi.psp_mapping.exceptions;
 
 import java.io.IOException;
 

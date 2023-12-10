@@ -1,4 +1,4 @@
-package psp.io_api.json_processing.custom_deserializers;
+package restapi.psp_mapping.json_processing.custom_deserializers;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import psp.io_api.json_processing.MapperSupplier;
+import restapi.psp_mapping.json_processing.MapperSupplier;
 import psp.mappings.PatternMapper;
 
 public class MapperDeserializer extends StdDeserializer<PatternMapper> {

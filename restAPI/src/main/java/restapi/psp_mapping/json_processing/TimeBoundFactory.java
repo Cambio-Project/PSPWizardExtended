@@ -1,10 +1,10 @@
-package psp.io_api.json_processing;
+package restapi.psp_mapping.json_processing;
 
 import psp.constraints.Interval;
 import psp.constraints.LowerTimeBound;
 import psp.constraints.TimeBound;
 import psp.constraints.UpperTimeBound;
-import psp.io_api.exceptions.UnsupportedTypeException;
+import restapi.psp_mapping.exceptions.UnsupportedTypeException;
 import psp.sel.EventImpl;
 
 public class TimeBoundFactory {

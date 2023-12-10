@@ -1,6 +1,6 @@
-package psp.io_api.json_processing;
+package restapi.psp_mapping.json_processing;
 
-import psp.io_api.exceptions.UnsupportedTypeException;
+import restapi.psp_mapping.exceptions.UnsupportedTypeException;
 import psp.sel.EventImpl;
 import psp.sel.scopes.AfterQ;
 import psp.sel.scopes.AfterQuntilR;

@@ -1,4 +1,4 @@
-package psp.io_api.json_processing;
+package restapi.psp_mapping.json_processing;
 
 import psp.sel.EventImpl;
 import  psp.sel.patterns.Pattern;
@@ -23,7 +23,7 @@ import psp.sel.patterns.order.Until;
 import psp.constraints.EventConstraint;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
-import psp.io_api.exceptions.UnsupportedTypeException;
+import restapi.psp_mapping.exceptions.UnsupportedTypeException;
 
 
 public class PatternFactory {

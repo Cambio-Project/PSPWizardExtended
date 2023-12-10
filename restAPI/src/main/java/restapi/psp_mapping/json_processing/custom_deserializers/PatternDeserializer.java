@@ -1,4 +1,4 @@
-package psp.io_api.json_processing.custom_deserializers;
+package restapi.psp_mapping.json_processing.custom_deserializers;
 
 import java.io.IOException;
 
@@ -14,9 +14,7 @@ import psp.sel.patterns.order.ChainEvents;
 import psp.constraints.EventConstraint;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
-import psp.io_api.json_processing.MapperSupplier;
-import psp.io_api.json_processing.PatternFactory;
-import psp.mappings.PatternMapper;
+import restapi.psp_mapping.json_processing.PatternFactory;
 
 public class PatternDeserializer extends StdDeserializer<Pattern> {
 

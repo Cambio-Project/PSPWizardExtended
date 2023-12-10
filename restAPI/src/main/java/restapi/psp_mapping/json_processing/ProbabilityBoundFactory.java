@@ -1,11 +1,11 @@
-package psp.io_api.json_processing;
+package restapi.psp_mapping.json_processing;
 
 import psp.constraints.GreaterThanEqualProbability;
 import psp.constraints.GreaterThanProbability;
 import psp.constraints.LowerThanEqualProbability;
 import psp.constraints.LowerThanProbability;
 import psp.constraints.ProbabilityBound;
-import psp.io_api.exceptions.UnsupportedTypeException;
+import restapi.psp_mapping.exceptions.UnsupportedTypeException;
 
 public class ProbabilityBoundFactory {
   	public static ProbabilityBound getProbabilityBound(String type, double probability) throws UnsupportedTypeException {

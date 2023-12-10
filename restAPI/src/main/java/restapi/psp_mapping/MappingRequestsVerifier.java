@@ -1,4 +1,4 @@
-package psp.io_api;
+package restapi.psp_mapping;
 
 public class MappingRequestsVerifier {
 

@@ -1,4 +1,4 @@
-package psp.io_api.json_processing;
+package restapi.psp_mapping.json_processing;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import psp.mappings.PrismMapper;
 import psp.mappings.QuantitativePrismMapper;
 import psp.mappings.TimedTBVMapper;
 import psp.mappings.UntimedTBVMapper;
-import psp.io_api.exceptions.UnsupportedTypeException;
+import restapi.psp_mapping.exceptions.UnsupportedTypeException;
 
 
 public class MapperSupplier {
