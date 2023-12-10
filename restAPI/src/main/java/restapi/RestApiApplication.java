@@ -8,9 +8,6 @@ import psp.ui.PSPWizard;
 public class RestApiApplication {
 
     public static void main(String[] args) {
-        //Init Gui to test
-        //PSPWizard.main(args);
-
         SpringApplication.run(RestApiApplication.class, args);
     }
 }

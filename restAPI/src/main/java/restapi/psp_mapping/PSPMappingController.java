@@ -30,13 +30,13 @@ public class PSPMappingController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
-            logger.info(request);
-            try {
-                String response = pspMappingService.mapPSPRequestToTargetLogic(request);
-                logger.info(response);
-            } catch (Exception e){
-                System.out.println(e.getMessage());
-            }
+            //TODO Mapping Request Object is working, but needs to be handled.
+            PSPMappingRequest mappingRequest = pspMappingService.mapJsonToPSPRequest(request);
+
+            //TODO Seems not to Work, but was also not working in the original json-interface Branch
+            //String response = pspMappingService.mapPSPRequestToTargetLogic(request);
+
+            //TODO Return correct Response
             return new ResponseEntity<>(null, HttpStatus.OK);
         } catch (Exception exception){
             logger.error(exception.getMessage());

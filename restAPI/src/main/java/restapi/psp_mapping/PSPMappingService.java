@@ -39,7 +39,7 @@ public class PSPMappingService {
         return mapPSPMappingResultToJson(response);
     }
 
-    private PSPMappingRequest mapJsonToPSPRequest(String jsonStr) {
+    public PSPMappingRequest mapJsonToPSPRequest(String jsonStr) {
         ObjectMapper mapper = new ObjectMapper();
         PSPMappingRequest psp;
         try {
