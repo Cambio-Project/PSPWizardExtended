@@ -1,110 +1,102 @@
 package psp.io_api;
 import java.io.File;
 import java.io.IOException;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import psp.io_api.exceptions.UnsupportedTypeException;
 import psp.io_api.json_processing.data_objects.PSPCorrectMappingResponse;
+import psp.io_api.json_processing.data_objects.PSPMappingError;
+import psp.io_api.json_processing.data_objects.PSPMappingResponse;
+import psp.io_api.json_processing.data_objects.PSPUnsupportedMappingResponse;
 import psp.io_api.json_processing.data_objects.psp_mapping_request.PSPMappingRequest;
 import psp.mappings.PatternMapper;
+import psp.mappings.SELMapper;
 import psp.sel.patterns.Pattern;
 import psp.sel.scopes.Scope;
 public class MappingRequestsHandler {
-  public static void main(String args[]) {
+  public static void main(String[] args) {
         File file = new File("test_pattern_v2.json");
-        PSPMappingRequest mapPSPRequestToTargetLogic = mapJsonToPSPRequest(file);
-    }
-
-  public static String mapPSPRequestToTargetLogic(String jsonPSPRequest) {
-        PSPMappingRequest request = mapJsonToPSPRequest(jsonPSPRequest);
-        Scope scope = request.getScope();
-        Pattern pattern = request.getPattern();
-        PatternMapper mapper = request.getMapper();
-        String seg = pattern.getSpecificationAsSEL();
-        String mapping = mapper.getMapping(scope, pattern);
-
-        PSPCorrectMappingResponse response = new PSPCorrectMappingResponse(seg,mapping);
-
-        return mapPSPMappingResultToJson(response);
-  }
-  public static String mapPSPRequestToTargetLogic(File pspRequest) {
-        PSPMappingRequest request = mapJsonToPSPRequest(pspRequest);
-        Scope scope = request.getScope();
-        Pattern pattern = request.getPattern();
-        PatternMapper mapper = request.getMapper();
-        String seg = pattern.getSpecificationAsSEL();
-        String mapping = mapper.getMapping(scope, pattern);
-
-        PSPCorrectMappingResponse response = new PSPCorrectMappingResponse(seg,mapping);
-
-        return mapPSPMappingResultToJson(response);
-  }
-
-  private static PSPMappingRequest mapJsonToPSPRequest(String jsonStr) {
-    ObjectMapper mapper = new ObjectMapper();
-    PSPMappingRequest psp;
-    try {
-      psp = mapper.readValue(jsonStr, PSPMappingRequest.class);
-      return psp;
-    } catch (IOException e){
-      System.out.println(e);
-      return null;
-    }
-  }
-
-  private static PSPMappingRequest mapJsonToPSPRequest(File file) {
-    ObjectMapper mapper = new ObjectMapper();
-    PSPMappingRequest psp;
-    try {
-      psp = mapper.readValue(file, PSPMappingRequest.class);
-      return psp;
-    } catch (IOException e){
-
-      System.out.println(e);
-      return null;
-    }
-  }
-
-  private static String mapPSPMappingResultToJson(PSPCorrectMappingResponse response){
-    ObjectMapper mapper = new ObjectMapper();
-    String psp;
-    try {
-      psp = mapper.writeValueAsString(response);
-      return psp;
-    } catch (IOException e){
-      System.out.println(e);
-      return null;
-    }
-  }
-
-/*     private void updateSELandMapping() {
-      StringBuilder sb = new StringBuilder();
-
-      if (fSelectedScope != null && fSelectedPattern != null) {
-          sb.append(fSelectedScope.getSpecificationAsSEL());
-          sb.append(", ");
-          sb.append(fSelectedPattern.getSpecificationAsSEL());
-          sb.append('.');
-
-          fSELP.setText(sb.toString());
-
-          PatternMapper lMapper = (PatternMapper) fMappings.getSelectedItem();
-
-          if (lMapper != null) {
-              String lMapping = lMapper.getMapping(fSelectedScope, fSelectedPattern);
-
-              if (!lMapping.isEmpty()) {
-                  if (lMapper.hasMappingErrorOccurred())
-                      fMapping.setForeground(Color.red);
-                  else
-                      fMapping.setForeground(Color.black);
-                  fMapping.setText(lMapping);
-              } else {
-                  fMapping.setForeground(Color.red);
-                  fMapping.setText(lMapper.getNotSupportedMessage());
-              }
-          }
+      PSPMappingResponse mapPSPRequestToTargetLogic = mapPSPRequestToTargetLogic(file);
+      try {
+          System.out.println(mapPSPRequestToTargetLogic.toJSON());
+      } catch (JsonProcessingException e) {
+          System.out.println(e.getMessage());
       }
-  } */
+    }
 
+  public static PSPMappingResponse mapPSPRequestToTargetLogic(String jsonMappingRequest) {
+      try {
+          PSPMappingRequest request = mapJsonToPSPRequest(jsonMappingRequest);
+          Scope scope = request.getScope();
+          Pattern pattern = request.getPattern();
+          PatternMapper requestedPSPMapper = request.getMapper();
+          PatternMapper selMapper = new SELMapper();
+
+          String seg =  selMapper.getMapping(scope, pattern);
+          String mapping = requestedPSPMapper.getMapping(scope, pattern);
+
+          if (mapping.isEmpty()){
+              String error_message = requestedPSPMapper.getNotSupportedMessage();
+              return new PSPCorrectMappingResponse(seg, error_message);
+          }
+          else {
+              return new PSPCorrectMappingResponse(seg, mapping);
+          }
+
+      } catch (IOException e) {
+          if (e instanceof UnsupportedTypeException) {
+              return new PSPMappingError(e.getMessage());
+          } else {
+              return new PSPMappingError(String.format("Unexpected JSON serialization error: %s", e.getMessage()));
+          }
+      } catch (Exception e) {
+          return new PSPMappingError(String.format("Unexpected PSP mapping error: %s", e.getMessage()));
+      }
+  }
+
+    private static PSPMappingRequest mapJsonToPSPRequest(String jsonStr) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        PSPMappingRequest psp;
+
+        psp = mapper.readValue(jsonStr, PSPMappingRequest.class);
+        return psp;
+    }
+
+  public static PSPMappingResponse mapPSPRequestToTargetLogic(File pspRequest) {
+      try {
+          PSPMappingRequest request = mapJsonToPSPRequest(pspRequest);
+          Scope scope = request.getScope();
+          Pattern pattern = request.getPattern();
+          PatternMapper requestedPSPMapper = request.getMapper();
+          PatternMapper selMapper = new SELMapper();
+
+          String seg =  selMapper.getMapping(scope, pattern);
+          String mapping = requestedPSPMapper.getMapping(scope, pattern);
+
+          if (mapping.isEmpty()){
+              String errorMessage = requestedPSPMapper.getNotSupportedMessage();
+              return new PSPUnsupportedMappingResponse(errorMessage, seg);
+          }
+          else {
+              return new PSPCorrectMappingResponse(seg, mapping);
+          }
+
+      } catch (IOException e) {
+          if (e instanceof UnsupportedTypeException) {
+              return new PSPMappingError(e.getMessage());
+          } else {
+              return new PSPMappingError(String.format("Unexpected JSON serialization error: %s", e.getMessage()));
+          }
+      } catch (Exception e) {
+          return new PSPMappingError(String.format("Unexpected PSP mapping error: %s", e.getMessage()));
+      }
+  }
+
+  private static PSPMappingRequest mapJsonToPSPRequest(File file) throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+      return mapper.readValue(file, PSPMappingRequest.class);
+  }
 
 }

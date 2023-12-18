@@ -28,21 +28,19 @@ public class ScopeDeserializer extends StdDeserializer<Scope> {
 
     JsonNode node = parser.getCodec().readTree(parser);
     String type = node.get("type").asText();
-    boolean isQEvent = node.has("q_event");
-    boolean isREvent = node.has("r_event");
     EventImpl qEvent = null;
     EventImpl rEvent = null;
 
-    if(isQEvent) {
+    if(node.has("q_event")) {
       String name = node.get("q_event").get("name").asText();
       String specification = node.get("q_event").get("specification").asText();
       qEvent = new EventImpl(name,specification);
     }
 
-    if (isREvent) {
+    if (node.has("r_event")) {
       String name = node.get("r_event").get("name").asText();
       String specification = node.get("r_event").get("specification").asText();
-      qEvent = new EventImpl(name,specification);
+      rEvent = new EventImpl(name,specification);
     }
 
     return ScopeFactory.getScope(type,qEvent,rEvent);

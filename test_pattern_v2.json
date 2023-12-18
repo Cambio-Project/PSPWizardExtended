@@ -1,19 +1,19 @@
 {
     "scope":{
-       "type":"Globally",
+       "type":"BetweenQandR",
        "q_event":{
           "name":"qEvent",
           "specification":"qEventSpec"
        },
        "r_event":{
-          "name":"rEvent",
+          "name":"A(a)",
           "specification":"rEventSpec"
        }
     },
     "pattern":{
-       "type":"Universality",
+       "type":"MaximumDuration",
        "p_event":{
-          "name":"pEvent",
+          "name":"pEvent(p)",
           "specification":"pEventSpec"
        },
        "s_event":{
@@ -51,7 +51,7 @@
              "lower_limit":31
           },
           "probability_bound":{
-             "type":"GreaterThan",
+             "type":"Greater",
              "probability":0.2
           },
           "constrain_event":{
@@ -60,5 +60,5 @@
           }
        }
     },
-    "target_logic": null
+    "target_logic": "LTL"
  }

@@ -22,4 +22,5 @@ public class TimeBoundFactory {
         throw new UnsupportedTypeException(String.format("Unsupported time bound: %s", type));
     }
 	}
+
 }

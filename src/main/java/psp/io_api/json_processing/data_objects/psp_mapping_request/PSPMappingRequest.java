@@ -12,9 +12,9 @@ import psp.sel.patterns.Pattern;
 
 public class PSPMappingRequest {
 
-    @JsonDeserialize(using = ScopeDeserializer.class)
+    @JsonProperty("scope") @JsonDeserialize(using = ScopeDeserializer.class)
     private Scope scope;
-    @JsonDeserialize(using = PatternDeserializer.class)
+    @JsonProperty("pattern") @JsonDeserialize(using = PatternDeserializer.class)
     private Pattern pattern;
     @JsonProperty("target_logic") @JsonDeserialize(using = MapperDeserializer.class)
     private PatternMapper mapper;

@@ -1,5 +1,7 @@
 package psp.io_api.json_processing.data_objects;
 
-public interface PSPMappingResponse {
+import com.fasterxml.jackson.core.JsonProcessingException;
 
+public interface PSPMappingResponse {
+    public String toJSON() throws JsonProcessingException;
 }
