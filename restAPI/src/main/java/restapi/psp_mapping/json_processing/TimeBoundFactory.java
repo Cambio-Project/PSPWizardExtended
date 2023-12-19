@@ -4,8 +4,8 @@ import psp.constraints.Interval;
 import psp.constraints.LowerTimeBound;
 import psp.constraints.TimeBound;
 import psp.constraints.UpperTimeBound;
-import restapi.psp_mapping.exceptions.UnsupportedTypeException;
 import psp.sel.EventImpl;
+import restapi.psp_mapping.exceptions.UnsupportedTypeException;
 
 public class TimeBoundFactory {
 	public static TimeBound getTimeBound(String type, EventImpl timedEvent, long lowerLimit, long upperLimit, String timeUnit) throws UnsupportedTypeException {
@@ -22,4 +22,5 @@ public class TimeBoundFactory {
         throw new UnsupportedTypeException(String.format("Unsupported time bound: %s", type));
     }
 	}
+
 }

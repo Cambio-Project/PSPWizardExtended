@@ -3,38 +3,66 @@ POST http://localhost:8080/transformPattern
 Content-Type: application/json
 
 {
-  "scope": {
-    "type": "Globally",
-    "q_event": {
-      "name": "",
-      "specification": ""
+    "scope":{
+       "type":"BetweenQandR",
+       "q_event":{
+          "name":"qEvent",
+          "specification":"qEventSpec"
+       },
+       "r_event":{
+          "name":"A(a)",
+          "specification":"rEventSpec"
+       }
     },
-    "r_event": {
-      "name": "",
-      "specification": ""
-    }
-  },
-  "pattern": {
-    "type": "Universality",
-    "event": {
-      "name": "My_first_event",
-      "specification": ""
+    "pattern":{
+       "type":"MaximumDuration",
+       "p_event":{
+          "name":"pEvent(p)",
+          "specification":"pEventSpec"
+       },
+       "s_event":{
+          "name":"sEvent",
+          "specification":"sEventSpec"
+       },
+       "chained_events":[
+          {
+             "event": {
+               "name":"chainedEvent",
+               "specification":"chainedEventEventSpec"
+            },
+             "constrain_event": {
+               "name":"constrainEvent",
+               "specification":"constrainEventSpec"
+            },
+             "time_bound":{
+                "type":"Interval",
+                "time_unit":"min",
+                "upper_limit":20,
+                "lower_limit":12
+             }
+          }
+       ],
+       "pattern_specifications":{
+          "time_unit":"sec",
+          "upper_limit":14,
+          "frequency":3
+       },
+       "pattern_constrains":{
+          "time_bound":{
+             "type":"Interval",
+             "time_unit":"sec",
+             "upper_limit":42,
+             "lower_limit":31
+          },
+          "probability_bound":{
+             "type":"Greater",
+             "probability":0.2
+          },
+          "constrain_event":{
+             "name":"constrainEvent",
+             "specification":"eventConstrainSpecificiation"
+          }
+       }
     },
-    "pattern_specifications": {
-      "time_unit": "",
-      "upper_limit": "",
-      "frequency": ""
-    },
-    "time_bound": {
-      "type": "",
-      "time_unit": "",
-      "upper_limit": "",
-      "lower_limit": ""
-    },
-    "probability_bound": {
-      "type": "",
-      "probability": ""
-    }
-  },
-  "target_logic": "MTL"
-}
+    "target_logic": "LTL"
+ }

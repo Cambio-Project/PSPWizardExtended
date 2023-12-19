@@ -6,14 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PSPMappingError implements PSPMappingResponse {
-    private final String TYPE = "mapping_error";
+public class PSPUnsupportedMappingResponse implements PSPMappingResponse{
+    private final String TYPE = "unsupported_mapping";
     private final Map<String, String> payload;
-
-    public PSPMappingError(String error){
-        this.payload = new HashMap<>();
-        payload.put("error", error);
-    }
 
     public Map<String, String> getPayload() {
         return payload;
@@ -21,6 +16,12 @@ public class PSPMappingError implements PSPMappingResponse {
 
     public String getType() {
         return TYPE;
+    }
+
+    public PSPUnsupportedMappingResponse(String mappingErrorMessage, String seg) {
+        this.payload = new HashMap<>();
+        payload.put("error", mappingErrorMessage);
+        payload.put("seg", seg);
     }
 
     @Override

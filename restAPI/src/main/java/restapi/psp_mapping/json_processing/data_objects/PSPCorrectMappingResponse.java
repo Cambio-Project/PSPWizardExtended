@@ -1,23 +1,32 @@
 package restapi.psp_mapping.json_processing.data_objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class PSPCorrectMappingResponse implements PSPMappingResponse{
+import java.util.HashMap;
+import java.util.Map;
 
-  private String seg;
-  @JsonProperty("mapped_psp")
-  private String mappedPSP;
+public class PSPCorrectMappingResponse implements PSPMappingResponse {
+
+  private final String TYPE = "correct_response";
+  private final Map<String, String> payload;
 
   public PSPCorrectMappingResponse(String seg, String mappedPSP){
-    this.seg = seg;
-    this.mappedPSP = mappedPSP;
+    this.payload = new HashMap<>();
+    payload.put("mapping", mappedPSP);
+    payload.put("seg", seg);
   }
 
-  public String getMappedPSP() {
-    return mappedPSP;
+  public Map<String, String> getPayload() {
+    return payload;
   }
 
-  public String getSeg() {
-    return seg;
+  public String getType() {
+    return TYPE;
+  }
+
+  @Override
+  public String toJSON() throws JsonProcessingException {
+    return new ObjectMapper().writeValueAsString(this);
   }
 }

@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import restapi.psp_mapping.json_processing.MapperSupplier;
 import psp.mappings.PatternMapper;
+import restapi.psp_mapping.json_processing.MapperSupplier;
 
 public class MapperDeserializer extends StdDeserializer<PatternMapper> {
 
