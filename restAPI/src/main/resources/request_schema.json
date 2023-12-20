@@ -1,14 +1,24 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "JSON schema for the response sent to the frontend.",
+  "title": "JSON schema for the mapping request sent to the API.",
   "type": "object",
   "properties": {
     "scope": {
       "type": "object",
       "properties": {
         "type": {
-          "type":  ["string", "null"],
-          "enum": ["Globally", "AfterQ", "AfterQUntilR","BeforeR","BetweenQandR", null]
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "Globally",
+            "AfterQ",
+            "AfterQUntilR",
+            "BeforeR",
+            "BetweenQandR",
+            null
+          ]
         },
         "q_event": {
           "description": "An event",
@@ -18,7 +28,10 @@
               "type": "string"
             },
             "specification": {
-              "type": ["string", "null"]
+              "type": [
+                "string",
+                "null"
+              ]
             }
           },
           "required": [
@@ -33,7 +46,10 @@
               "type": "string"
             },
             "specification": {
-              "type": ["string", "null"]
+              "type": [
+                "string",
+                "null"
+              ]
             }
           },
           "required": [
@@ -50,7 +66,26 @@
       "type": "object",
       "properties": {
         "type": {
-          "type": "string"
+          "type": "string",
+          "enum": [
+            "Universality",
+            "Absence",
+            "Existence",
+            "BoundedExistence",
+            "TransientState",
+            "SteadyState",
+            "MinimumDuration",
+            "MaximumDuration",
+            "Recurrence",
+            "Precedence",
+            "PrecedenceChain1N",
+            "PrecedenceChainN1",
+            "Until",
+            "Response",
+            "ResponseChain1N",
+            "ResponseChainN1",
+            "ResponseInvariance"
+          ]
         },
         "p_event": {
           "type": "object",
@@ -59,7 +94,10 @@
               "type": "string"
             },
             "specification": {
-              "type":["string", "null"]
+              "type": [
+                "string",
+                "null"
+              ]
             }
           },
           "required": [
@@ -74,7 +112,10 @@
               "type": "string"
             },
             "specification": {
-              "type": ["string", "null"]
+              "type": [
+                "string",
+                "null"
+              ]
             }
           },
           "required": [
@@ -94,7 +135,10 @@
                     "type": "string"
                   },
                   "specification": {
-                    "type":  ["string", "null"]
+                    "type": [
+                      "string",
+                      "null"
+                    ]
                   }
                 },
                 "required": [
@@ -109,7 +153,10 @@
                     "type": "string"
                   },
                   "specification": {
-                    "type":  ["string", "null"]
+                    "type": [
+                      "string",
+                      "null"
+                    ]
                   }
                 },
                 "required": [
@@ -122,7 +169,11 @@
                 "properties": {
                   "type": {
                     "type": "string",
-                    "enum": ["Interval","Lower","Upper"]
+                    "enum": [
+                      "Interval",
+                      "Lower",
+                      "Upper"
+                    ]
                   },
                   "time_unit": {
                     "type": "string"
@@ -168,7 +219,11 @@
               "properties": {
                 "type": {
                   "type": "string",
-                  "enum": ["Interval","Lower","Upper"]
+                  "enum": [
+                    "Interval",
+                    "Lower",
+                    "Upper"
+                  ]
                 },
                 "time_unit": {
                   "type": "string"
@@ -191,7 +246,13 @@
               "properties": {
                 "type": {
                   "type": "string",
-                  "enum": ["Unconstrained","GreaterEqual", "Greater", "LowerEqual","Lower"]
+                  "enum": [
+                    "Unconstrained",
+                    "GreaterEqual",
+                    "Greater",
+                    "LowerEqual",
+                    "Lower"
+                  ]
                 },
                 "probability": {
                   "type": "number"
@@ -209,7 +270,10 @@
                   "type": "string"
                 },
                 "specification": {
-                  "type": ["string", "null"]
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 }
               },
               "required": [
@@ -227,7 +291,14 @@
     },
     "target_logic": {
       "type": "string",
-      "enum": ["LTL","MTL","Prism","Quantitative Prism","TBV (timed)","TBV (untimed)"]
+      "enum": [
+        "LTL",
+        "MTL",
+        "Prism",
+        "Quantitative Prism",
+        "TBV (timed)",
+        "TBV (untimed)"
+      ]
     }
   },
   "required": [
