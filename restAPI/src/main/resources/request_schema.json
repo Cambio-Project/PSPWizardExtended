@@ -191,7 +191,7 @@
               "properties": {
                 "type": {
                   "type": "string",
-                  "enum": ["Unconstrained","GreaterThanEqual", "GreaterThan", "LowerThanEqual","LowerThan"]
+                  "enum": ["Unconstrained","GreaterEqual", "Greater", "LowerEqual","Lower"]
                 },
                 "probability": {
                   "type": "number"
@@ -222,7 +222,7 @@
       },
       "required": [
         "type",
-        "event_p"
+        "p_event"
       ]
     },
     "target_logic": {

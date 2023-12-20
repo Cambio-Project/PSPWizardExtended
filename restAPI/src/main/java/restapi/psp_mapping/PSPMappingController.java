@@ -42,7 +42,8 @@ public class PSPMappingController {
             }
             else {
                 logger.error(report.toString());
-                return new ResponseEntity<>("Bad request format.",HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Bad request format. Please refer to the JSON schema definition."
+                         ,HttpStatus.BAD_REQUEST);
             }
 
         } catch (IOException e) {
