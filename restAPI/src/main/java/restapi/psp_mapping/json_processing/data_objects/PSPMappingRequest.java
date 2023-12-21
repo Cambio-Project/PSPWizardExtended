@@ -11,6 +11,13 @@ import restapi.psp_mapping.json_processing.custom_deserializers.MapperDeserializ
 import restapi.psp_mapping.json_processing.custom_deserializers.PatternDeserializer;
 import restapi.psp_mapping.json_processing.custom_deserializers.ScopeDeserializer;
 
+/**
+ * The {@code PSPMappingRequest} class represents a request for PSP (Pattern Specificity Pattern) mapping.
+ * It contains information such as the scope, pattern, and target logic mapper for the mapping operation.
+ *
+ * @author Aref El-Maarawi
+ *
+ */
 public class PSPMappingRequest {
 
     @JsonProperty("scope") @JsonDeserialize(using = ScopeDeserializer.class)
