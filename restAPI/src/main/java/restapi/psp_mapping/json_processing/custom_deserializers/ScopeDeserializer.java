@@ -43,7 +43,7 @@ public class ScopeDeserializer extends StdDeserializer<Scope> {
       rEvent = new EventImpl(name,specification);
     }
 
-    return ScopeFactory.getScope(type,qEvent,rEvent);
+    return ScopeFactory.getScope(parser,type,qEvent,rEvent);
   }
 
 }

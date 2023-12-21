@@ -18,10 +18,21 @@ public class PSPUnsupportedMappingResponse implements PSPMappingResponse{
         return TYPE;
     }
 
+
     public PSPUnsupportedMappingResponse(String mappingErrorMessage, String seg) {
         this.payload = new HashMap<>();
         payload.put("error", mappingErrorMessage);
         payload.put("seg", seg);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof PSPUnsupportedMappingResponse))
+            return false;
+        PSPUnsupportedMappingResponse other = (PSPUnsupportedMappingResponse)o;
+        return this.payload.equals(other.getPayload());
     }
 
     @Override

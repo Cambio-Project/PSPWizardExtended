@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import psp.mappings.PatternMapper;
 import psp.mappings.LTLMapper;
 import psp.mappings.MTLMapper;
@@ -11,8 +14,6 @@ import psp.mappings.PrismMapper;
 import psp.mappings.QuantitativePrismMapper;
 import psp.mappings.TimedTBVMapper;
 import psp.mappings.UntimedTBVMapper;
-import restapi.psp_mapping.exceptions.UnsupportedTypeException;
-
 
 public class MapperSupplier {
 
@@ -32,10 +33,10 @@ public class MapperSupplier {
    }
 
 
-   public PatternMapper supplyMapper(String mapperType) throws UnsupportedTypeException {
+   public PatternMapper supplyMapper(JsonParser p, String mapperType) throws JsonMappingException {
       Supplier<PatternMapper> mapper = MAPPER_SUPPLIER.get(mapperType);
       if (mapper == null) {
-         throw new UnsupportedTypeException(String.format("Unsupported target logic: %s",mapperType));
+         throw JsonMappingException.from(p, String.format("Unsupported target logic: %s",mapperType));
       }
       return mapper.get();
    }

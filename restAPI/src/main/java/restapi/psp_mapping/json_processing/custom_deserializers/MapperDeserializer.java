@@ -28,7 +28,7 @@ public class MapperDeserializer extends StdDeserializer<PatternMapper> {
     JsonNode node = parser.getCodec().readTree(parser);
     String targetLogic = node.asText();
 
-    return supplier.supplyMapper(targetLogic);
+    return supplier.supplyMapper(parser, targetLogic);
   }
 
 }

@@ -1,5 +1,7 @@
 package restapi.psp_mapping.json_processing;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import psp.sel.EventImpl;
 import psp.sel.scopes.AfterQ;
 import psp.sel.scopes.AfterQuntilR;
@@ -7,11 +9,10 @@ import psp.sel.scopes.BeforeR;
 import psp.sel.scopes.BetweenQandR;
 import psp.sel.scopes.Globally;
 import psp.sel.scopes.Scope;
-import restapi.psp_mapping.exceptions.UnsupportedTypeException;
 
 public class ScopeFactory {
 
-	public static Scope getScope(String type, EventImpl qEvent, EventImpl rEvent) throws UnsupportedTypeException {
+	public static Scope getScope(JsonParser p, String type, EventImpl qEvent, EventImpl rEvent) throws JsonMappingException {
 		if("Globally".equalsIgnoreCase(type)) {
       return new Globally();
     }
@@ -28,7 +29,7 @@ public class ScopeFactory {
        return new AfterQuntilR(qEvent, rEvent);
     }
     else {
-        throw new UnsupportedTypeException(String.format("Unsupported scope: %s", type));
+        throw JsonMappingException.from(p, String.format("Unsupported scope: %s", type));
     }
 	}
 }

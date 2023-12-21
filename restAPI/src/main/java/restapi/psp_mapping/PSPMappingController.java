@@ -1,6 +1,6 @@
 package restapi.psp_mapping;
 
-import com.github.fge.jsonschema.core.exceptions.ProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import restapi.psp_mapping.exceptions.UnsupportedTypeException;
 import restapi.psp_mapping.json_processing.data_objects.PSPMappingResponse;
 import restapi.psp_mapping.json_processing.schema_validation.JSONRequestSchemaValidator;
 
@@ -37,7 +36,6 @@ public class PSPMappingController {
         }
         try {
             ProcessingReport report= JSONRequestSchemaValidator.validateSchema(request);
-            System.out.println(report);
             if (report.isSuccess()) {
                 PSPMappingResponse response = pspMappingService.mapPSPRequestToTargetLogic(request);
                 return new ResponseEntity<>(response.toJSON(), HttpStatus.OK);
@@ -48,18 +46,18 @@ public class PSPMappingController {
                          ,HttpStatus.BAD_REQUEST);
             }
 
-        } catch (IOException e) {
-            if (e instanceof UnsupportedTypeException) {
+        } catch (Exception e) {
+            if (e instanceof JsonMappingException) {
                 logger.error(e.getMessage());
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-            } else {
+            } else if (e instanceof IOException)  {
                 logger.error(e.getMessage());
                 return new ResponseEntity<>("Unexpected JSON serialization error.", HttpStatus.BAD_REQUEST);
             }
-        }
-        catch (Exception e){
-            logger.error(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            else {
+                logger.error(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 }
