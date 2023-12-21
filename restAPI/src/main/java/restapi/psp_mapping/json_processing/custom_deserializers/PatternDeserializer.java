@@ -44,7 +44,7 @@ public class PatternDeserializer extends StdDeserializer<Pattern> {
     TimeBound timeBound = null;
     EventConstraint constrainEvent = null;
     int upperLimit = 0;
-    int frequency = 0;
+    int frequency = 1;
     String timeUnit = null;
 
     if(node.has("s_event")) {

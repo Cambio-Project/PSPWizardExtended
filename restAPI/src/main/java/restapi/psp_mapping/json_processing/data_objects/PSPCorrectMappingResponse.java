@@ -26,6 +26,16 @@ public class PSPCorrectMappingResponse implements PSPMappingResponse {
   }
 
   @Override
+  public boolean equals(Object o) {
+    if (o == this)
+      return true;
+    if (!(o instanceof PSPCorrectMappingResponse))
+      return false;
+    PSPCorrectMappingResponse other = (PSPCorrectMappingResponse)o;
+    return this.payload.equals(other.getPayload());
+  }
+
+  @Override
   public String toJSON() throws JsonProcessingException {
     return new ObjectMapper().writeValueAsString(this);
   }
