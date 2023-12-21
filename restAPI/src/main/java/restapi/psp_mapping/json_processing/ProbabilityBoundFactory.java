@@ -1,14 +1,15 @@
 package restapi.psp_mapping.json_processing;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import psp.constraints.GreaterThanEqualProbability;
 import psp.constraints.GreaterThanProbability;
 import psp.constraints.LowerThanEqualProbability;
 import psp.constraints.LowerThanProbability;
 import psp.constraints.ProbabilityBound;
-import restapi.psp_mapping.exceptions.UnsupportedTypeException;
 
 public class ProbabilityBoundFactory {
-  	public static ProbabilityBound getProbabilityBound(String type, double probability) throws UnsupportedTypeException {
+  	public static ProbabilityBound getProbabilityBound(JsonParser p, String type, double probability) throws JsonMappingException {
 		if("Lower".equalsIgnoreCase(type)) {
       return new LowerThanProbability(probability);
     }
@@ -22,7 +23,7 @@ public class ProbabilityBoundFactory {
       return new GreaterThanEqualProbability(probability);
     }
     else {
-        throw new UnsupportedTypeException(String.format("Unsupported probability type: %s", type));
+        throw JsonMappingException.from(p, String.format("Unsupported probability type: %s", type));
     }
 	}
 }

@@ -1,5 +1,6 @@
 package restapi;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import restapi.psp_mapping.PSPMappingService;
@@ -90,9 +91,29 @@ public class PSPMappingServiceTests {
 
 
     @Test
-    void testExceptionIsThrown() {
+    void exceptionIsThrownOnEmptyInput() {
         String request = "";
-        assertThrows(IllegalArgumentException.class, () -> testedService.mapPSPRequestToTargetLogic(request));
+        assertThrows(IOException.class, () -> testedService.mapPSPRequestToTargetLogic(request));
+    }
+
+    @Test
+    void mappingExceptionIsThrownOnUnsupportedPatternType() {
+        String request = """
+                {
+                    "scope": {
+                        "type": "Globally"
+                    },
+                    "pattern": {
+                        "type": "SomePattern",
+                        "p_event": {
+                            "name": "pEvent(p)",
+                            "specification": "pEventSpec"
+                        }
+                    },
+                    "target_logic": "Prism"
+                }
+                """;
+        assertThrows(JsonMappingException.class, () -> testedService.mapPSPRequestToTargetLogic(request));
     }
 
 }

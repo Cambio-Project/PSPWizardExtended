@@ -6,6 +6,7 @@ import java.util.*;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
@@ -16,7 +17,6 @@ import psp.sel.patterns.order.ChainEvents;
 import psp.constraints.EventConstraint;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
-import restapi.psp_mapping.exceptions.UnsupportedTypeException;
 import restapi.psp_mapping.json_processing.PatternFactory;
 import restapi.psp_mapping.json_processing.ProbabilityBoundFactory;
 import restapi.psp_mapping.json_processing.TimeBoundFactory;
@@ -55,7 +55,7 @@ public class PatternDeserializer extends StdDeserializer<Pattern> {
 
     if (node.has("chained_events")) {
       JsonNode chainedEventsNode = node.get("chained_events");
-      chainEvents = buildChainEvents(chainedEventsNode);
+      chainEvents = buildChainEvents(parser, chainedEventsNode);
     }
 
 
@@ -73,7 +73,7 @@ public class PatternDeserializer extends StdDeserializer<Pattern> {
       if(constrainsNode.has("time_bound")) {
         JsonNode timeBoundNode = constrainsNode.get("time_bound");
 
-        timeBound = TimeBoundFactory.getTimeBound(timeBoundNode.get("type").asText(),
+        timeBound = TimeBoundFactory.getTimeBound(parser,timeBoundNode.get("type").asText(),
                 pEvent,
                 timeBoundNode.get("lower_limit").asLong(),
                 timeBoundNode.get("upper_limit").asLong(),
@@ -83,7 +83,7 @@ public class PatternDeserializer extends StdDeserializer<Pattern> {
       if(constrainsNode.has("probability_bound")) {
         JsonNode probabilityBoundNode = constrainsNode.get("probability_bound");
 
-        probabilityBound = ProbabilityBoundFactory.getProbabilityBound(probabilityBoundNode.get("type").asText(),
+        probabilityBound = ProbabilityBoundFactory.getProbabilityBound(parser, probabilityBoundNode.get("type").asText(),
                 probabilityBoundNode.get("probability").asDouble());
 
       }
@@ -98,11 +98,11 @@ public class PatternDeserializer extends StdDeserializer<Pattern> {
 
     }
 
-    return PatternFactory.getPattern(type, pEvent, sEvent, chainEvents, probabilityBound,
+    return PatternFactory.getPattern(parser, type, pEvent, sEvent, chainEvents, probabilityBound,
             timeBound,constrainEvent, upperLimit, frequency, timeUnit);
   }
 
-  private ChainEvents buildChainEvents(JsonNode chainedEventsNode) throws UnsupportedTypeException {
+  private ChainEvents buildChainEvents(JsonParser parser, JsonNode chainedEventsNode) throws JsonMappingException {
     ArrayList<ChainEvent> listChainEvents = new ArrayList<>();
       for (JsonNode jsonNode : chainedEventsNode) {
           String name = jsonNode.get("event").get("name").asText();
@@ -117,7 +117,7 @@ public class PatternDeserializer extends StdDeserializer<Pattern> {
           }
 
           if (jsonNode.has("time_bound")) {
-              chainTimeBound = TimeBoundFactory.getTimeBound(jsonNode.get("time_bound").get("type").asText(),
+              chainTimeBound = TimeBoundFactory.getTimeBound(parser,jsonNode.get("time_bound").get("type").asText(),
                       event,
                       jsonNode.get("time_bound").get("lower_limit").asLong(),
                       jsonNode.get("time_bound").get("upper_limit").asLong(),

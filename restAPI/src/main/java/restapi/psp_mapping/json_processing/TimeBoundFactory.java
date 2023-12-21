@@ -1,14 +1,15 @@
 package restapi.psp_mapping.json_processing;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import psp.constraints.Interval;
 import psp.constraints.LowerTimeBound;
 import psp.constraints.TimeBound;
 import psp.constraints.UpperTimeBound;
 import psp.sel.EventImpl;
-import restapi.psp_mapping.exceptions.UnsupportedTypeException;
 
 public class TimeBoundFactory {
-	public static TimeBound getTimeBound(String type, EventImpl timedEvent, long lowerLimit, long upperLimit, String timeUnit) throws UnsupportedTypeException {
+	public static TimeBound getTimeBound(JsonParser p, String type, EventImpl timedEvent, long lowerLimit, long upperLimit, String timeUnit) throws JsonMappingException {
 		if("Upper".equalsIgnoreCase(type)) {
       return new UpperTimeBound(timedEvent, upperLimit, timeUnit);
     }
@@ -19,7 +20,7 @@ public class TimeBoundFactory {
       return new Interval(timedEvent, lowerLimit, upperLimit, timeUnit);
     }
     else {
-        throw new UnsupportedTypeException(String.format("Unsupported time bound: %s", type));
+        throw JsonMappingException.from(p, String.format("Unsupported time bound: %s", type));
     }
 	}
 

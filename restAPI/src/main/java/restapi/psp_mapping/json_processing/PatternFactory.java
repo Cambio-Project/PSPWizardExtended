@@ -1,5 +1,7 @@
 package restapi.psp_mapping.json_processing;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import psp.sel.EventImpl;
 import  psp.sel.patterns.Pattern;
 import psp.sel.patterns.occurrence.Absence;
@@ -23,12 +25,11 @@ import psp.sel.patterns.order.Until;
 import psp.constraints.EventConstraint;
 import psp.constraints.ProbabilityBound;
 import psp.constraints.TimeBound;
-import restapi.psp_mapping.exceptions.UnsupportedTypeException;
 
 
 public class PatternFactory {
 
-	public static Pattern getPattern(String type, EventImpl pEvent, EventImpl sEvent, ChainEvents chainEvents, ProbabilityBound probabilityBound, TimeBound timeBound, EventConstraint constrainEvent, int upperLimit, int frequency, String timeUnit) throws UnsupportedTypeException {
+	public static Pattern getPattern(JsonParser p, String type, EventImpl pEvent, EventImpl sEvent, ChainEvents chainEvents, ProbabilityBound probabilityBound, TimeBound timeBound, EventConstraint constrainEvent, int upperLimit, int frequency, String timeUnit) throws  JsonMappingException {
     // Occurrence
 		if("Universality".equalsIgnoreCase(type)) {
       return new Universality(pEvent, timeBound,probabilityBound);
@@ -72,7 +73,7 @@ public class PatternFactory {
     }
     else if("Response".equalsIgnoreCase(type)) {
       return new Response(pEvent, sEvent, timeBound, constrainEvent.getEvent(), probabilityBound);
-    } // TODO check the inconsistency regardin constraint type
+    } // TODO check the inconsistency regarding constraint type
     else if("ResponseChain1N".equalsIgnoreCase(type)) {
       return new ResponseChain1N(pEvent, sEvent, chainEvents, timeBound,constrainEvent, probabilityBound);
     }
@@ -83,7 +84,7 @@ public class PatternFactory {
       return new ResponseInvariance(pEvent, sEvent, timeBound, probabilityBound);
     }
     else {
-      throw new UnsupportedTypeException(String.format("Unsupported pattern: %s", type));
+        throw JsonMappingException.from(p, String.format("Unsupported pattern: %s", type));
     }
 	}
 
