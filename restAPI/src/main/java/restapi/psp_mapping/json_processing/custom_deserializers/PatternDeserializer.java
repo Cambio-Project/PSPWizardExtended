@@ -38,14 +38,14 @@ public class PatternDeserializer extends StdDeserializer<Pattern> {
     String type = node.get("type").asText();
     EventImpl pEvent = new EventImpl(node.get("p_event").get("name").asText(),
             node.get("p_event").get("specification").asText());
-    EventImpl sEvent = null;
-    ChainEvents chainEvents = null;
+    EventImpl sEvent = EventImpl.getDefault();
+    ChainEvents chainEvents = new ChainEvents();
     ProbabilityBound probabilityBound = null;
     TimeBound timeBound = null;
-    EventConstraint constrainEvent = null;
+    EventConstraint constrainEvent = new EventConstraint(EventImpl.getConstraintDefault());
     int upperLimit = 0;
     int frequency = 1;
-    String timeUnit = null;
+    String timeUnit = "time units";
 
     if(node.has("s_event")) {
       String name = node.get("s_event").get("name").asText();
