@@ -42,7 +42,7 @@ public class PatternDeserializer extends StdDeserializer<Pattern> {
     ChainEvents chainEvents = new ChainEvents();
     ProbabilityBound probabilityBound = null;
     TimeBound timeBound = null;
-    EventConstraint constrainEvent = new EventConstraint(EventImpl.getConstraintDefault());
+    EventConstraint constrainEvent = null;
     int upperLimit = 0;
     int frequency = 1;
     String timeUnit = "time units";

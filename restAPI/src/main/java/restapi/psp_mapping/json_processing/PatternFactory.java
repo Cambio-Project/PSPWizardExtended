@@ -72,6 +72,9 @@ public class PatternFactory {
       return new Until(pEvent, sEvent, timeBound, probabilityBound);
     }
     else if("Response".equalsIgnoreCase(type)) {
+        if (constrainEvent == null) {
+            return new Response(pEvent, sEvent, timeBound, null, probabilityBound);
+        }
       return new Response(pEvent, sEvent, timeBound, constrainEvent.getEvent(), probabilityBound);
     } // TODO check the inconsistency regarding constraint type
     else if("ResponseChain1N".equalsIgnoreCase(type)) {
