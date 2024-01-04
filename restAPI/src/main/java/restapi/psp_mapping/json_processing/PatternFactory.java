@@ -76,7 +76,7 @@ public class PatternFactory {
             return new Response(pEvent, sEvent, timeBound, null, probabilityBound);
         }
       return new Response(pEvent, sEvent, timeBound, constrainEvent.getEvent(), probabilityBound);
-    } // TODO check the inconsistency regarding constraint type
+    }
     else if("ResponseChain1N".equalsIgnoreCase(type)) {
       return new ResponseChain1N(pEvent, sEvent, chainEvents, timeBound,constrainEvent, probabilityBound);
     }
