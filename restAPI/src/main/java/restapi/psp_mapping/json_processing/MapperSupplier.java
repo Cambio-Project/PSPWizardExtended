@@ -7,13 +7,7 @@ import java.util.function.Supplier;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import psp.mappings.PatternMapper;
-import psp.mappings.LTLMapper;
-import psp.mappings.MTLMapper;
-import psp.mappings.PrismMapper;
-import psp.mappings.QuantitativePrismMapper;
-import psp.mappings.TimedTBVMapper;
-import psp.mappings.UntimedTBVMapper;
+import psp.mappings.*;
 
 public class MapperSupplier {
 
@@ -22,6 +16,7 @@ public class MapperSupplier {
   static {
       final Map<String, Supplier<PatternMapper>>
       mappers = new HashMap<>();
+      mappers.put("SEL", SELMapper::new);
       mappers.put("LTL", LTLMapper::new);
       mappers.put("MTL", MTLMapper::new);
       mappers.put("Prism", PrismMapper::new);
