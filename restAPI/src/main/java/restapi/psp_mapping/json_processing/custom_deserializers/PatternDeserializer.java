@@ -72,10 +72,15 @@ public class PatternDeserializer extends StdDeserializer<Pattern> {
 
       if(constrainsNode.has("time_bound")) {
         JsonNode timeBoundNode = constrainsNode.get("time_bound");
+        Long lowerLimit = null;
+
+        if (timeBoundNode.has("lower_limit")) {
+          lowerLimit = timeBoundNode.get("lower_limit").asLong();
+        }
 
         timeBound = TimeBoundFactory.getTimeBound(parser,timeBoundNode.get("type").asText(),
                 pEvent,
-                timeBoundNode.get("lower_limit").asLong(),
+                lowerLimit,
                 timeBoundNode.get("upper_limit").asLong(),
                 timeBoundNode.get("time_unit").asText());
       }
@@ -117,9 +122,14 @@ public class PatternDeserializer extends StdDeserializer<Pattern> {
           }
 
           if (jsonNode.has("time_bound")) {
+            Long lowerLimit = null;
+
+            if (jsonNode.get("time_bound").has("lower_limit")) {
+              lowerLimit = jsonNode.get("time_bound").get("lower_limit").asLong();
+            }
               chainTimeBound = TimeBoundFactory.getTimeBound(parser,jsonNode.get("time_bound").get("type").asText(),
                       event,
-                      jsonNode.get("time_bound").get("lower_limit").asLong(),
+                      lowerLimit,
                       jsonNode.get("time_bound").get("upper_limit").asLong(),
                       jsonNode.get("time_bound").get("time_unit").asText());
           }
