@@ -23,7 +23,7 @@ ___
 ## Usage of the Rest-API
 
 ### Additional Requirements: 
-- min. Java 21
+- min. Java 17
 
 ### Usage:
 
