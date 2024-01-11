@@ -19,3 +19,19 @@ This allows you to create a Virtual Machine using Vagrant & Virtual box which co
 
 This repository was constructed by [Manav Verma](https://github.com/mverma4) under the supervision of [Dr. Emerson Murphy-Hill](https://github.com/CaptainEmerson). Thanks to Dr.Markus Lumpe, Dr.Indika Meedeniya and Dr.Lars Grunske for their help in establishing this repository.
 
+___
+## Usage of the Rest-API
+
+### Additional Requirements: 
+- min. Java 17
+
+### Usage:
+
+#### Manual Install
+1. Install the main PSPWizard Maven Project
+2. Install the restAPI Module Maven Project (needs to be second because of dependencies)
+3. Start the application with the .jar in ``/restAPI/target/restAPI-0.0.1-SNAPSHOT.jar``
+
+#### Install via Docker
+
+You can either use the provided `Dockerfile` to create build the image locally or use the included ``docker-compose.yml`` which uses the lastest image from the GitHub Container Registry

@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2011-2014 Swinburne University of Technology
  *
- * This file is part of PSPWizard, a tool for machine-assisted 
+ * This file is part of PSPWizard, a tool for machine-assisted
  * definition of temporal formulae capturing pattern-based system
  * properties, developed at the Faculty of Science, Engineering and
  * Technology at Swinburne University of Technology, Australia.
@@ -50,37 +50,37 @@ public class Absence extends Occurrence
     {
         this( EventImpl.getDefault(), null, null );
     }
-    
+
     public Absence( EventImpl aEventP, TimeBound aTimeBound, ProbabilityBound aProbBound )
     {
         super( aEventP, aTimeBound, aProbBound );
     }
 
-    public int getType() 
+    public int getType()
     {
         return PSPConstants.P_Absence;
     }
 
-    public String getSpecificationAsSEL() 
+    public String getSpecificationAsSEL()
     {
         StringBuilder sb = new StringBuilder();
-        
-        sb.append( "it is newer the case that " );
+
+        sb.append( "it is never the case that " );
         sb.append( getP().getAsSELEvent() );
         sb.append( " [holds]" );
-        
+
         if ( getPTimeBound() != null )
         {
             sb.append( " " );
             sb.append( getPTimeBound().getSpecificationAsSEL() );
         }
-        
+
         if ( getProbabilityBound() != null )
         {
             sb.append( " " );
             sb.append( getProbabilityBound().getSpecificationAsSEL() );
         }
-        
+
         return sb.toString();
     }
 }

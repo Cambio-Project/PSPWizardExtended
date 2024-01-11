@@ -1,0 +1,64 @@
+{
+  "scope": {
+    "type": "BetweenQandR",
+    "q_event": {
+      "name": "qEvent",
+      "specification": "qEventSpec"
+    },
+    "r_event": {
+      "name": "A(a)",
+      "specification": "rEventSpec"
+    }
+  },
+  "pattern": {
+    "type": "MaximumDuration",
+    "p_event": {
+      "name": "pEvent(p)",
+      "specification": "pEventSpec"
+    },
+    "s_event": {
+      "name": "sEvent",
+      "specification": "sEventSpec"
+    },
+    "chained_events": [
+      {
+        "event": {
+          "name": "chainedEvent",
+          "specification": "chainedEventEventSpec"
+        },
+        "constrain_event": {
+          "name": "constrainEvent",
+          "specification": "constrainEventSpec"
+        },
+        "time_bound": {
+          "type": "Interval",
+          "time_unit": "min",
+          "upper_limit": 20,
+          "lower_limit": 12
+        }
+      }
+    ],
+    "pattern_specifications": {
+      "time_unit": "sec",
+      "upper_limit": 14,
+      "frequency": 3
+    },
+    "pattern_constrains": {
+      "time_bound": {
+        "type": "Interval",
+        "time_unit": "sec",
+        "upper_limit": 42,
+        "lower_limit": 31
+      },
+      "probability_bound": {
+        "type": "Greater",
+        "probability": 0.2
+      },
+      "constrain_event": {
+        "name": "constrainEvent",
+        "specification": "eventConstrainSpecificiation"
+      }
+    }
+  },
+  "target_logic": "LTL"
+}
