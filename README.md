@@ -27,3 +27,11 @@ ___
 
 ### Usage:
 
+#### Manual Install
+1. Install the main PSPWizard Maven Project
+2. Install the restAPI Module Maven Project (needs to be second because of dependencies)
+3. Start the application with the .jar in ``/restAPI/target/restAPI-0.0.1-SNAPSHOT.jar``
+
+#### Install via Docker
+
+You can either use the provided `Dockerfile` to create build the image locally or use the included ``docker-compose.yml`` which uses the lastest image from the GitHub Container Registry
