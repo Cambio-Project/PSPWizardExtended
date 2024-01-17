@@ -11,6 +11,7 @@ import com.github.fge.jsonschema.main.JsonSchemaFactory;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * The {@code JSONRequestSchemaValidator} class is responsible for validating the JSON mapping request
@@ -33,8 +34,8 @@ public class JSONRequestSchemaValidator {
      */
     public static ProcessingReport validateSchema(String input) throws IOException, ProcessingException {
         JsonNode json_request = mapper.readTree(input);
-        File schema_file = new ClassPathResource("request_schema.json").getFile();
-        final JsonNode fstabSchema = JsonLoader.fromFile(schema_file);
+        InputStream schema_stream = new ClassPathResource("request_schema.json").getInputStream();
+        final JsonNode fstabSchema = JsonLoader.fromReader(new InputStreamReader( schema_stream, StandardCharsets.UTF_8));
         final JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
         final JsonSchema schema = factory.getJsonSchema(fstabSchema);
         return schema.validate(json_request);
