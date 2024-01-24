@@ -1,0 +1,9 @@
+version: "1"
+
+services:
+  pspwizard:
+    image: ghcr.io/cambio-project/pspwizardextended:1.0.0
+    container_name: pspwizard
+    ports:
+      - 8081:8080
+    pull_policy: always

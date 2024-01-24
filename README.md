@@ -35,3 +35,16 @@ ___
 #### Install via Docker
 
 You can either use the provided `Dockerfile` to create build the image locally or use the included ``docker-compose.yml`` which uses the lastest image from the GitHub Container Registry
+
+#### Docker compose
+You can use the provided docker compose to download an image directly from the GitHub Container Registry.
+
+Information to the parameters used in the ``docker-compose.yml``:
+- ``image: ghcr.io/cambio-project/pspwizardextended:1.0.0``
+  - The image parameter is used to determin the image you want to download. The preset is ``ghcr.io/cambio-project/pspwizardextended:1.0.0 `` but you can change it to the `ghcr.io/cambio-project/pspwizardextended:latest` tag to get the newest version.
+- ``container_name: pspwizard``
+  - This parameter is used to rename the container used by Docker.
+- ``ports: 8081:8080``
+  - The Ports parameter determins the host and container port in the following scheme: "host:container". You should not change the container port, but feel free to change the host port.
+- ``pull_policy: always``
+  - This parameter describes that docker tries to always pull the newest image available. Can be removed when you use a dedicated version.
