@@ -72,16 +72,21 @@ public class PatternDeserializer extends StdDeserializer<Pattern> {
 
       if(constrainsNode.has("time_bound")) {
         JsonNode timeBoundNode = constrainsNode.get("time_bound");
-        Long lowerLimit = null;
+        Long lowerTimeLimit = null;
+        Long upperTimeLimit = null;
 
         if (timeBoundNode.has("lower_limit")) {
-          lowerLimit = timeBoundNode.get("lower_limit").asLong();
+          lowerTimeLimit = timeBoundNode.get("lower_limit").asLong();
+        }
+
+        if (timeBoundNode.has("upper_limit")) {
+          upperTimeLimit = timeBoundNode.get("upper_limit").asLong();
         }
 
         timeBound = TimeBoundFactory.getTimeBound(parser,timeBoundNode.get("type").asText(),
                 pEvent,
-                lowerLimit,
-                timeBoundNode.get("upper_limit").asLong(),
+                lowerTimeLimit,
+                upperTimeLimit,
                 timeBoundNode.get("time_unit").asText());
       }
 
@@ -122,15 +127,21 @@ public class PatternDeserializer extends StdDeserializer<Pattern> {
           }
 
           if (jsonNode.has("time_bound")) {
-            Long lowerLimit = null;
+            Long lowerTimeLimit = null;
+            Long upperTimeLimit = null;
 
             if (jsonNode.get("time_bound").has("lower_limit")) {
-              lowerLimit = jsonNode.get("time_bound").get("lower_limit").asLong();
+              lowerTimeLimit = jsonNode.get("time_bound").get("lower_limit").asLong();
             }
+
+            if (jsonNode.get("time_bound").has("upper_limit")) {
+              upperTimeLimit = jsonNode.get("time_bound").get("upper_limit").asLong();
+            }
+
               chainTimeBound = TimeBoundFactory.getTimeBound(parser,jsonNode.get("time_bound").get("type").asText(),
                       event,
-                      lowerLimit,
-                      jsonNode.get("time_bound").get("upper_limit").asLong(),
+                      lowerTimeLimit,
+                      upperTimeLimit,
                       jsonNode.get("time_bound").get("time_unit").asText());
           }
           ChainEvent chainEvent = new ChainEvent(event, chainConstrainEvent, chainTimeBound);

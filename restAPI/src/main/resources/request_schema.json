@@ -187,8 +187,7 @@
                 },
                 "required": [
                   "type",
-                  "time_unit",
-                  "upper_limit"
+                  "time_unit"
                 ]
               }
             },
@@ -237,8 +236,7 @@
               },
               "required": [
                 "type",
-                "time_unit",
-                "upper_limit"
+                "time_unit"
               ]
             },
             "probability_bound": {
