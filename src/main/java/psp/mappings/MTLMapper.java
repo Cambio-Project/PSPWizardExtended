@@ -293,8 +293,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new TimeBoundElement(time(aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
