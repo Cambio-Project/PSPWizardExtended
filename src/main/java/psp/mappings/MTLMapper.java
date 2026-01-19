@@ -350,8 +350,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new TimeBoundElement(time(aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
@@ -383,8 +385,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getWeakUntil());
                 elements.add(new TimeBoundElement(time(aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
@@ -408,8 +412,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(aPattern.getP());
                 break;
             case PSPConstants.S_BeforeR:
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getWeakUntil());
                 elements.add(new TimeBoundElement(time(aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
@@ -464,8 +470,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getWeakUntil());
                 elements.add(new TimeBoundElement(time(aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
@@ -494,8 +502,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new TimeBoundElement(time(aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
@@ -523,8 +533,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(aPattern.getP());
                 elements.add(languageDefinitions.getOr());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getWeakUntil());
                 elements.add(new TimeBoundElement(utb(aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
@@ -543,8 +555,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(aPattern.getP());
                 elements.add(languageDefinitions.getOr());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
@@ -578,8 +592,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(aPattern.getP());
                 elements.add(languageDefinitions.getOr());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getWeakUntil());
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
@@ -599,8 +615,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
@@ -613,8 +631,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(aPattern.getP());
                 elements.add(languageDefinitions.getOr());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
@@ -653,8 +673,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(aPattern.getP());
                 elements.add(languageDefinitions.getOr());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getWeakUntil());
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
@@ -693,8 +715,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(aPattern.getP());
                 elements.add(languageDefinitions.getOr());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getWeakUntil());
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
@@ -722,8 +746,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(aPattern.getP());
                 elements.add(languageDefinitions.getOr());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
@@ -734,8 +760,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new TimeBoundElement(utb(aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getOr());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
@@ -760,8 +788,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(aPattern.getP());
                 elements.add(languageDefinitions.getOr());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getWeakUntil());
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
@@ -785,8 +815,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(languageDefinitions.getEventually());
                 elements.add(aScope.getR());
@@ -797,8 +829,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(aPattern.getP());
                 elements.add(languageDefinitions.getOr());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
@@ -809,8 +843,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new TimeBoundElement(utb(aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getOr());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
@@ -832,8 +868,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
@@ -841,8 +879,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(aPattern.getP());
                 elements.add(languageDefinitions.getOr());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getWeakUntil());
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
@@ -853,8 +893,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new TimeBoundElement(utb(aPattern.getPTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getOr());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());
@@ -930,8 +972,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
@@ -961,8 +1005,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
@@ -1075,8 +1121,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
@@ -1317,8 +1365,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
@@ -1446,8 +1496,10 @@ public class MTLMapper extends MTLSupport {
             } else {
                 // with Zi
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new MiscElement(lcntZi));
                 elements.add(languageDefinitions.getAnd());
@@ -1455,8 +1507,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(languageDefinitions.getNext());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new MiscElement(lcntZi));
                 elements.add(new RoundBracketCloseElement());
@@ -1496,8 +1550,10 @@ public class MTLMapper extends MTLSupport {
                 if (lHasConstraint) {
                     // has ZS
                     elements.add(new RoundBracketOpenElement());
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aPattern.getP());
+                    elements.add(new RoundBracketCloseElement());
                     elements.add(languageDefinitions.getAnd());
                     elements.add(new MiscElement(lcntZP));
                     elements.add(new RoundBracketCloseElement());
@@ -1535,8 +1591,10 @@ public class MTLMapper extends MTLSupport {
                     elements.add(languageDefinitions.getImplication());
                     elements.add(new RoundBracketOpenElement());
                     elements.add(new RoundBracketOpenElement());
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aPattern.getP());
+                    elements.add(new RoundBracketCloseElement());
                     elements.add(languageDefinitions.getAnd());
                     elements.add(new MiscElement(lcntZP));
                     elements.add(new RoundBracketCloseElement());
@@ -1600,8 +1658,10 @@ public class MTLMapper extends MTLSupport {
                 if (lHasConstraint) {
                     // has ZS
                     elements.add(new RoundBracketOpenElement());
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aPattern.getP());
+                    elements.add(new RoundBracketCloseElement());
                     elements.add(languageDefinitions.getAnd());
                     elements.add(new MiscElement(lcntZP));
                     elements.add(new RoundBracketCloseElement());
@@ -1627,8 +1687,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
@@ -1650,8 +1712,10 @@ public class MTLMapper extends MTLSupport {
                 if (lHasConstraint) {
                     // has ZS
                     elements.add(new RoundBracketOpenElement());
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aPattern.getP());
+                    elements.add(new RoundBracketCloseElement());
                     elements.add(languageDefinitions.getAnd());
                     elements.add(new MiscElement(lcntZP));
                     elements.add(new RoundBracketCloseElement());
@@ -1706,8 +1770,10 @@ public class MTLMapper extends MTLSupport {
                 if (lHasConstraint) {
                     // has ZS
                     elements.add(new RoundBracketOpenElement());
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aPattern.getP());
+                    elements.add(new RoundBracketCloseElement());
                     elements.add(languageDefinitions.getAnd());
                     elements.add(new MiscElement(lcntZP));
                     elements.add(new RoundBracketCloseElement());
@@ -1798,8 +1864,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
@@ -1902,8 +1970,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 if (lHasConstraint) {
                     elements.add(new RoundBracketOpenElement());
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aScope.getR());
+                    elements.add(new RoundBracketCloseElement());
                     elements.add(languageDefinitions.getAnd());
                     elements.add(new MiscElement(lcntZS));
                     elements.add(new RoundBracketCloseElement());
@@ -1979,16 +2049,20 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 if (lHasConstraint) {
                     elements.add(new RoundBracketOpenElement());
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aScope.getR());
+                    elements.add(new RoundBracketCloseElement());
                     elements.add(languageDefinitions.getAnd());
                     elements.add(new MiscElement(lcntZS));
                     elements.add(new RoundBracketCloseElement());
                 } else {
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aScope.getR());
                     // elements.add(languageDefinitions.getAnd());
                     // TODO: sb.deleteCharAt(sb.length() - 1);
+                    elements.add(new RoundBracketCloseElement());
                 }
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new TimeBoundElement(time(aPattern.getSTimeBound())));
@@ -2029,14 +2103,18 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 if (lHasConstraint) {
                     elements.add(new RoundBracketOpenElement());
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aScope.getR());
+                    elements.add(new RoundBracketCloseElement());
                     elements.add(languageDefinitions.getAnd());
                     elements.add(new MiscElement(lcntZS));
                     elements.add(new RoundBracketCloseElement());
                 } else {
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aScope.getR());
+                    elements.add(new RoundBracketCloseElement());
                 }
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new TimeBoundElement(time(aPattern.getSTimeBound())));
@@ -2114,8 +2192,10 @@ public class MTLMapper extends MTLSupport {
             if (lHasConstraint) {
                 // with Zi
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(R);
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new MiscElement(lcntZi));
                 elements.add(languageDefinitions.getAnd());
@@ -2135,8 +2215,10 @@ public class MTLMapper extends MTLSupport {
             } else {
                 // no Zi
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(R);
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNext());
@@ -2196,14 +2278,18 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 if (lHasConstraint) {
                     elements.add(new RoundBracketOpenElement());
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aScope.getR());
+                    elements.add(new RoundBracketCloseElement());
                     elements.add(languageDefinitions.getAnd());
                     elements.add(new MiscElement(lcntZS));
                     elements.add(new RoundBracketCloseElement());
                 } else {
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aScope.getR());
+                    elements.add(new RoundBracketCloseElement());
                 }
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new TimeBoundElement(umintime(aPattern.getSTimeBound())));
@@ -2266,14 +2352,18 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 if (lHasConstraint) {
                     elements.add(new RoundBracketOpenElement());
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aScope.getR());
+                    elements.add(new RoundBracketCloseElement());
                     elements.add(languageDefinitions.getAnd());
                     elements.add(new MiscElement(lcntZS));
                     elements.add(new RoundBracketCloseElement());
                 } else {
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aScope.getR());
+                    elements.add(new RoundBracketCloseElement());
                 }
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new TimeBoundElement(umintime(aPattern.getSTimeBound())));
@@ -2302,14 +2392,18 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 if (lHasConstraint) {
                     elements.add(new RoundBracketOpenElement());
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aScope.getR());
+                    elements.add(new RoundBracketCloseElement());
                     elements.add(languageDefinitions.getAnd());
                     elements.add(new MiscElement(lcntZS));
                     elements.add(new RoundBracketCloseElement());
                 } else {
+                    elements.add(new RoundBracketOpenElement());
                     elements.add(languageDefinitions.getNot());
                     elements.add(aScope.getR());
+                    elements.add(new RoundBracketCloseElement());
                 }
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new TimeBoundElement(umintime(aPattern.getSTimeBound())));
@@ -2410,8 +2504,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNext());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(R);
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getUntil());
                 elements.add(new TimeBoundElement(utb(Ti.getTimeBound())));
                 elements.add(new SpaceElement());
@@ -2428,8 +2524,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(languageDefinitions.getNext());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(R);
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new MiscElement(lcntZi));
                 elements.add(new RoundBracketCloseElement());
@@ -2511,8 +2609,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
@@ -2537,8 +2637,10 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getImplication());
                 elements.add(new RoundBracketOpenElement());
@@ -2629,11 +2731,13 @@ public class MTLMapper extends MTLSupport {
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getAlways());
                 elements.add(new TimeBoundElement(umintime(aPattern.getSTimeBound())));
                 elements.add(new SpaceElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getEventually());
