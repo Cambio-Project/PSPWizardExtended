@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
+import psp.engine.PSPConstants;
 import psp.sel.EventImpl;
 import psp.sel.patterns.Pattern;
 import psp.sel.patterns.order.ChainEvent;
@@ -46,6 +47,14 @@ public class PatternDeserializer extends StdDeserializer<Pattern> {
     int upperLimit = 0;
     int frequency = 1;
     String timeUnit = "time units";
+
+    int subType = PSPConstants.SP_All_Basic;
+    if(node.has("subType")){
+        String subTypeText = node.get("subType").asText();
+        if("Liberal".equalsIgnoreCase(subTypeText)){
+            subType = PSPConstants.SP_Liberal;
+        }
+    }
 
     if(node.has("s_event")) {
       String name = node.get("s_event").get("name").asText();
@@ -108,8 +117,10 @@ public class PatternDeserializer extends StdDeserializer<Pattern> {
 
     }
 
-    return PatternFactory.getPattern(parser, type, pEvent, sEvent, chainEvents, probabilityBound,
+    Pattern pattern = PatternFactory.getPattern(parser, type, pEvent, sEvent, chainEvents, probabilityBound,
             timeBound,constrainEvent, upperLimit, frequency, timeUnit);
+    pattern.setSubType(subType);
+    return pattern;
   }
 
   private ChainEvents buildChainEvents(JsonParser parser, JsonNode chainedEventsNode) throws JsonMappingException {

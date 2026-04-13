@@ -115,6 +115,13 @@
             "ResponseInvariance"
           ]
         },
+        "subType":  {
+          "type": "string",
+          "enum": [
+            "Basic",
+            "Liberal"
+          ]
+        },
         "p_event": {
           "type": "object",
           "properties": {

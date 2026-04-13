@@ -39,10 +39,22 @@
 package psp.sel.patterns;
 
 import java.util.ArrayList;
+
+import psp.engine.PSPConstants;
 import psp.sel.EventImpl;
 
 public abstract class Pattern
 {
+    private int subType = PSPConstants.SP_All_Basic;
+
+    public int getSubType() {
+        return subType;
+    }
+
+    public void setSubType(int subType) {
+        this.subType = subType;
+    }
+
     public abstract int getPatternCategory();
 
     public abstract int getType();

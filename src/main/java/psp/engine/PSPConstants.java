@@ -78,6 +78,10 @@ public class PSPConstants
 
     public final int P_LastOrder = P_ResponseInvariance;
 
+    // Subpatterns
+    public static final int SP_All_Basic = 0;
+    public static final int SP_Liberal = 1;
+
     // Constraints
     public static final int C_Event = 1;
     public static final int C_Time = 2;
