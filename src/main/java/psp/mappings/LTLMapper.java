@@ -129,9 +129,9 @@ public class LTLMapper extends GenericMapper {
                 case PSPConstants.P_Precedence:
                     return mapPrecedence(aScope, (Precedence) aPattern);
                 case PSPConstants.P_RelaxedPrecedenceChain1N:
-                    return mapRelaxedPrecedenceChain1N(aScope, (PrecedenceChain1N) aPattern);
+                    return mapRelaxedPrecedenceChain1N(aScope, (RelaxedPrecedenceChain1N) aPattern);
                 case PSPConstants.P_RelaxedPrecedenceChainN1:
-                    return mapRelaxedPrecedenceChainN1(aScope, (PrecedenceChainN1) aPattern);
+                    return mapRelaxedPrecedenceChainN1(aScope, (RelaxedPrecedenceChainN1) aPattern);
                 case PSPConstants.P_PrecedenceChain1N:
                     return mapPrecedenceChain1N(aScope, (PrecedenceChain1N) aPattern);
                 case PSPConstants.P_PrecedenceChainN1:
@@ -145,9 +145,9 @@ public class LTLMapper extends GenericMapper {
                 case PSPConstants.P_ResponseChainN1:
                     return mapResponseChainN1(aScope, (ResponseChainN1) aPattern);
                 case PSPConstants.P_RelaxedResponseChain1N:
-                    return mapRelaxedResponseChain1N(aScope, (ResponseChain1N) aPattern);
+                    return mapRelaxedResponseChain1N(aScope, (RelaxedResponseChain1N) aPattern);
                 case PSPConstants.P_RelaxedResponseChainN1:
-                    return mapRelaxedResponseChainN1(aScope, (ResponseChainN1) aPattern);
+                    return mapRelaxedResponseChainN1(aScope, (RelaxedResponseChainN1) aPattern);
                 case PSPConstants.P_ResponseInvariance:
                     return mapResponseInvariance(aScope, (ResponseInvariance) aPattern);
             }
@@ -1826,7 +1826,7 @@ public class LTLMapper extends GenericMapper {
         }
     }
 
-    private List<Element> mapRelaxedPrecedenceChain1N(Scope aScope, PrecedenceChain1N aPattern) {
+    private List<Element> mapRelaxedPrecedenceChain1N(Scope aScope, RelaxedPrecedenceChain1N aPattern) {
         List<Element> elements = new ArrayList<>();
         EventConstraint lZS = aPattern.getSConstraint();
         String lcntZS = lZS != null ? cnt(lZS.getEvent()) : "true";
@@ -2021,7 +2021,7 @@ public class LTLMapper extends GenericMapper {
     }
 
     // Tis addressed from 0 to n-1.
-    private void RelaxedPCN1_Ch(List<Element> elements, PrecedenceChainN1 aPattern, int i) {
+    private void RelaxedPCN1_Ch(List<Element> elements, RelaxedPrecedenceChainN1 aPattern, int i) {
         ChainEvents Tis = aPattern.getTis();
 
         if (i < Tis.size()) {
@@ -2071,7 +2071,7 @@ public class LTLMapper extends GenericMapper {
         }
     }
 
-    private List<Element> mapRelaxedPrecedenceChainN1(Scope aScope, PrecedenceChainN1 aPattern) {
+    private List<Element> mapRelaxedPrecedenceChainN1(Scope aScope, RelaxedPrecedenceChainN1 aPattern) {
         List<Element> elements = new ArrayList<>();
         EventConstraint lZP = aPattern.getPConstraint();
         String lcntZP = lZP != null ? cnt(lZP.getEvent()) : "true";
@@ -3130,7 +3130,7 @@ public class LTLMapper extends GenericMapper {
         }
     }
 
-    private List<Element> mapRelaxedResponseChain1N(Scope aScope, ResponseChain1N aPattern) {
+    private List<Element> mapRelaxedResponseChain1N(Scope aScope, RelaxedResponseChain1N aPattern) {
         List<Element> elements = new ArrayList<>();
         EventConstraint lZS = aPattern.getSConstraint();
         String lcntZS = lZS != null ? cnt(lZS.getEvent()) : "true";
@@ -3302,7 +3302,7 @@ public class LTLMapper extends GenericMapper {
     }
 
     // Tis addressed from 0 to n-1.
-    private void RelaxedRCN1_Ch(List<Element> elements, ResponseChainN1 aPattern, int i) {
+    private void RelaxedRCN1_Ch(List<Element> elements, RelaxedResponseChainN1 aPattern, int i) {
         ChainEvents Tis = aPattern.getTis();
 
         if (i < Tis.size()) {
@@ -3355,7 +3355,7 @@ public class LTLMapper extends GenericMapper {
         }
     }
 
-    private void RelaxedRCN1_ChR(List<Element> elements, ResponseChainN1 aPattern, EventImpl R, int i) {
+    private void RelaxedRCN1_ChR(List<Element> elements, RelaxedResponseChainN1 aPattern, EventImpl R, int i) {
         ChainEvents Tis = aPattern.getTis();
 
         if (i < Tis.size()) {
@@ -3415,7 +3415,7 @@ public class LTLMapper extends GenericMapper {
         }
     }
 
-    private List<Element> mapRelaxedResponseChainN1(Scope aScope, ResponseChainN1 aPattern) {
+    private List<Element> mapRelaxedResponseChainN1(Scope aScope, RelaxedResponseChainN1 aPattern) {
         List<Element> elements = new ArrayList<>();
         switch (aScope.getType()) {
             case PSPConstants.S_Globally:
