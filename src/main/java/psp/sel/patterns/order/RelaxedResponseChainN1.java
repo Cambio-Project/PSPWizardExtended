@@ -88,7 +88,7 @@ public class RelaxedResponseChainN1 extends Order
 
     public int getType() 
     {
-        return PSPConstants.P_ResponseChainN1;
+        return PSPConstants.P_RelaxedResponseChainN1;
     }
 
     public ArrayList<EventImpl> getEvents() 
