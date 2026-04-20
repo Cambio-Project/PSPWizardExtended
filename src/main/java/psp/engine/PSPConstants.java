@@ -76,7 +76,12 @@ public class PSPConstants
     public static final int P_ResponseChainN1 = 16;
     public static final int P_ResponseInvariance = 17;
 
-    public final int P_LastOrder = P_ResponseInvariance;
+    public static final int P_RelaxedPrecedenceChain1N = 18;
+    public static final int P_RelaxedPrecedenceChainN1 = 19;
+    public static final int P_RelaxedResponseChain1N = 20;
+    public static final int P_RelaxedResponseChainN1 = 21;
+
+    public final int P_LastOrder = P_ResponseChainN1;
 
     // Subpatterns
     public static final int SP_All_Basic = 0;

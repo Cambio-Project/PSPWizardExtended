@@ -128,6 +128,10 @@ public class LTLMapper extends GenericMapper {
                     return mapRecurrence(aScope, (Recurrence) aPattern);
                 case PSPConstants.P_Precedence:
                     return mapPrecedence(aScope, (Precedence) aPattern);
+                case PSPConstants.P_RelaxedPrecedenceChain1N:
+                    return mapRelaxedPrecedenceChain1N(aScope, (PrecedenceChain1N) aPattern);
+                case PSPConstants.P_RelaxedPrecedenceChainN1:
+                    return mapRelaxedPrecedenceChainN1(aScope, (PrecedenceChainN1) aPattern);
                 case PSPConstants.P_PrecedenceChain1N:
                     return mapPrecedenceChain1N(aScope, (PrecedenceChain1N) aPattern);
                 case PSPConstants.P_PrecedenceChainN1:
@@ -140,6 +144,10 @@ public class LTLMapper extends GenericMapper {
                     return mapResponseChain1N(aScope, (ResponseChain1N) aPattern);
                 case PSPConstants.P_ResponseChainN1:
                     return mapResponseChainN1(aScope, (ResponseChainN1) aPattern);
+                case PSPConstants.P_RelaxedResponseChain1N:
+                    return mapRelaxedResponseChain1N(aScope, (ResponseChain1N) aPattern);
+                case PSPConstants.P_RelaxedResponseChainN1:
+                    return mapRelaxedResponseChainN1(aScope, (ResponseChainN1) aPattern);
                 case PSPConstants.P_ResponseInvariance:
                     return mapResponseInvariance(aScope, (ResponseInvariance) aPattern);
             }
@@ -1734,6 +1742,540 @@ public class LTLMapper extends GenericMapper {
         return elements;
     }
 
+    // Tis addressed from 0 to n-1.
+    private void RelaxedPC1N_Ch(List<Element> elements, ChainEvents Tis, int i) {
+        if (i < Tis.size()) {
+            ChainEvent Ti = Tis.getTi(i);
+
+            EventConstraint lZi = Ti.getConstraint();
+            String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
+
+            // unconstrained
+            if (lcntZi.equals("true")) {
+                // no Zi
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(Ti.getEvent());
+                RelaxedPC1N_Ch(elements, Tis, i + 1);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+            } else {
+                // with Zi
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new MiscElement(lcntZi));
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(Ti.getEvent());
+                elements.add(new MiscElement(lcntZi));
+                RelaxedPC1N_Ch(elements, Tis, i + 1);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+            }
+        }
+    }
+
+    private void RelaxedPC1N_Ch2(List<Element> elements, ChainEvents Tis, int i, Scope scope) {
+        if (i < Tis.size()) {
+            ChainEvent Ti = Tis.getTi(i);
+
+            EventConstraint lZi = Ti.getConstraint();
+            String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
+
+            // unconstrained
+            if (lcntZi.equals("true")) {
+                // no Zi
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(scope.getR());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(Ti.getEvent());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(languageDefinitions.getNot());
+                elements.add(scope.getR());
+                RelaxedPC1N_Ch2(elements, Tis, i + 1, scope);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+            } else {
+                // with Zi
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(scope.getR());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new MiscElement(lcntZi));
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(Ti.getEvent());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new MiscElement(lcntZi));
+                RelaxedPC1N_Ch2(elements, Tis, i + 1, scope);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+            }
+        }
+    }
+
+    private List<Element> mapRelaxedPrecedenceChain1N(Scope aScope, PrecedenceChain1N aPattern) {
+        List<Element> elements = new ArrayList<>();
+        EventConstraint lZS = aPattern.getSConstraint();
+        String lcntZS = lZS != null ? cnt(lZS.getEvent()) : "true";
+        boolean lHasConstraint = !lcntZS.equals("true");
+        ChainEvents Tis = aPattern.getTis();
+
+        switch (aScope.getType()) {
+            case PSPConstants.S_Globally:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                if (lHasConstraint) {
+                    // has ZS
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZS));
+                }
+                RelaxedPC1N_Ch(elements, Tis, 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aPattern.getS());
+                if (lHasConstraint) {
+                    // has ZS
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZS));
+                }
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_BeforeR:
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getR());
+                if (lHasConstraint) {
+                    // has ZS
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZS));
+                }
+                RelaxedPC1N_Ch2(elements, Tis, 0, aScope);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getR());
+                elements.add(languageDefinitions.getOr());
+                elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_AfterQ:
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getAlways());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getQ());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                if (lHasConstraint) {
+                    // has ZS
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZS));
+                }
+                RelaxedPC1N_Ch(elements, Tis, 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aPattern.getS());
+                if (lHasConstraint) {
+                    // has ZS
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZS));
+                }
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_BetweenQandR:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getR());
+                if (lHasConstraint) {
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZS));
+                }
+                RelaxedPC1N_Ch2(elements, Tis, 0, aScope);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getR());
+                elements.add(languageDefinitions.getOr());
+                elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_AfterQuntilR:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getR());
+                if (lHasConstraint) {
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZS));
+                }
+                RelaxedPC1N_Ch2(elements, Tis, 0, aScope);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getR());
+                elements.add(languageDefinitions.getOr());
+                elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                elements.add(languageDefinitions.getAnd());
+                RelaxedPC1N_Ch(elements, Tis, 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+        }
+
+        return elements;
+    }
+
+    // Tis addressed from 0 to n-1.
+    private void RelaxedPCN1_Ch(List<Element> elements, PrecedenceChainN1 aPattern, int i) {
+        ChainEvents Tis = aPattern.getTis();
+
+        if (i < Tis.size()) {
+            ChainEvent Ti = Tis.getTi(i);
+
+            EventConstraint lZi = Ti.getConstraint();
+            String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
+
+            // unconstrained
+            if (lcntZi.equals("true")) {
+                // no Zi
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(Ti.getEvent());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aPattern.getP());
+                RelaxedPCN1_Ch(elements, aPattern, i + 1);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+            } else {
+                // with Zi
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new MiscElement(lcntZi));
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(Ti.getEvent());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new MiscElement(lcntZi));
+                RelaxedPCN1_Ch(elements, aPattern, i + 1);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+            }
+        }
+    }
+
+    private List<Element> mapRelaxedPrecedenceChainN1(Scope aScope, PrecedenceChainN1 aPattern) {
+        List<Element> elements = new ArrayList<>();
+        EventConstraint lZP = aPattern.getPConstraint();
+        String lcntZP = lZP != null ? cnt(lZP.getEvent()) : "true";
+        boolean lHasConstraint = !lcntZP.equals("true");
+        ChainEvents Tis = aPattern.getTis();
+
+        switch (aScope.getType()) {
+            case PSPConstants.S_Globally:
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aPattern.getP());
+                if (lHasConstraint) {
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZP));
+                }
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aPattern.getP());
+                if (lHasConstraint) {
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZP));
+                }
+                RelaxedPCN1_Ch(elements, aPattern, 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_BeforeR:
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aPattern.getP());
+                if (lHasConstraint) {
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZP));
+                }
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getR());
+                elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aPattern.getP());
+                if (lHasConstraint) {
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZP));
+                }
+                RelaxedPCN1_Ch(elements, aPattern, 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_AfterQ:
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getAlways());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getQ());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(aPattern.getP());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aPattern.getP());
+                if (lHasConstraint) {
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZP));
+                }
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aPattern.getP());
+                if (lHasConstraint) {
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZP));
+                }
+                RelaxedPCN1_Ch(elements, aPattern, 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_BetweenQandR:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aPattern.getP());
+                if (lHasConstraint) {
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZP));
+                }
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getR());
+                elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aPattern.getP());
+                if (lHasConstraint) {
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZP));
+                }
+                RelaxedPCN1_Ch(elements, aPattern, 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_AfterQuntilR:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aPattern.getP());
+                if (lHasConstraint) {
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZP));
+                }
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(aScope.getR());
+                elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aPattern.getP());
+                if (lHasConstraint) {
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZP));
+                }
+                RelaxedPCN1_Ch(elements, aPattern, 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+        }
+
+        return elements;
+    }
+
     private List<Element> mapUntil(Scope aScope, psp.sel.patterns.order.Until aPattern) {
         List<Element> elements = new ArrayList<>();
         switch (aScope.getType()) {
@@ -2494,6 +3036,465 @@ public class LTLMapper extends GenericMapper {
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aPattern.getS());
                 RCN1_ChR(elements, aPattern, aScope.getR(), 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getWeakUntil());
+                elements.add(new SpaceElement());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+        }
+
+        return elements;
+    }
+
+
+    // Tis addressed from 0 to n-1.
+    private void RelaxedRC1N_Ch(List<Element> elements, ChainEvents Tis, int i) {
+        if (i < Tis.size()) {
+            ChainEvent Ti = Tis.getTi(i);
+
+            EventConstraint lZi = Ti.getConstraint();
+            String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
+            boolean lHasConstraint = !lcntZi.equals("true");
+
+            if (lHasConstraint) {
+                // with Zi
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new MiscElement(lcntZi));
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new MiscElement(lcntZi));
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(Ti.getEvent());
+                RelaxedRC1N_Ch(elements, Tis, i + 1);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+            } else {
+                // no Zi
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(Ti.getEvent());
+                RelaxedRC1N_Ch(elements, Tis, i + 1);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+            }
+        }
+    }
+
+    private void RelaxedRC1N_ChR(List<Element> elements, ChainEvents Tis, EventImpl R, int i) {
+        if (i < Tis.size()) {
+            ChainEvent Ti = Tis.getTi(i);
+
+            EventConstraint lZi = Ti.getConstraint();
+            String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
+            boolean lHasConstraint = !lcntZi.equals("true");
+
+            if (lHasConstraint) {
+                // with Zi
+                elements.add(languageDefinitions.getAnd());
+                elements.add(languageDefinitions.getNot());
+                elements.add(R);
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new MiscElement(lcntZi));
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new MiscElement(lcntZi));
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(Ti.getEvent());
+                RelaxedRC1N_ChR(elements, Tis, R, i + 1);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+            } else {
+                // no Zi
+                elements.add(languageDefinitions.getAnd());
+                elements.add(languageDefinitions.getNot());
+                elements.add(R);
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(Ti.getEvent());
+                RelaxedRC1N_ChR(elements, Tis, R, i + 1);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+            }
+        }
+    }
+
+    private List<Element> mapRelaxedResponseChain1N(Scope aScope, ResponseChain1N aPattern) {
+        List<Element> elements = new ArrayList<>();
+        EventConstraint lZS = aPattern.getSConstraint();
+        String lcntZS = lZS != null ? cnt(lZS.getEvent()) : "true";
+        boolean lHasConstraint = !lcntZS.equals("true");
+
+        switch (aScope.getType()) {
+            case PSPConstants.S_Globally:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                if (lHasConstraint) {
+                    elements.add(new MiscElement(lcntZS));
+                    elements.add(languageDefinitions.getUntil());
+                } else {
+                    elements.add(languageDefinitions.getEventually());
+                }
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                RelaxedRC1N_Ch(elements, aPattern.getTis(), 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_BeforeR:
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                if (lHasConstraint) {
+                    elements.add(new RoundBracketOpenElement());
+                    elements.add(languageDefinitions.getNot());
+                    elements.add(aScope.getR());
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZS));
+                    elements.add(new RoundBracketCloseElement());
+                } else {
+                    elements.add(languageDefinitions.getNot());
+                    elements.add(aScope.getR());
+                }
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                RelaxedRC1N_ChR(elements, aPattern.getTis(), aScope.getR(), 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new SpaceElement());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_AfterQ:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                if (lHasConstraint) {
+                    elements.add(new MiscElement(lcntZS));
+                    elements.add(languageDefinitions.getUntil());
+                } else {
+                    elements.add(languageDefinitions.getEventually());
+                }
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                RelaxedRC1N_Ch(elements, aPattern.getTis(), 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_BetweenQandR:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                if (lHasConstraint) {
+                    elements.add(new RoundBracketOpenElement());
+                    elements.add(languageDefinitions.getNot());
+                    elements.add(aScope.getR());
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZS));
+                    elements.add(new RoundBracketCloseElement());
+                } else {
+                    elements.add(languageDefinitions.getNot());
+                    elements.add(aScope.getR());
+                }
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                RelaxedRC1N_ChR(elements, aPattern.getTis(), aScope.getR(), 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new SpaceElement());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_AfterQuntilR:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                if (lHasConstraint) {
+                    elements.add(new RoundBracketOpenElement());
+                    elements.add(languageDefinitions.getNot());
+                    elements.add(aScope.getR());
+                    elements.add(languageDefinitions.getAnd());
+                    elements.add(new MiscElement(lcntZS));
+                    elements.add(new RoundBracketCloseElement());
+                } else {
+                    elements.add(languageDefinitions.getNot());
+                    elements.add(aScope.getR());
+                }
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                RelaxedRC1N_ChR(elements, aPattern.getTis(), aScope.getR(), 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getWeakUntil());
+                elements.add(new SpaceElement());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+        }
+
+        return elements;
+    }
+
+    // Tis addressed from 0 to n-1.
+    private void RelaxedRCN1_Ch(List<Element> elements, ResponseChainN1 aPattern, int i) {
+        ChainEvents Tis = aPattern.getTis();
+
+        if (i < Tis.size()) {
+            ChainEvent Ti = Tis.getTi(i);
+
+            EventConstraint lZi = Ti.getConstraint();
+            String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
+
+            if (lcntZi.equals("true")) {
+                // no Zi
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(Ti.getEvent());
+                RelaxedRCN1_Ch(elements, aPattern, i + 1);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+            } else {
+                // with Zi
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new MiscElement(lcntZi));
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(Ti.getEvent());
+                RelaxedRCN1_Ch(elements, aPattern, i + 1);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+            }
+        } else {
+            EventConstraint lZP = aPattern.getPConstraint();
+            String lcntZP = lZP != null ? cnt(lZP.getEvent()) : "true";
+
+            elements.add(languageDefinitions.getImplication());
+            elements.add(new RoundBracketOpenElement());
+            if (lcntZP.equals("true")) {
+                // no Zi
+                elements.add(languageDefinitions.getEventually());
+            } else {
+                // with Zi
+                elements.add(new MiscElement(lcntZP));
+                elements.add(languageDefinitions.getUntil());
+            }
+            elements.add(new SpaceElement());
+            elements.add(aPattern.getP());
+            elements.add(new RoundBracketCloseElement());
+        }
+    }
+
+    private void RelaxedRCN1_ChR(List<Element> elements, ResponseChainN1 aPattern, EventImpl R, int i) {
+        ChainEvents Tis = aPattern.getTis();
+
+        if (i < Tis.size()) {
+            ChainEvent Ti = Tis.getTi(i);
+
+            EventConstraint lZi = Ti.getConstraint();
+            String lcntZi = lZi != null ? cnt(lZi.getEvent()) : "true";
+
+            if (lcntZi.equals("true")) {
+                // no Zi
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(R);
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(Ti.getEvent());
+                RelaxedRCN1_ChR(elements, aPattern, R, i + 1);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+            } else {
+                // with Zi
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(R);
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new MiscElement(lcntZi));
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(Ti.getEvent());
+                RelaxedRCN1_ChR(elements, aPattern, R, i + 1);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+            }
+        } else {
+            EventConstraint lZP = aPattern.getPConstraint();
+            String lcntZP = lZP != null ? cnt(lZP.getEvent()) : "true";
+
+            elements.add(languageDefinitions.getImplication());
+            elements.add(new RoundBracketOpenElement());
+            if (lcntZP.equals("true")) {
+                // no Zi
+                elements.add(languageDefinitions.getEventually());
+            } else {
+                // with Zi
+                elements.add(new MiscElement(lcntZP));
+                elements.add(languageDefinitions.getUntil());
+            }
+            elements.add(new SpaceElement());
+            elements.add(aPattern.getP());
+            elements.add(new RoundBracketCloseElement());
+        }
+    }
+
+    private List<Element> mapRelaxedResponseChainN1(Scope aScope, ResponseChainN1 aPattern) {
+        List<Element> elements = new ArrayList<>();
+        switch (aScope.getType()) {
+            case PSPConstants.S_Globally:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                RelaxedRCN1_Ch(elements, aPattern, 0);
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_BeforeR:
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                RelaxedRCN1_ChR(elements, aPattern, aScope.getR(), 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new SpaceElement());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_AfterQ:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                RelaxedRCN1_Ch(elements, aPattern, 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_BetweenQandR:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getR());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                RelaxedRCN1_ChR(elements, aPattern, aScope.getR(), 0);
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new SpaceElement());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_AfterQuntilR:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getS());
+                RelaxedRCN1_ChR(elements, aPattern, aScope.getR(), 0);
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getWeakUntil());
                 elements.add(new SpaceElement());

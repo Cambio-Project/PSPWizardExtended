@@ -100,6 +100,10 @@ public class PrismMapper extends PrismSupport {
 
     public boolean isPatternSupported(Pattern aPattern) {
         switch (aPattern.getType()) {
+            case PSPConstants.P_RelaxedPrecedenceChain1N:
+            case PSPConstants.P_RelaxedPrecedenceChainN1:
+            case PSPConstants.P_RelaxedResponseChain1N:
+            case PSPConstants.P_RelaxedResponseChainN1:
             case PSPConstants.P_BoundedExistence:
             case PSPConstants.P_TransientState:
             case PSPConstants.P_SteadyState:
