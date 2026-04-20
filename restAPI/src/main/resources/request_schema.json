@@ -108,10 +108,14 @@
             "Precedence",
             "PrecedenceChain1N",
             "PrecedenceChainN1",
+            "RelaxedPrecedenceChain1N",
+            "RelaxedPrecedenceChainN1",
             "Until",
             "Response",
             "ResponseChain1N",
             "ResponseChainN1",
+            "RelaxedResponseChain1N",
+            "RelaxedResponseChainN1",
             "ResponseInvariance"
           ]
         },
