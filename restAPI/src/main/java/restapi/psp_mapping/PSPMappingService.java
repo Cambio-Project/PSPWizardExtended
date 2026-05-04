@@ -39,13 +39,14 @@ public class PSPMappingService {
 
         String seg =  selMapper.getMapping(scope, pattern);
         String mapping = requestedPSPMapper.getMapping(scope, pattern);
+        boolean isEndMode = requestedPSPMapper.isEndMode(pattern);
 
         if (mapping.isEmpty()){
             String errorMessage = requestedPSPMapper.getNotSupportedMessage();
             return new PSPUnsupportedMappingResponse(errorMessage, seg);
         }
         else {
-            return new PSPCorrectMappingResponse(seg, mapping);
+            return new PSPCorrectMappingResponse(seg, mapping, isEndMode);
         }
 
     }

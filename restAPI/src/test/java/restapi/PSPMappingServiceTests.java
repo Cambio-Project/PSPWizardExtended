@@ -39,7 +39,7 @@ public class PSPMappingServiceTests {
                 """;
         String expectedSeg = "Globally, it is always the case that {pEvent(p)} [holds].";
         String expectedMapping = "☐ (pEvent(p))";
-        PSPCorrectMappingResponse expected = new PSPCorrectMappingResponse(expectedSeg, expectedMapping);
+        PSPCorrectMappingResponse expected = new PSPCorrectMappingResponse(expectedSeg, expectedMapping, false);
         assertEquals(expected, testedService.mapPSPRequestToTargetLogic(request));
     }
 
@@ -62,7 +62,7 @@ public class PSPMappingServiceTests {
                 """;
         String expectedSeg = "Globally, it is always the case that {pEvent(p)} [holds].";
         String expectedMapping = "☐ (pEvent(p))";
-        PSPCorrectMappingResponse expected = new PSPCorrectMappingResponse(expectedSeg, expectedMapping);
+        PSPCorrectMappingResponse expected = new PSPCorrectMappingResponse(expectedSeg, expectedMapping, false);
         assertEquals(expected, testedService.mapPSPRequestToTargetLogic(request));
     }
 

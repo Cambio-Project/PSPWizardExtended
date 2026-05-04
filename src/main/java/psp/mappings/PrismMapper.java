@@ -118,6 +118,11 @@ public class PrismMapper extends PrismSupport {
         return isPatternSupported(aPattern);
     }
 
+    @Override
+    public boolean isEndMode(Pattern aPattern) {
+        return false;
+    }
+
     // pattern mapping
     public List<Element> mapToElements(Scope aScope, Pattern aPattern) {
         clearError();

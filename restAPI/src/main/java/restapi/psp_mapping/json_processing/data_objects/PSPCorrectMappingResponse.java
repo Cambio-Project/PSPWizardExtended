@@ -32,11 +32,13 @@ public class PSPCorrectMappingResponse implements PSPMappingResponse {
    *
    * @param seg       The SEG (Structured English Grammar) representation.
    * @param mappedPSP The mapped PSP (Pattern Specificity Pattern) details.
+   * @param endMode Whether the mapping requires endMode for validation.
    */
-  public PSPCorrectMappingResponse(String seg, String mappedPSP){
+  public PSPCorrectMappingResponse(String seg, String mappedPSP, boolean endMode){
     this.payload = new HashMap<>();
     payload.put("mapping", mappedPSP);
     payload.put("seg", seg);
+    payload.put("endMode", String.valueOf(endMode));
   }
 
   public Map<String, String> getPayload() {

@@ -65,8 +65,7 @@ public class SELMapper extends GenericMapper {
 
     @Override
     public  List<Element> mapToElements(Scope aScope, Pattern aPattern) {
-        //StringBuilder sb = new StringBuilder();
-        List<Element> elements = new ArrayList();
+        List<Element> elements = new ArrayList<>();
         
         if (aScope != null && aPattern != null) {
             elements.add(new MiscElement(aScope.getSpecificationAsSEL()));
@@ -84,6 +83,11 @@ public class SELMapper extends GenericMapper {
 
     public String toString() {
         return "SEG";
+    }
+
+    @Override
+    public boolean isEndMode(Pattern aPattern) {
+        return false;
     }
 
 }

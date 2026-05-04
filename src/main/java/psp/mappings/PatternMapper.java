@@ -65,4 +65,6 @@ public interface PatternMapper extends PSPFrameworkSupport {
     public void register(final MappingPostprocessor processor);
 
     public void register(final PatternFormatter formatter);
+
+    public boolean isEndMode(Pattern aPattern);
 }

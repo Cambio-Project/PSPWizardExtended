@@ -99,6 +99,8 @@ public class LTLMapper extends GenericMapper {
         return true;
     }
 
+
+
     public boolean isCombinationSupported(Scope aScope, Pattern aPattern) {
         return isPatternSupported(aPattern);
     }
@@ -3654,5 +3656,10 @@ public class LTLMapper extends GenericMapper {
 
     public String toString() {
         return "LTL";
+    }
+
+    @Override
+    public boolean isEndMode(Pattern aPattern) {
+        return false;
     }
 }

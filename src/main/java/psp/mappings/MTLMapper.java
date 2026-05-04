@@ -4453,4 +4453,16 @@ public class MTLMapper extends MTLSupport {
 
         return elements;
     }
+
+    @Override
+    public boolean isEndMode(Pattern aPattern) {
+        switch (aPattern.getType()) {
+            case PSPConstants.P_Recurrence -> {
+                return PSPConstants.SP_Liberal == aPattern.getSubType();
+            }
+            default -> {
+                return false;
+            }
+        }
+    }
 }
