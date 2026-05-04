@@ -550,6 +550,14 @@ public class MTLMapper extends MTLSupport {
         return elements;
     }
 
+    private List<Element> mapRecurrence(Scope aScope, Recurrence aPattern) {
+        return switch (aPattern.getSubType()) {
+            case PSPConstants.SP_All_Basic -> mapRecurrenceBasic(aScope, aPattern);
+            case PSPConstants.SP_Liberal -> mapRecurrenceLiberal(aScope, aPattern);
+            default -> throw new IllegalStateException("Unexpected value: " + aPattern.getSubType());
+        };
+    }
+
     private List<Element> mapBoundedExistence(Scope aScope, BoundedExistence aPattern) {
         return switch (aPattern.getSubType()) {
             case PSPConstants.SP_All_Basic -> mapBoundedExistenceBasic(aScope, aPattern);
@@ -1474,7 +1482,7 @@ public class MTLMapper extends MTLSupport {
         return elements;
     }
 
-    private List<Element> mapRecurrence(Scope aScope, Recurrence aPattern) {
+    private List<Element> mapRecurrenceBasic(Scope aScope, Recurrence aPattern) {
         List<Element> elements = new ArrayList<>();
 
         switch (aScope.getType()) {
@@ -1575,6 +1583,141 @@ public class MTLMapper extends MTLSupport {
                 elements.add(new SpaceElement());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getOr());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getWeakUntil());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+        }
+
+        return elements;
+    }
+
+    private List<Element> mapRecurrenceLiberal(Scope aScope, Recurrence aPattern) {
+        List<Element> elements = new ArrayList<>();
+
+        switch (aScope.getType()) {
+            case PSPConstants.S_Globally:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(new TimeBoundElement(utb(aPattern.getPTimeBound())));
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getOr());
+                elements.add(languageDefinitions.getEndPlaceholder());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_BeforeR:
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(new TimeBoundElement(utb(aPattern.getPTimeBound())));
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getOr());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getR());
+                elements.add(languageDefinitions.getOr());
+                elements.add(languageDefinitions.getEndPlaceholder());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new SpaceElement());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_AfterQ:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(new TimeBoundElement(utb(aPattern.getPTimeBound())));
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getOr());
+                elements.add(languageDefinitions.getEndPlaceholder());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_BetweenQandR:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(new TimeBoundElement(utb(aPattern.getPTimeBound())));
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getOr());
+                elements.add(languageDefinitions.getEndPlaceholder());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getOr());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_AfterQuntilR:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(new TimeBoundElement(utb(aPattern.getPTimeBound())));
+                elements.add(new SpaceElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getOr());
+                elements.add(languageDefinitions.getEndPlaceholder());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getOr());
                 elements.add(aScope.getR());
                 elements.add(new RoundBracketCloseElement());

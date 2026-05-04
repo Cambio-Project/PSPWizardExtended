@@ -2,15 +2,7 @@ package psp.mappings;
 
 import java.util.Optional;
 
-import psp.mappings.elements.AlwaysElement;
-import psp.mappings.elements.AndElement;
-import psp.mappings.elements.EventuallyElement;
-import psp.mappings.elements.ImplicationElement;
-import psp.mappings.elements.NextElement;
-import psp.mappings.elements.NotElement;
-import psp.mappings.elements.OrElement;
-import psp.mappings.elements.UntilElement;
-import psp.mappings.elements.WeakUntilElement;
+import psp.mappings.elements.*;
 
 public class LanguageDefinitions {
     private final Optional<String> inf;
@@ -23,6 +15,7 @@ public class LanguageDefinitions {
     private final OrElement or;
     private final UntilElement until;
     private final WeakUntilElement weakUntil;
+    private final EndPlaceholder endPlaceholder = new EndPlaceholder();
 
     public LanguageDefinitions(String inf, AlwaysElement always, EventuallyElement eventually, NextElement next, ImplicationElement implication,
         NotElement not, AndElement and, OrElement or, UntilElement until, WeakUntilElement weakUntil) {
@@ -83,4 +76,5 @@ public class LanguageDefinitions {
         return weakUntil;
     }
 
+    public EndPlaceholder getEndPlaceholder(){ return endPlaceholder; }
 }
