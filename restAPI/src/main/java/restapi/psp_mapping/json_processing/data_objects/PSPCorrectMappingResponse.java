@@ -3,9 +3,6 @@ package restapi.psp_mapping.json_processing.data_objects;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * The {@code PSPCorrectMappingResponse} class represents a correct response from a PSP mapping operation.
  * It implements the {@link PSPMappingResponse} interface and provides methods to retrieve the response type,
@@ -16,51 +13,53 @@ import java.util.Map;
  */
 public class PSPCorrectMappingResponse implements PSPMappingResponse {
 
-  /**
-   * The response type indicating a correct mapping response.
-   */
-  private final String TYPE = "correct_response";
+    public record Payload(String mapping,
+                          String seg,
+                          boolean endMode) {
+    }
 
-  /**
-   * The payload containing mapping details and SEG representation.
-   */
-  private final Map<String, String> payload;
+    /**
+     * The response type indicating a correct mapping response.
+     */
+    private final String TYPE = "correct_response";
+
+    /**
+     * The payload containing mapping details and SEG representation.
+     */
+    private final Payload payload;
 
 
-  /**
-   * Constructs a new PSPCorrectMappingResponse with the provided SEG and mapped PSP details.
-   *
-   * @param seg       The SEG (Structured English Grammar) representation.
-   * @param mappedPSP The mapped PSP (Pattern Specificity Pattern) details.
-   * @param endMode Whether the mapping requires endMode for validation.
-   */
-  public PSPCorrectMappingResponse(String seg, String mappedPSP, boolean endMode){
-    this.payload = new HashMap<>();
-    payload.put("mapping", mappedPSP);
-    payload.put("seg", seg);
-    payload.put("endMode", String.valueOf(endMode));
-  }
+    /**
+     * Constructs a new PSPCorrectMappingResponse with the provided SEG and mapped PSP details.
+     *
+     * @param seg       The SEG (Structured English Grammar) representation.
+     * @param mappedPSP The mapped PSP (Pattern Specificity Pattern) details.
+     * @param endMode   Whether the mapping requires endMode for validation.
+     */
+    public PSPCorrectMappingResponse(String seg, String mappedPSP, boolean endMode) {
+        this.payload = new Payload(mappedPSP, seg, endMode);
+    }
 
-  public Map<String, String> getPayload() {
-    return payload;
-  }
+    public Payload getPayload() {
+        return payload;
+    }
 
-  public String getType() {
-    return TYPE;
-  }
+    public String getType() {
+        return TYPE;
+    }
 
-  @Override
-  public boolean equals(Object o) {
-    if (o == this)
-      return true;
-    if (!(o instanceof PSPCorrectMappingResponse))
-      return false;
-    PSPCorrectMappingResponse other = (PSPCorrectMappingResponse)o;
-    return this.payload.equals(other.getPayload());
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof PSPCorrectMappingResponse))
+            return false;
+        PSPCorrectMappingResponse other = (PSPCorrectMappingResponse) o;
+        return this.payload.equals(other.getPayload());
+    }
 
-  @Override
-  public String toJSON() throws JsonProcessingException {
-    return new ObjectMapper().writeValueAsString(this);
-  }
+    @Override
+    public String toJSON() throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(this);
+    }
 }
