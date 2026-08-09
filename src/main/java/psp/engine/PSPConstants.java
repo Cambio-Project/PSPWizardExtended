@@ -64,10 +64,10 @@ public class PSPConstants
     public static final int P_MaximumDuration = 8;
     public static final int P_Recurrence = 9;
 
-    public static final int P_LastOccurrence = P_Recurrence;
-    
+    public static final int P_BoundedEventExistence = 22;
+
     // Order
-    public static final int P_Precedence = P_LastOccurrence + 1;
+    public static final int P_Precedence = 10;
     public static final int P_PrecedenceChain1N = 11;
     public static final int P_PrecedenceChainN1 = 12;
     public static final int P_Until = 13;
@@ -80,8 +80,6 @@ public class PSPConstants
     public static final int P_RelaxedPrecedenceChainN1 = 19;
     public static final int P_RelaxedResponseChain1N = 20;
     public static final int P_RelaxedResponseChainN1 = 21;
-
-    public final int P_LastOrder = P_ResponseChainN1;
 
     // Subpatterns
     public static final int SP_All_Basic = 0;

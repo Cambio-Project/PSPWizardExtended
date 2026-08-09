@@ -4,15 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import psp.sel.EventImpl;
 import psp.sel.patterns.Pattern;
-import psp.sel.patterns.occurrence.Absence;
-import psp.sel.patterns.occurrence.BoundedExistence;
-import psp.sel.patterns.occurrence.Existence;
-import psp.sel.patterns.occurrence.MaximumDuration;
-import psp.sel.patterns.occurrence.MinimumDuration;
-import psp.sel.patterns.occurrence.Recurrence;
-import psp.sel.patterns.occurrence.SteadyState;
-import psp.sel.patterns.occurrence.TransientState;
-import psp.sel.patterns.occurrence.Universality;
+import psp.sel.patterns.occurrence.*;
 import psp.sel.patterns.order.*;
 import psp.constraints.EventConstraint;
 import psp.constraints.ProbabilityBound;
@@ -33,6 +25,8 @@ public class PatternFactory {
             return new Existence(pEvent, timeBound, probabilityBound);
         } else if ("BoundedExistence".equalsIgnoreCase(type)) {
             return new BoundedExistence(pEvent, frequency, timeBound, probabilityBound);
+        } else if ("BoundedEventExistence".equalsIgnoreCase(type)) {
+            return new BoundedEventExistence(pEvent, frequency, timeBound, probabilityBound);
         } else if ("TransientState".equalsIgnoreCase(type)) {
             return new TransientState(pEvent, upperLimit, timeUnit, probabilityBound);
         } else if ("SteadyState".equalsIgnoreCase(type)) {

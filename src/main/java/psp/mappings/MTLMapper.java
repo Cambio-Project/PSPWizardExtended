@@ -121,6 +121,8 @@ public class MTLMapper extends MTLSupport {
                     return mapExistence(aScope, (Existence) aPattern);
                 case PSPConstants.P_BoundedExistence:
                     return mapBoundedExistence(aScope, (BoundedExistence) aPattern);
+                case PSPConstants.P_BoundedEventExistence:
+                    return mapBoundedEventExistence(aScope, (BoundedEventExistence) aPattern);
                 case PSPConstants.P_TransientState:
                 case PSPConstants.P_SteadyState:
                     return Collections.emptyList(); // not supported indicator
@@ -409,6 +411,278 @@ public class MTLMapper extends MTLSupport {
         return elements;
     }
 
+    private List<Element> mapBoundedEventExistence(Scope aScope, BoundedEventExistence aPattern) {
+        List<Element> elements = new ArrayList<>();
+
+        if (aPattern.getFrequency() < 1) {
+            return elements;
+        }
+
+        switch (aScope.getType()) {
+            case PSPConstants.S_Globally:
+                elements.add(languageDefinitions.getNot());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getEndPlaceholder());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.addAll(mapBoundedEventExistenceGloballyRepeating(aPattern, aPattern.getFrequency()));
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_BeforeR:
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getEndPlaceholder());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.addAll(mapBoundedEventExistenceBeforeRepeating(aScope, aPattern, aPattern.getFrequency()));
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_AfterQ:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+
+                // this part is same as globally
+                elements.add(languageDefinitions.getNot());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getEndPlaceholder());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.addAll(mapBoundedEventExistenceGloballyRepeating(aPattern, aPattern.getFrequency()));
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_BetweenQandR:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getEventually());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+
+                // this part is same as in BEFORE after implication
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getEndPlaceholder());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.addAll(mapBoundedEventExistenceBeforeRepeating(aScope, aPattern, aPattern.getFrequency()));
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+            case PSPConstants.S_AfterQuntilR:
+                elements.add(languageDefinitions.getAlways());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aScope.getQ());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getImplication());
+                elements.add(new RoundBracketOpenElement());
+
+                // this part is almost same as in BEFORE after implication (except for Until R)
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getUntil());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(aPattern.getP());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(languageDefinitions.getEndPlaceholder());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(languageDefinitions.getAnd());
+                elements.add(new RoundBracketOpenElement());
+                elements.add(languageDefinitions.getNot());
+                elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.addAll(mapBoundedEventExistenceBeforeRepeating(aScope, aPattern, aPattern.getFrequency()));
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                // elements.add(languageDefinitions.getUntil());
+                // elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
+
+                elements.add(new RoundBracketCloseElement());
+                elements.add(new RoundBracketCloseElement());
+                break;
+        }
+
+        return elements;
+    }
+
+    private List<Element> mapBoundedEventExistenceGloballyRepeating(BoundedEventExistence aPattern,
+                                                                    int remainingFrequency) {
+        List<Element> elements = new ArrayList<>();
+        if (remainingFrequency > 0) {
+            elements.add(languageDefinitions.getAnd());
+            elements.add(new RoundBracketOpenElement());
+            elements.add(languageDefinitions.getNext());
+            elements.add(new RoundBracketOpenElement());
+            elements.add(languageDefinitions.getEventually());
+            elements.add(new RoundBracketOpenElement());
+            elements.add(new RoundBracketOpenElement());
+            elements.add(aPattern.getP());
+            elements.add(languageDefinitions.getAnd());
+            elements.add(new RoundBracketOpenElement());
+            elements.add(languageDefinitions.getNot());
+            elements.add(languageDefinitions.getEndPlaceholder());
+            elements.add(new RoundBracketCloseElement());
+            elements.add(new RoundBracketCloseElement());
+            elements.addAll(mapBoundedEventExistenceGloballyRepeating(aPattern, remainingFrequency - 1));
+            elements.add(new RoundBracketCloseElement());
+            elements.add(new RoundBracketCloseElement());
+            elements.add(new RoundBracketCloseElement());
+        }
+        return elements;
+    }
+
+    private List<Element> mapBoundedEventExistenceBeforeRepeating(Scope aScope, BoundedEventExistence aPattern,
+                                                                  int remainingFrequency) {
+        List<Element> elements = new ArrayList<>();
+        if (remainingFrequency > 0) {
+            elements.add(languageDefinitions.getAnd());
+            elements.add(new RoundBracketOpenElement());
+            elements.add(languageDefinitions.getNext());
+            elements.add(new RoundBracketOpenElement());
+
+            elements.add(new RoundBracketOpenElement());
+            elements.add(languageDefinitions.getNot());
+            elements.add(aScope.getR());
+            elements.add(new RoundBracketCloseElement());
+            elements.add(languageDefinitions.getUntil());
+            elements.add(new RoundBracketOpenElement());
+            elements.add(new RoundBracketOpenElement());
+            elements.add(new RoundBracketOpenElement());
+            elements.add(aPattern.getP());
+            elements.add(languageDefinitions.getAnd());
+            elements.add(new RoundBracketOpenElement());
+            elements.add(languageDefinitions.getNot());
+            elements.add(languageDefinitions.getEndPlaceholder());
+            elements.add(new RoundBracketCloseElement());
+            elements.add(new RoundBracketCloseElement());
+            elements.add(languageDefinitions.getAnd());
+            elements.add(new RoundBracketOpenElement());
+            elements.add(languageDefinitions.getNot());
+            elements.add(aScope.getR());
+            elements.add(new RoundBracketCloseElement());
+            elements.add(new RoundBracketCloseElement());
+            elements.addAll(mapBoundedEventExistenceBeforeRepeating(aScope, aPattern, remainingFrequency - 1));
+            elements.add(new RoundBracketCloseElement());
+
+            elements.add(new RoundBracketCloseElement());
+            elements.add(new RoundBracketCloseElement());
+        }
+        return elements;
+    }
+
     private List<Element> mapBoundedExistenceGlobally(BoundedExistence aPattern, int remainingFrequency) {
         List<Element> elements = new ArrayList<>();
         if (remainingFrequency > 0) {
@@ -468,7 +742,7 @@ public class MTLMapper extends MTLSupport {
             elements.add(new RoundBracketCloseElement());
             elements.add(new RoundBracketCloseElement());
             elements.add(languageDefinitions.getUntil());
-            elements.addAll(mapBoundedExistenceGlobally(aPattern, remainingFrequency - 1));
+            elements.addAll(mapBoundedExistenceBefore(aScope, aPattern, remainingFrequency - 1));
             elements.add(new RoundBracketCloseElement());
             elements.add(new RoundBracketCloseElement());
             elements.add(new RoundBracketCloseElement());
@@ -484,6 +758,7 @@ public class MTLMapper extends MTLSupport {
             elements.add(new RoundBracketCloseElement());
             elements.add(languageDefinitions.getUntil());
             elements.add(aScope.getR());
+            elements.add(new RoundBracketCloseElement());
             elements.add(new RoundBracketCloseElement());
         }
         return elements;
@@ -522,7 +797,7 @@ public class MTLMapper extends MTLSupport {
             elements.add(new RoundBracketCloseElement());
             elements.add(new RoundBracketCloseElement());
             elements.add(languageDefinitions.getUntil());
-            elements.addAll(mapBoundedExistenceGlobally(aPattern, remainingFrequency - 1));
+            elements.addAll(mapBoundedExistenceAfterUntil(aScope, aPattern, remainingFrequency - 1));
             elements.add(new RoundBracketCloseElement());
             elements.add(new RoundBracketCloseElement());
             elements.add(new RoundBracketCloseElement());
@@ -537,13 +812,14 @@ public class MTLMapper extends MTLSupport {
             elements.add(languageDefinitions.getNot());
             elements.add(aPattern.getP());
             elements.add(new RoundBracketCloseElement());
-            elements.add(languageDefinitions.getUntil());
+            elements.add(languageDefinitions.getWeakUntil());
             elements.add(aScope.getR());
             elements.add(new RoundBracketCloseElement());
             elements.add(languageDefinitions.getOr());
             elements.add(new RoundBracketOpenElement());
             elements.add(languageDefinitions.getAlways());
-            elements.add(aScope.getR());
+            elements.add(aPattern.getP());
+            elements.add(new RoundBracketCloseElement());
             elements.add(new RoundBracketCloseElement());
             elements.add(new RoundBracketCloseElement());
         }
@@ -1535,11 +1811,13 @@ public class MTLMapper extends MTLSupport {
                 elements.add(languageDefinitions.getAlways());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new RoundBracketOpenElement());
@@ -1662,11 +1940,13 @@ public class MTLMapper extends MTLSupport {
                 elements.add(languageDefinitions.getAlways());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(new RoundBracketOpenElement());
+                elements.add(new RoundBracketOpenElement());
                 elements.add(aScope.getQ());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new RoundBracketOpenElement());
                 elements.add(languageDefinitions.getNot());
                 elements.add(aScope.getR());
+                elements.add(new RoundBracketCloseElement());
                 elements.add(new RoundBracketCloseElement());
                 elements.add(languageDefinitions.getAnd());
                 elements.add(new RoundBracketOpenElement());
@@ -4602,6 +4882,9 @@ public class MTLMapper extends MTLSupport {
         switch (aPattern.getType()) {
             case PSPConstants.P_Recurrence -> {
                 return PSPConstants.SP_Liberal == aPattern.getSubType();
+            }
+            case PSPConstants.P_BoundedEventExistence -> {
+                return true;
             }
             default -> {
                 return false;
