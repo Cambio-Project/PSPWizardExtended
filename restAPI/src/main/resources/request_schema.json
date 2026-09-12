@@ -124,7 +124,8 @@
           "type": "string",
           "enum": [
             "Basic",
-            "Liberal"
+            "Liberal",
+            "Conservative"
           ]
         },
         "p_event": {

@@ -84,6 +84,7 @@ public class PSPConstants
     // Subpatterns
     public static final int SP_All_Basic = 0;
     public static final int SP_Liberal = 1;
+    public static final int SP_Conservative = 2;
 
     // Constraints
     public static final int C_Event = 1;

@@ -40,7 +40,7 @@ public class PatternFactory {
         }
         // Order
         else if ("Precedence".equalsIgnoreCase(type)) {
-            return new Precedence(pEvent, sEvent, timeBound, probabilityBound);
+            return new Precedence(pEvent, sEvent, timeBound, constrainEvent, probabilityBound);
         } else if ("PrecedenceChain1N".equalsIgnoreCase(type)) {
             return new PrecedenceChain1N(pEvent, sEvent, chainEvents, timeBound, constrainEvent, probabilityBound);
         } else if ("PrecedenceChainN1".equalsIgnoreCase(type)) {

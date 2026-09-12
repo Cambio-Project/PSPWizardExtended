@@ -1,35 +1,35 @@
 /**
  *
  * Copyright (C) 2011-2014 Swinburne University of Technology
- *
- * This file is part of PSPWizard, a tool for machine-assisted 
+ * <p>
+ * This file is part of PSPWizard, a tool for machine-assisted
  * definition of temporal formulae capturing pattern-based system
  * properties, developed at the Faculty of Science, Engineering and
  * Technology at Swinburne University of Technology, Australia.
  * The patterns, structured English grammar and mappings are due to
- *
- *   Marco Autili, Universita` dell'Aquila
- *   Lars Grunske, University of Stuttgart
- *   Markus Lumpe, Swinburne University of Technology
- *   Patrizio Pelliccione, University of Gothenburg
- *   Antony Tang, Swinburne University of Technology
- *
+ * <p>
+ * Marco Autili, Universita` dell'Aquila
+ * Lars Grunske, University of Stuttgart
+ * Markus Lumpe, Swinburne University of Technology
+ * Patrizio Pelliccione, University of Gothenburg
+ * Antony Tang, Swinburne University of Technology
+ * <p>
  * Details about the PSP framework can found in
- *   "Aligning Qualitative, Real-Time, and Probabilistic
- *    Property Specification Patterns Using a Structured
- *    English Grammar"
- *
- *
+ * "Aligning Qualitative, Real-Time, and Probabilistic
+ * Property Specification Patterns Using a Structured
+ * English Grammar"
+ * <p>
+ * <p>
  * PSPWizard is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2, or (at your option)
  * any later version.
- *
+ * <p>
  * PSPWizard is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with PSPWizard; see the file COPYING.  If not, write to
  * the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -52,7 +52,7 @@ public abstract class MTLSupport extends GenericMapper {
     private TimeLanguageDefinitions timeLanguageDefinitions;
 
     public MTLSupport(final LanguageDefinitions languageDefinitions,
-        final TimeLanguageDefinitions timeLanguageDefinitions) {
+                      final TimeLanguageDefinitions timeLanguageDefinitions) {
         super(languageDefinitions);
         this.timeLanguageDefinitions = timeLanguageDefinitions;
     }
@@ -92,6 +92,20 @@ public abstract class MTLSupport extends GenericMapper {
             sb.append(tL(aPTimeBound));
             sb.append(",");
             sb.append(languageDefinitions.getInf());
+            sb.append(timeLanguageDefinitions.getInfinityEndTimeBoundBracket());
+        }
+
+        return sb.toString();
+    }
+
+    public String lowerExact(TimeBound aPTimeBound){
+        StringBuilder sb = new StringBuilder();
+
+        if (aPTimeBound != null) {
+            sb.append(timeLanguageDefinitions.getDefaultStartTimeBoundBracket());
+            sb.append(tL(aPTimeBound));
+            sb.append(",");
+            sb.append(tL(aPTimeBound));
             sb.append(timeLanguageDefinitions.getInfinityEndTimeBoundBracket());
         }
 
@@ -139,12 +153,12 @@ public abstract class MTLSupport extends GenericMapper {
             if (lUP == Long.MAX_VALUE) {
                 markError(); // inf? makes no sense
                 Result = String.format(
-                    timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "%s,%s"
-                        + timeLanguageDefinitions.getDefaultEndTimeBoundBracket(),
-                    languageDefinitions.getInf(), languageDefinitions.getInf());
+                        timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "%s,%s"
+                                + timeLanguageDefinitions.getDefaultEndTimeBoundBracket(),
+                        languageDefinitions.getInf(), languageDefinitions.getInf());
             } else
                 Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "%d,%d"
-                    + timeLanguageDefinitions.getDefaultEndTimeBoundBracket(), lUP, lUP);
+                        + timeLanguageDefinitions.getDefaultEndTimeBoundBracket(), lUP, lUP);
         }
 
         return Result;
@@ -159,9 +173,10 @@ public abstract class MTLSupport extends GenericMapper {
 
             if (lUP == Long.MAX_VALUE)
                 Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%s"
-                    + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), languageDefinitions.getInf()); // inf -
-                                                                                                               // x =
-                                                                                                               // inf
+                        + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), languageDefinitions.getInf()); //
+                // inf -
+                // x =
+                // inf
             else {
                 long lDelta = lUP - lLP;
 
@@ -169,7 +184,7 @@ public abstract class MTLSupport extends GenericMapper {
                     markError(); // negative gap
 
                 Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%d"
-                    + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), lDelta);
+                        + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), lDelta);
             }
         }
 
@@ -184,10 +199,11 @@ public abstract class MTLSupport extends GenericMapper {
 
             if (lUP == Long.MAX_VALUE)
                 Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%s"
-                    + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), languageDefinitions.getInf()); // inf
+                        + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), languageDefinitions.getInf()); //
+                // inf
             else
                 Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%d"
-                    + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), lUP);
+                        + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), lUP);
         }
 
         return Result;
@@ -203,8 +219,9 @@ public abstract class MTLSupport extends GenericMapper {
             if (lUP == Long.MAX_VALUE) {
                 markError();
                 Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%s"
-                    + timeLanguageDefinitions.getDefaultEndTimeBoundBracket(), languageDefinitions.getInf()); // inf - x
-                                                                                                              // = inf
+                        + timeLanguageDefinitions.getDefaultEndTimeBoundBracket(), languageDefinitions.getInf()); //
+                // inf - x
+                // = inf
             } else {
                 long lDelta = lUP - lLP;
 
@@ -212,7 +229,7 @@ public abstract class MTLSupport extends GenericMapper {
                     markError(); // negative gap?
 
                 Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%d"
-                    + timeLanguageDefinitions.getDefaultEndTimeBoundBracket(), lDelta);
+                        + timeLanguageDefinitions.getDefaultEndTimeBoundBracket(), lDelta);
             }
         }
 
@@ -277,10 +294,10 @@ public abstract class MTLSupport extends GenericMapper {
 
             if (lTUP == Long.MAX_VALUE)
                 Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%s"
-                    + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), languageDefinitions.getInf());
+                        + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), languageDefinitions.getInf());
             else
                 Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%d"
-                    + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), lTUP);
+                        + timeLanguageDefinitions.getInfinityEndTimeBoundBracket(), lTUP);
         }
 
         return Result; // "" if some time component is missing
@@ -309,7 +326,7 @@ public abstract class MTLSupport extends GenericMapper {
             }
 
             Result = String.format(timeLanguageDefinitions.getDefaultStartTimeBoundBracket() + "0,%d"
-                + timeLanguageDefinitions.getDefaultEndTimeBoundBracket(), lTUP);
+                    + timeLanguageDefinitions.getDefaultEndTimeBoundBracket(), lTUP);
         }
 
         return Result; // "" if some time component is missing
